@@ -1,0 +1,94 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile.api
+    container_name: lumen-api
+    env_file:
+      - /opt/lumen/secrets/lumen.env  
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: ${DATABASE_URL}
+      STORAGE_TYPE: ${STORAGE_TYPE:-s3}
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "8000:8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile.worker
+    container_name: lumen-worker
+    env_file:
+      - /opt/lumen/secrets/lumen.env 
+    environment:
+      REDIS_URL: redis://redis:6379/0
+      DATABASE_URL: ${DATABASE_URL}
+      STORAGE_TYPE: ${STORAGE_TYPE:-s3}
+      PYTHONUNBUFFERED: 1
+      PYTHONPATH: /app
+    depends_on:
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_started
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: lumen-redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  ui:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile.ui
+    container_name: lumen-ui
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_started
+
+  db:
+    image: postgres:15-alpine
+    container_name: lumen-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-lumen}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+volumes:
+  pgdata:

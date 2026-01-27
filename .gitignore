@@ -1,0 +1,21 @@
+# Root .gitignore for monorepo
+# Environment and secrets
+.env
+.env.*
+
+# Node
+node_modules/
+frontend/dist/
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Docker
+.DS_Store
+docker-compose.override.yml
+
+# Logs
+*.log

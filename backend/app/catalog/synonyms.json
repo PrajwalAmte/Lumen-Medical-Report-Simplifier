@@ -1,0 +1,12 @@
+{
+  "hb": "hemoglobin",
+  "hgb": "hemoglobin",
+  "haemoglobin": "hemoglobin",
+  "hemoglobin": "hemoglobin",
+  "plt": "platelet_count",
+  "platelets": "platelet_count",
+  "platelet": "platelet_count",
+  "wbc": "wbc_count",
+  "white blood cell": "wbc_count",
+  "white blood cells": "wbc_count"
+}

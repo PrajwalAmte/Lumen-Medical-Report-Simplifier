@@ -1,0 +1,25 @@
+meta {
+  name: Upload
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://127.0.0.1:8000/upload
+  body: multipartForm
+  auth: inherit
+}
+
+headers {
+  X-API-Key: supersecret123
+}
+
+body:multipart-form {
+  locale: en-IN @contentType(Text)
+  context: auto @contentType(Text)
+  file: @file(/Users/prajwalamte/Desktop/Lumen_sample_medical_report.pdf) @contentType(File)
+}
+
+settings {
+  encodeUrl: true
+}

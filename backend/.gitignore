@@ -1,0 +1,11 @@
+# Backend ignore
+__pycache__/
+*.pyc
+*.pyo
+venv/
+env/
+instance/
+data/
+.env
+.env.*
+*.sqlite

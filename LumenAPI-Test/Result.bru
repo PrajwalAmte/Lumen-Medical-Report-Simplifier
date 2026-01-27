@@ -1,0 +1,19 @@
+meta {
+  name: Result
+  type: http
+  seq: 4
+}
+
+get {
+  url: http://127.0.0.1:8000/result/job_fd29de22a7
+  body: none
+  auth: inherit
+}
+
+headers {
+  X-API-Key: supersecret123
+}
+
+settings {
+  encodeUrl: true
+}

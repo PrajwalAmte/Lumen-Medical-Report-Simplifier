@@ -1,0 +1,17 @@
+{
+  "augmentin": {
+    "display_name": "Augmentin",
+    "category": "antibiotic",
+    "aliases": ["augmentin 625", "amoxiclav"]
+  },
+  "paracetamol": {
+    "display_name": "Paracetamol",
+    "category": "painkiller",
+    "aliases": ["acetaminophen", "calpol"]
+  },
+  "iron": {
+    "display_name": "Iron",
+    "category": "supplement",
+    "aliases": ["iron tablets", "ferrous"]
+  }
+}
