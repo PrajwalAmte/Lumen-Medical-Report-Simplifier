@@ -5,10 +5,9 @@ services:
       dockerfile: backend/Dockerfile.api
     container_name: lumen-api
     env_file:
-      - /opt/lumen/secrets/lumen.env
+      - .env
     environment:
       REDIS_URL: redis://redis:6379/0
-      DATABASE_URL: ${DATABASE_URL}
       STORAGE_TYPE: ${STORAGE_TYPE:-s3}
       PYTHONUNBUFFERED: 1
     ports:
@@ -32,7 +31,7 @@ services:
       dockerfile: backend/Dockerfile.worker
     container_name: lumen-worker
     env_file:
-      - /opt/lumen/secrets/lumen.env
+      - .env
     environment:
       REDIS_URL: redis://redis:6379/0
       STORAGE_TYPE: ${STORAGE_TYPE:-s3}
@@ -58,6 +57,21 @@ services:
       retries: 3
       start_period: 10s
 
+  db:
+    image: postgres:15-alpine
+    container_name: lumen-postgres
+    env_file:
+      - .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
   ui:
     build:
       context: .
@@ -65,32 +79,15 @@ services:
     container_name: lumen-ui
     ports:
       - "3000:80"
-    restart: unless-stopped
     depends_on:
       api:
         condition: service_started
+    restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost"]
       interval: 30s
       timeout: 5s
       retries: 3
-
-  db:
-    image: postgres:15-alpine
-    container_name: lumen-postgres
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?err}
-      POSTGRES_DB: ${POSTGRES_DB:-lumen}
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
-      interval: 30s
-      timeout: 5s
-      retries: 5
-      start_period: 20s
 
 volumes:
   pgdata:
