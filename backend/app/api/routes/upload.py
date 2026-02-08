@@ -22,19 +22,30 @@ router = APIRouter()
 @router.post(
     "/upload",
     response_model=UploadResponse,
-    dependencies=[Depends(api_key_auth)]
+    dependencies=[Depends(api_key_auth)]  # Require API key authentication
 )
 async def upload_file_route(
     request: Request,
-    file: UploadFile = File(...),
-    locale: str = "en-IN",
-    context: str = "auto",
+    file: UploadFile = File(...),  # Required file upload
+    locale: str = "en-IN",  # Language/region for processing
+    context: str = "auto",  # Processing context hint
     db: Session = Depends(get_db),
 ):
+    """Upload and queue a medical document for processing.
+    
+    Process flow:
+    1. Rate limiting and validation
+    2. File upload to storage
+    3. Job creation and queuing
+    4. Return job ID for status tracking
+    """
+    # Apply rate limiting to prevent abuse
     rate_limit(request)
 
-    validate_file(file)
+    # Multi-layer file validation
+    validate_file(file)  # Basic validation (name, extension)
 
+    # Strict MIME type validation for security
     allowed_mime = {"application/pdf", "image/jpeg", "image/png"}
     if file.content_type not in allowed_mime:
         raise HTTPException(

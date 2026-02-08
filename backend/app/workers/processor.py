@@ -23,6 +23,7 @@ from app.core.logging import setup_logging
 
 
 def update_job(db: Session, job: Job, status: str, stage: str, progress: int, error_message: str = None):
+    """Update job status and progress with database commit and error handling."""
     job.status = status
     job.stage = stage
     job.progress = progress
@@ -39,9 +40,19 @@ def update_job(db: Session, job: Job, status: str, stage: str, progress: int, er
 
 
 def process_job(job_id: str):
+    """Main job processing pipeline: OCR -> Parse -> LLM -> Store.
+    
+    Processes a single job through the complete pipeline:
+    1. Download file from storage
+    2. Extract text via OCR
+    3. Parse medical entities
+    4. Generate explanation via LLM
+    5. Sanitize and store results
+    """
     db = SessionLocal()
     job = db.query(Job).filter(Job.id == job_id).first()
 
+    # Skip if job not found or not in queued state
     if not job or job.status != JOB_STATUS_QUEUED:
         db.close()
         return
@@ -49,31 +60,35 @@ def process_job(job_id: str):
     start_time = time.time()
 
     try:
+        # Stage 1: Text extraction via OCR
         update_job(db, job, JOB_STATUS_PROCESSING, STAGE_EXTRACTING_TEXT,
                    DEFAULT_PROGRESS_BY_STAGE[STAGE_EXTRACTING_TEXT])
 
+        # Download file to temporary location with original extension
         original_ext = os.path.splitext(job.file_path)[1]
-
         with tempfile.NamedTemporaryFile(delete=False, suffix=original_ext) as tmp:
             local_path = tmp.name
 
         download_file(job.file_path, local_path)
         raw_text = extract_text(local_path)
-        os.remove(local_path)
+        os.remove(local_path)  # Cleanup temporary file
 
         if not raw_text.strip():
             raise RuntimeError("OCR returned empty text")
 
+        # Stage 2: Parse medical entities from text
         update_job(db, job, JOB_STATUS_PROCESSING, STAGE_PARSING,
                    DEFAULT_PROGRESS_BY_STAGE[STAGE_PARSING])
 
         parsed_data = parse_medical_text(raw_text)
 
+        # Stage 3: Generate explanation via LLM
         update_job(db, job, JOB_STATUS_PROCESSING, STAGE_GENERATING_EXPLANATION,
                    DEFAULT_PROGRESS_BY_STAGE[STAGE_GENERATING_EXPLANATION])
 
         explanation = generate_explanation(parsed_data)
 
+        # Stage 4: Finalize and store results
         update_job(db, job, JOB_STATUS_PROCESSING, STAGE_FINALIZING,
                    DEFAULT_PROGRESS_BY_STAGE[STAGE_FINALIZING])
 

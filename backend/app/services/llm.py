@@ -11,8 +11,10 @@ from app.services.result_sanitizer import sanitize_result
 logger = get_logger("llm")
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
+# Maximum characters of raw text to send to LLM to prevent token overflow
 MAX_RAW_CHARS = 3000 
 
+# System prompt template that enforces strict JSON output format
 SYSTEM_PROMPT_TEMPLATE = """
 You are Lumen, a medical report explainer.
 
@@ -29,6 +31,7 @@ Always follow this JSON schema exactly:
 {{SCHEMA}}
 """
 
+# Expected response schema for medical explanations
 _SCHEMA_OBJ = {
     "disclaimer": "string",
     "input_summary": {
@@ -77,12 +80,21 @@ _SCHEMA_OBJ = {
     "confidence_score": "number"
 }
 
+# Complete system prompt with embedded schema
 SYSTEM_PROMPT = SYSTEM_PROMPT_TEMPLATE.replace(
     "{{SCHEMA}}", json.dumps(_SCHEMA_OBJ, separators=(",", ":"))
 )
 
 
 def generate_explanation(parsed_data: dict) -> dict:
+    """Generate medical explanation with retry logic and fallback.
+    
+    Args:
+        parsed_data: Structured medical data from parser
+        
+    Returns:
+        dict: Medical explanation following the schema
+    """
     for attempt in range(1, settings.LLM_RETRY_COUNT + 1):
         try:
             logger.info(f"LLM attempt {attempt}/{settings.LLM_RETRY_COUNT}")
@@ -90,6 +102,7 @@ def generate_explanation(parsed_data: dict) -> dict:
         except Exception as e:
             logger.warning(f"LLM attempt {attempt} failed: {e}")
             if attempt < settings.LLM_RETRY_COUNT:
+                # Exponential backoff with maximum 8 seconds
                 time.sleep(min(settings.LLM_RETRY_BACKOFF_SEC * attempt, 8))
             else:
                 logger.error("All LLM attempts failed. Using fallback.")
@@ -97,6 +110,8 @@ def generate_explanation(parsed_data: dict) -> dict:
 
 
 def _call_openai(parsed_data: dict) -> dict:
+    """Make actual call to OpenAI API with structured data."""
+    # Ensure data is JSON serializable by round-trip conversion
     safe_parsed = json.loads(json.dumps(parsed_data))  
 
     raw_text = safe_parsed.get("raw_text")

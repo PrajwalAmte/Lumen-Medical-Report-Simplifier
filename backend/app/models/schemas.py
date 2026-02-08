@@ -4,39 +4,43 @@ from datetime import datetime
 
 
 class UploadResponse(BaseModel):
-    job_id: str
-    status: str
-    message: str
-    estimated_time_sec: int
+    """Response schema for file upload endpoint."""
+    job_id: str  # Unique identifier for tracking
+    status: str  # Initial job status (usually 'queued')
+    message: str  # Human-readable upload confirmation
+    estimated_time_sec: int  # Expected processing time
 
 
 class StatusResponse(BaseModel):
+    """Response schema for job status checking."""
     job_id: str
-    status: str
-    progress: int
-    stage: str
-    updated_at: datetime
+    status: str  # queued, processing, completed, failed, expired
+    progress: int  # Percentage complete (0-100)
+    stage: str  # Current processing stage
+    updated_at: datetime  # Last update timestamp
 
 
 class AbnormalValue(BaseModel):
+    """Schema for abnormal test results that require attention."""
     test_name: str
-    value: str
-    normal_range: str
-    severity: str
-    what_it_means: str
-    common_causes: List[str]
-    what_to_ask_doctor: List[str]
-    # Optional, frontend may display these
+    value: str  # Actual test result
+    normal_range: str  # Expected normal range
+    severity: str  # mild|moderate|severe|critical|low|high|unknown
+    what_it_means: str  # Plain language explanation
+    common_causes: List[str]  # Possible reasons for abnormal value
+    what_to_ask_doctor: List[str]  # Suggested questions for doctor
+    # Optional fields for enhanced explanations
     health_risks: Optional[List[str]] = None
     lifestyle_recommendations: Optional[List[str]] = None
     dietary_recommendations: Optional[List[str]] = None
 
 
 class NormalValue(BaseModel):
+    """Schema for normal test results."""
     test_name: str
     value: str
     normal_range: str
-    what_it_means: str
+    what_it_means: str  # Brief explanation of what this test measures
 
 
 class Medicine(BaseModel):

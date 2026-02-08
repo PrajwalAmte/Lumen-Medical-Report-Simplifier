@@ -1,8 +1,10 @@
-JOB_STATUS_QUEUED = "queued"
-JOB_STATUS_PROCESSING = "processing"
-JOB_STATUS_COMPLETED = "completed"
-JOB_STATUS_FAILED = "failed"
-JOB_STATUS_EXPIRED = "expired"
+# Job Status Constants
+# These represent the overall state of a job through its lifecycle
+JOB_STATUS_QUEUED = "queued"        # Job created and waiting for processing
+JOB_STATUS_PROCESSING = "processing" # Job currently being processed by worker
+JOB_STATUS_COMPLETED = "completed"   # Job finished successfully
+JOB_STATUS_FAILED = "failed"        # Job encountered an error
+JOB_STATUS_EXPIRED = "expired"      # Job is too old and has been cleaned up
 
 JOB_STATUSES = {
     JOB_STATUS_QUEUED,
@@ -12,13 +14,15 @@ JOB_STATUSES = {
     JOB_STATUS_EXPIRED,
 }
 
-STAGE_UPLOADING = "uploading"
-STAGE_EXTRACTING_TEXT = "extracting_text"
-STAGE_PARSING = "parsing"
-STAGE_GENERATING_EXPLANATION = "generating_explanation"
-STAGE_FINALIZING = "finalizing"
-STAGE_DONE = "done"
-STAGE_FAILED = "failed"
+# Job Stage Constants  
+# These represent the current processing step within a job
+STAGE_UPLOADING = "uploading"                       # File being uploaded to storage
+STAGE_EXTRACTING_TEXT = "extracting_text"           # OCR in progress
+STAGE_PARSING = "parsing"                           # Extracting medical entities
+STAGE_GENERATING_EXPLANATION = "generating_explanation"  # LLM generating explanation
+STAGE_FINALIZING = "finalizing"                     # Saving results and cleanup
+STAGE_DONE = "done"                                 # All processing complete
+STAGE_FAILED = "failed"                             # Processing failed at some stage
 
 JOB_STAGES = {
     STAGE_UPLOADING,

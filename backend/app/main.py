@@ -6,6 +6,7 @@ from app.core.logging import setup_logging, get_logger
 from app.db.init_db import init_db
 from app.db.session import SessionLocal
 
+# Import API route modules
 from app.api.routes.upload import router as upload_router
 from app.api.routes.status import router as status_router
 from app.api.routes.result_routes import router as result_router
@@ -13,15 +14,32 @@ from app.api.routes.result_routes import router as result_router
 from app.services.job_lifecycle import cleanup_old_jobs
 from app.services.scheduler import start_scheduler
 
+# Import models to ensure they are registered with SQLAlchemy
 from app.models import job, result
 
 logger = get_logger("main")
 
 
 def create_app() -> FastAPI:
+    """Create and configure the FastAPI application instance.
+    
+    Sets up:
+    - Logging system
+    - Database initialization
+    - CORS middleware
+    - Cache headers middleware
+    - API routes
+    - Background scheduler
+    - Admin endpoints
+    
+    Returns:
+        FastAPI: Configured application instance
+    """
+    # Initialize core systems
     setup_logging()
     init_db()
 
+    # Create FastAPI application with metadata
     app = FastAPI(
         title=settings.APP_NAME,
         version="0.1.0",
@@ -91,4 +109,5 @@ def create_app() -> FastAPI:
     return app
 
 
-app = create_app()
+if __name__ == "__main__":
+    app = create_app()
