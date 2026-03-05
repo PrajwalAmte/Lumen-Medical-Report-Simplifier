@@ -31,9 +31,12 @@ Rules:
   "12,800 cells/uL", output value="12800 cells/uL". Commas in numbers
   are thousands separators — "12,800" means twelve thousand eight hundred.
 - Extract EVERY test result from raw_text. Do NOT stop after the first few.
-  A blood report may have 10-20 tests — list ALL of them in abnormal_values
-  or normal_values as appropriate.
-- Compare each test value against its normal range to decide if abnormal.
+  A blood report may have 10-20 tests — list ALL of them.
+- CLASSIFICATION RULE (strict): Compare each value against its reference range.
+  If the value is ABOVE the max OR BELOW the min of the normal range → put it
+  in abnormal_values. ONLY put a test in normal_values if the value falls
+  strictly within the normal range. Never put a high or low result in
+  normal_values, even if it is only slightly out of range.
 - For each abnormal value, provide specific causes and actionable advice.
 - For each medicine, explain purpose and side effects in plain language.
 - If data is truly insufficient for a field, use null or empty array [].
