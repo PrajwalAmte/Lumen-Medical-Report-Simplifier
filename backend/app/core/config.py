@@ -47,7 +47,7 @@ class Settings(BaseSettings):
     LLM_PROVIDER: str = "openai"
     OPENAI_API_KEY: str | None = None
     LLM_MODEL: str = "gpt-4.1-mini"
-    LLM_MAX_TOKENS: int = 1200
+    LLM_MAX_TOKENS: int = 4000
     LLM_TEMPERATURE: float = 0.1
 
     LLM_TIMEOUT_SEC: int = 60

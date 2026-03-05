@@ -46,7 +46,7 @@ def extract_tests(text: str) -> List[Dict]:
         units = meta.get("units", [unit] if unit else [])
 
         for name in aliases:
-            pattern = rf"{re.escape(name)}\s*[:\-]?\s*(\d+\.?\d*)\s*([a-zA-Z/^\d]+)?"
+            pattern = rf"{re.escape(name)}\s*[:\-]?\s*(\d[\d,]*\.?\d*)\s*([a-zA-Z/%^\d]+)?"
             for match in re.finditer(pattern, text, flags=re.IGNORECASE):
                 raw_value = match.group(1)
                 raw_unit = match.group(2) or units[0] if units else ""

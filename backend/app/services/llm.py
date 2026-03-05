@@ -26,13 +26,19 @@ Rules:
 - Do NOT omit any required keys. Do NOT add extra keys.
 - Never invent medical facts. Base everything on the provided data.
 - Use simple Indian English that a non-medical person can understand.
-- If the input contains raw OCR text, extract ALL tests, medicines, values,
-  hospital name, doctor name, and date from it — even if structured fields
-  are empty. The raw text is the ground truth.
+- UNIT RULE: Copy values and units EXACTLY as written in the document.
+  Never convert, infer, or substitute units. If the document says
+  "12,800 cells/uL", output value="12800 cells/uL". Commas in numbers
+  are thousands separators — "12,800" means twelve thousand eight hundred.
+- Extract EVERY test result from raw_text. Do NOT stop after the first few.
+  A blood report may have 10-20 tests — list ALL of them in abnormal_values
+  or normal_values as appropriate.
+- Compare each test value against its normal range to decide if abnormal.
 - For each abnormal value, provide specific causes and actionable advice.
 - For each medicine, explain purpose and side effects in plain language.
-- If data is truly insufficient for a field, use "insufficient data".
+- If data is truly insufficient for a field, use null or empty array [].
 - confidence_score: 0.0-1.0 reflecting how much usable data was found.
+  Set to 1.0 if raw_text was readable and all tests were extracted.
 
 Always follow this JSON schema exactly:
 {{SCHEMA}}
@@ -50,14 +56,19 @@ _SCHEMA_OBJ = {
     "abnormal_values": [
         {
             "test_name": "string",
-            "value": "string",
-            "normal_range": "string",
-            "severity": "mild|moderate|severe|critical|low|high|unknown",
-            "what_it_means": "string",
+            "value": "string — copy EXACTLY from document including unit",
+            "normal_range": "string — copy EXACTLY from document",
+            "severity": "mild|moderate|severe|critical",
+            "what_it_means": "string — plain English explanation",
             "common_causes": ["string"],
-            "what_to_ask_doctor": ["string"]
+            "what_to_ask_doctor": ["string"],
+            "health_risks": ["string"],
+            "lifestyle_recommendations": ["string"],
+            "dietary_recommendations": ["string"]
         }
     ],
+    "urgency_level": "routine|soon|urgent|emergency",
+    "red_flags": ["string — symptom that needs immediate attention"],
     "normal_values": [
         {
             "test_name": "string",
