@@ -1,6 +1,11 @@
 from sqlalchemy import Column, Integer, String, DateTime, Text
-from datetime import datetime
+from datetime import datetime, timezone
 from app.db.base import Base
+
+
+def _utcnow() -> datetime:
+    """Return the current UTC time as a timezone-aware datetime."""
+    return datetime.now(timezone.utc)
 
 
 class Feedback(Base):
@@ -10,4 +15,4 @@ class Feedback(Base):
     job_id = Column(String, index=True, nullable=False)
     rating = Column(Integer)
     comment = Column(Text, nullable=True)
-    created_at = Column(DateTime, default=datetime.utcnow)
+    created_at = Column(DateTime(timezone=True), default=_utcnow)

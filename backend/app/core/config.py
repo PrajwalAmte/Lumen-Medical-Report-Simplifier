@@ -66,6 +66,15 @@ class Settings(BaseSettings):
     JOB_HARD_DELETE_DAYS: int = 30
     CLEANUP_INTERVAL_HOURS: int = 24
 
+    # Watchdog: maximum minutes a job can stay in "processing" before
+    # it is considered stuck (worker crash recovery).
+    STUCK_JOB_TIMEOUT_MINUTES: int = 10
+    # How often (in seconds) the worker polls for orphaned "queued" jobs
+    # that were never pushed to Redis (issue #18 safety net).
+    QUEUED_POLL_INTERVAL_SEC: int = 30
+    # Number of worker threads that run pipeline jobs concurrently.
+    WORKER_CONCURRENCY: int = 4
+
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
     def parse_cors(cls, v):

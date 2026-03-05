@@ -1,28 +1,26 @@
-import time
-import redis
 from fastapi import HTTPException, status, Request
 from app.core.config import settings
+from app.services.redis_client import get_redis_client
 
-# Global Redis client for rate limiting
-_redis_client = None
-
-
-def get_redis_client():
-    """Get Redis client instance for rate limiting operations."""
-    global _redis_client
-    if _redis_client is None:
-        _redis_client = redis.Redis.from_url(
-            settings.REDIS_URL,
-            decode_responses=True
-        )
-    return _redis_client
+# Lua script for atomic increment-and-check rate limiting.
+# Eliminates the TOCTOU race between reading the counter and incrementing it.
+# Returns the new count after increment. Sets TTL only on the first request
+# in a window (when INCR returns 1) to avoid resetting the expiry mid-window.
+_RATE_LIMIT_LUA = """
+local current = redis.call('INCR', KEYS[1])
+if current == 1 then
+    redis.call('EXPIRE', KEYS[1], ARGV[1])
+end
+return current
+"""
 
 
 def rate_limit(request: Request):
     """Enforce per-minute rate limiting based on client IP address.
     
-    CRITICAL BUG FIX: request.client can be None in test environments
-    or when running behind certain proxies. This was causing AttributeError.
+    Uses an atomic Lua script to increment the counter and check the limit
+    in a single Redis round-trip, preventing race conditions where concurrent
+    requests could bypass the limit.
     
     Args:
         request: FastAPI request object
@@ -31,25 +29,18 @@ def rate_limit(request: Request):
         HTTPException: 429 if rate limit exceeded
     """
     r = get_redis_client()
-    
-    # Handle cases where client info is not available
-    if request.client is None:
-        client_ip = "unknown"
-    else:
-        client_ip = request.client.host
-    
-    key = f"rate:{client_ip}"
-    current = r.get(key)
 
-    # Check if rate limit exceeded
-    if current and int(current) >= settings.RATE_LIMIT_PER_MINUTE:
+    # Handle cases where client info is not available
+    client_ip = request.client.host if request.client else "unknown"
+
+    key = f"rate:{client_ip}"
+    window_seconds = 60
+
+    # Atomic increment-then-check: no window for concurrent bypass
+    current_count = r.eval(_RATE_LIMIT_LUA, 1, key, window_seconds)
+
+    if int(current_count) > settings.RATE_LIMIT_PER_MINUTE:
         raise HTTPException(
             status_code=status.HTTP_429_TOO_MANY_REQUESTS,
             detail="Rate limit exceeded"
         )
-
-    # Increment counter with atomic operations
-    pipe = r.pipeline()
-    pipe.incr(key, 1)  # Increment request count
-    pipe.expire(key, 60)  # Set TTL of 60 seconds
-    pipe.execute()

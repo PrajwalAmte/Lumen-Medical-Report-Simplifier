@@ -1,21 +1,26 @@
-import json
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from sqlalchemy import text
 
 from app.api.deps import get_db
 from app.models.job import Job
+from app.models.result import Result
 from app.models.schemas import ResultResponse
-from app.services.cache import get_cached_result
+from app.services.cache import get_cached_result, set_cached_result
 from app.services.result_sanitizer import sanitize_result
 from app.core.constants import JOB_STATUS_EXPIRED
+from app.core.config import settings
+from app.core.security import api_key_auth
 from app.core.logging import get_logger
 
 logger = get_logger("result")
 router = APIRouter()
 
 
-@router.get("/result/{job_id}", response_model=ResultResponse)
+@router.get(
+    "/result/{job_id}",
+    response_model=ResultResponse,
+    dependencies=[Depends(api_key_auth)]
+)
 def get_result(job_id: str, db: Session = Depends(get_db)):
     job = db.query(Job).filter(Job.id == job_id).first()
 
@@ -78,38 +83,25 @@ def get_result(job_id: str, db: Session = Depends(get_db)):
     except Exception as e:
         logger.warning(f"Cache read failed for {job_id}: {e}")
 
-    result_row = db.execute(
-        text("SELECT result_json FROM results WHERE job_id = :job_id"),
-        {"job_id": job_id}
-    ).fetchone()
+    # ORM query — result_json is a JSON/JSONB column, so SQLAlchemy
+    # returns a native dict; no manual json.loads needed.
+    result_row = db.query(Result).filter(Result.job_id == job_id).first()
 
-    if not result_row or not result_row[0]:
+    if not result_row or not result_row.result_json:
         logger.error(f"Result not found in database for completed job {job_id}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Result not found for completed job"
         )
 
+    result_payload = result_row.result_json
+
+    # Re-populate Redis cache so subsequent requests avoid a DB round-trip.
+    # Uses the default 24-hour TTL from settings.
     try:
-        result_payload = json.loads(result_row[0])
+        set_cached_result(job_id, result_payload, ttl_sec=settings.REDIS_RESULT_TTL_SECONDS)
     except Exception as e:
-        logger.error(f"Stored result is corrupted for job {job_id}: {e}")
-        # Return a safe minimal response instead of 500
-        safe = {
-            "job_id": job_id,
-            "status": "completed",
-            "disclaimer": "",
-            "input_summary": {"document_type": "unknown", "detected_language": None, "detected_hospital": None, "date_of_report": None},
-            "abnormal_values": [],
-            "normal_values": [],
-            "medicines": [],
-            "overall_summary": "Result corrupted",
-            "questions_to_ask_doctor": [],
-            "next_steps": [],
-            "confidence_score": 0.0,
-            "metadata": {"processing_time_sec": 0, "ocr_engine": "unknown", "llm_provider": "unknown", "model": "unknown", "cached": False}
-        }
-        return ResultResponse.model_validate(safe)
+        logger.warning(f"Failed to re-cache result for {job_id}: {e}")
 
     logger.info(f"Result retrieved successfully for job {job_id}")
 

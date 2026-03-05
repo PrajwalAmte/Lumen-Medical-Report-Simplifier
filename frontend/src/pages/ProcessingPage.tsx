@@ -12,13 +12,9 @@ interface PollingState {
   lastSuccessTime: number;
 }
 
-interface ProcessingPageProps {
-  jobId: string;
-}
-
-export function ProcessingPage({ jobId }: ProcessingPageProps) {
+export function ProcessingPage() {
   const navigate = useNavigate();
-  const { jobId: paramJobId } = useParams<{ jobId: string }>();
+  const { jobId } = useParams<{ jobId: string }>();
   const [status, setStatus] = useState<StatusResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [elapsedTime, setElapsedTime] = useState<number>(0);
@@ -32,7 +28,7 @@ export function ProcessingPage({ jobId }: ProcessingPageProps) {
   const timerIdRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (!paramJobId) {
+    if (!jobId) {
       navigate('/');
       return;
     }
@@ -48,7 +44,7 @@ export function ProcessingPage({ jobId }: ProcessingPageProps) {
       if (!isMountedRef.current) return;
 
       try {
-        const response = await getStatus(paramJobId);
+        const response = await getStatus(jobId);
 
         if (!isMountedRef.current) return;
 
@@ -59,7 +55,7 @@ export function ProcessingPage({ jobId }: ProcessingPageProps) {
         if (response.status === 'completed') {
           if (intervalIdRef.current) clearInterval(intervalIdRef.current);
           if (timerIdRef.current) clearInterval(timerIdRef.current);
-          navigate(`/result/${paramJobId}`);
+          navigate(`/result/${jobId}`);
         } else if (response.status === 'failed') {
           setError('Processing failed. Please try uploading again.');
         }
@@ -100,7 +96,7 @@ export function ProcessingPage({ jobId }: ProcessingPageProps) {
       if (intervalIdRef.current) clearInterval(intervalIdRef.current);
       if (timerIdRef.current) clearInterval(timerIdRef.current);
     };
-  }, [paramJobId, navigate]);
+  }, [jobId, navigate]);
 
   const handleCancel = () => {
     const confirmed = window.confirm(

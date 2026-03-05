@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, status, Header
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -20,6 +21,21 @@ from app.models import job, result
 logger = get_logger("main")
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Application lifespan — replaces the deprecated @app.on_event pattern.
+
+    Everything before ``yield`` runs on startup; everything after runs on
+    shutdown.
+    """
+    logger.info("Starting background scheduler")
+    start_scheduler()
+    yield
+    # Shutdown: nothing to clean up currently, but this is where you'd
+    # stop the scheduler, close connection-pools, etc.
+    logger.info("Application shutting down")
+
+
 def create_app() -> FastAPI:
     """Create and configure the FastAPI application instance.
     
@@ -29,7 +45,7 @@ def create_app() -> FastAPI:
     - CORS middleware
     - Cache headers middleware
     - API routes
-    - Background scheduler
+    - Background scheduler (via lifespan)
     - Admin endpoints
     
     Returns:
@@ -39,17 +55,13 @@ def create_app() -> FastAPI:
     setup_logging()
     init_db()
 
-    # Create FastAPI application with metadata
+    # Create FastAPI application with metadata and lifespan handler
     app = FastAPI(
         title=settings.APP_NAME,
         version="0.1.0",
-        description="Lumen API - Medical Report & Prescription Explainer"
+        description="Lumen API - Medical Report & Prescription Explainer",
+        lifespan=lifespan,
     )
-
-    @app.on_event("startup")
-    def startup_event():
-        logger.info("Starting background scheduler")
-        start_scheduler()
 
     app.add_middleware(
         CORSMiddleware,
@@ -109,5 +121,6 @@ def create_app() -> FastAPI:
     return app
 
 
-if __name__ == "__main__":
-    app = create_app()
+# Module-level app instance used by uvicorn (app.main:app).
+# Must be at module scope — not inside __main__ guard.
+app = create_app()

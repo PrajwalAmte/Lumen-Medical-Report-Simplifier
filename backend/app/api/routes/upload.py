@@ -57,7 +57,7 @@ async def upload_file_route(
     validate_file_size(file_content)
     validate_file_magic_bytes(file_content, file.filename)
 
-    job_id = f"job_{uuid.uuid4().hex[:10]}"
+    job_id = f"job_{uuid.uuid4().hex}"
     file_ext = os.path.splitext(file.filename)[1].lower()
     s3_key = f"uploads/{job_id}{file_ext}"
 

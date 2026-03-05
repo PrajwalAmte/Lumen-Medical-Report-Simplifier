@@ -1,28 +1,12 @@
-import redis
 from app.core.config import settings
 from app.core.logging import get_logger
+from app.services.redis_client import get_redis_client
 
 logger = get_logger("queue")
-
-# Global Redis client instance (singleton pattern)
-_redis_client = None
 
 # Queue size limits to prevent memory issues
 MAX_QUEUE_SIZE = 1000
 QUEUE_SIZE_CHECK_INTERVAL = 100
-
-
-def get_redis_client():
-    """Get Redis client instance using singleton pattern for connection reuse."""
-    global _redis_client
-
-    if _redis_client is None:
-        _redis_client = redis.Redis.from_url(
-            settings.REDIS_URL,
-            decode_responses=True  # Automatically decode bytes to strings
-        )
-
-    return _redis_client
 
 
 def push_job(job_id: str):

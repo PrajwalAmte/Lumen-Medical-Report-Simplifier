@@ -1,26 +1,10 @@
-import redis
 import json
 from app.core.config import settings
 from app.core.logging import get_logger
+from app.services.redis_client import get_redis_client
 from app.services.result_sanitizer import sanitize_result
 
 logger = get_logger("cache")
-
-# Global Redis client for caching operations
-_redis_client = None
-
-
-def get_redis_client():
-    """Get Redis client instance for caching operations."""
-    global _redis_client
-
-    if _redis_client is None:
-        _redis_client = redis.Redis.from_url(
-            settings.REDIS_URL,
-            decode_responses=True  # Automatically decode bytes to strings
-        )
-
-    return _redis_client
 
 
 def get_cached_result(job_id: str) -> dict | None:

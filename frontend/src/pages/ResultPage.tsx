@@ -97,14 +97,42 @@ export const ResultPage: React.FC = () => {
     };
   }, [jobId, navigate]);
 
-  const getSeverityColor = (severity: string) => {
-    const colors: Record<string, string> = {
-      critical: 'red',
-      severe: 'red',
-      moderate: 'orange',
-      mild: 'yellow'
+  // Return complete static Tailwind class strings per severity.
+  // IMPORTANT: Every class must appear as a full literal string so Tailwind's
+  // PurgeCSS can detect them. NEVER use template interpolation like `border-${x}-500`.
+  const getSeverityClasses = (severity: string) => {
+    const map: Record<string, { border: string; bg: string; text: string; value: string }> = {
+      critical: {
+        border: 'border-red-500',
+        bg: 'bg-red-100 text-red-800',
+        text: 'text-red-800',
+        value: 'text-red-700',
+      },
+      severe: {
+        border: 'border-red-500',
+        bg: 'bg-red-100 text-red-800',
+        text: 'text-red-800',
+        value: 'text-red-700',
+      },
+      moderate: {
+        border: 'border-orange-500',
+        bg: 'bg-orange-100 text-orange-800',
+        text: 'text-orange-800',
+        value: 'text-orange-700',
+      },
+      mild: {
+        border: 'border-yellow-500',
+        bg: 'bg-yellow-100 text-yellow-800',
+        text: 'text-yellow-800',
+        value: 'text-yellow-700',
+      },
     };
-    return colors[severity] || 'gray';
+    return map[severity] || {
+      border: 'border-gray-500',
+      bg: 'bg-gray-100 text-gray-800',
+      text: 'text-gray-800',
+      value: 'text-gray-700',
+    };
   };
 
   const getUrgencyConfig = (level: string) => {
@@ -363,10 +391,10 @@ export const ResultPage: React.FC = () => {
                 {result.abnormal_values && result.abnormal_values.length > 0 ? (
                   result.abnormal_values.map((value: AbnormalValue, idx) => {
                   const isExpanded = expandedAbnormal === value.test_name;
-                  const color = getSeverityColor(value.severity);
+                  const severityClasses = getSeverityClasses(value.severity);
                   
                   return (
-                    <div key={idx} className={`bg-white rounded-lg shadow-sm border-l-4 border-${color}-500 overflow-hidden`}>
+                    <div key={idx} className={`bg-white rounded-lg shadow-sm border-l-4 ${severityClasses.border} overflow-hidden`}>
                       <button
                         onClick={() => setExpandedAbnormal(isExpanded ? null : value.test_name)}
                         className="w-full p-6 text-left hover:bg-gray-50 transition-colors"
@@ -375,14 +403,14 @@ export const ResultPage: React.FC = () => {
                           <div className="flex-1">
                             <div className="flex items-center gap-3 mb-2">
                               <h3 className="text-lg font-bold text-gray-900">{value.test_name}</h3>
-                              <span className={`px-2 py-1 bg-${color}-100 text-${color}-800 text-xs font-medium rounded uppercase`}>
+                              <span className={`px-2 py-1 ${severityClasses.bg} text-xs font-medium rounded uppercase`}>
                                 {value.severity}
                               </span>
                             </div>
                             <div className="flex items-center gap-4 text-sm">
                               <div>
                                 <span className="text-gray-600">Your Value: </span>
-                                <span className={`font-bold text-${color}-700`}>{value.value}</span>
+                                <span className={`font-bold ${severityClasses.value}`}>{value.value}</span>
                               </div>
                               <div>
                                 <span className="text-gray-600">Normal Range: </span>
@@ -422,25 +450,6 @@ export const ResultPage: React.FC = () => {
                                   </li>
                                 ))}
                               </ul>
-                              <div className="flex gap-3 mt-3">
-                                <button
-                                  onClick={() => {
-                                    setLoading(true);
-                                    setError(null);
-                                  }}
-                                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
-                                  aria-label="retry-fetch-results"
-                                >
-                                  Retry
-                                </button>
-                                <button
-                                  onClick={() => navigate('/')}
-                                  className="flex-1 px-4 py-2 bg-gray-200 text-gray-900 rounded-lg hover:bg-gray-300 transition-colors text-sm font-medium"
-                                  aria-label="back-to-upload"
-                                >
-                                  Back to Upload
-                                </button>
-                              </div>
                             </div>
                           )}
 

@@ -1,8 +1,9 @@
 import json
+import asyncio
 import time
 from typing import Optional, List, Any, Dict
 
-from openai import OpenAI
+from openai import OpenAI, AsyncOpenAI
 from app.core.config import settings
 from app.core.logging import get_logger
 from app.services.catalog import TEST_CATALOG, MEDICINE_CATALOG
@@ -10,6 +11,7 @@ from app.services.result_sanitizer import sanitize_result
 
 logger = get_logger("llm")
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
+async_client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
 
 # Maximum characters of raw text to send to LLM to prevent token overflow
 MAX_RAW_CHARS = 3000 
@@ -166,6 +168,80 @@ Important:
     return parsed_json
 
 
+# ---------------------------------------------------------------------------
+#  Async variants — used by the async worker pipeline (#20)
+# ---------------------------------------------------------------------------
+
+async def generate_explanation_async(parsed_data: dict) -> dict:
+    """Async version of generate_explanation with retry + fallback."""
+    for attempt in range(1, settings.LLM_RETRY_COUNT + 1):
+        try:
+            logger.info(f"Async LLM attempt {attempt}/{settings.LLM_RETRY_COUNT}")
+            return await _call_openai_async(parsed_data)
+        except Exception as e:
+            logger.warning(f"Async LLM attempt {attempt} failed: {e}")
+            if attempt < settings.LLM_RETRY_COUNT:
+                await asyncio.sleep(min(settings.LLM_RETRY_BACKOFF_SEC * attempt, 8))
+            else:
+                logger.error("All async LLM attempts failed. Using fallback.")
+                return _fallback_explanation(parsed_data)
+
+
+async def _call_openai_async(parsed_data: dict) -> dict:
+    """Async OpenAI call — uses the AsyncOpenAI client so the event-loop
+    is not blocked while waiting for the network response."""
+    safe_parsed = json.loads(json.dumps(parsed_data))
+
+    raw_text = safe_parsed.get("raw_text")
+    if isinstance(raw_text, str) and len(raw_text) > MAX_RAW_CHARS:
+        safe_parsed["raw_text"] = raw_text[:MAX_RAW_CHARS] + "…"
+
+    enriched_payload = {"parsed_data": safe_parsed}
+
+    user_prompt = f"""
+Return a JSON object that strictly matches the required schema.
+
+Use this input data:
+{json.dumps(enriched_payload, separators=(",", ":"))}
+
+Important:
+- Return ONLY JSON.
+- No explanations.
+- No markdown.
+"""
+
+    response = await async_client.chat.completions.create(
+        model=settings.LLM_MODEL,
+        messages=[
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "user", "content": user_prompt},
+        ],
+        max_tokens=settings.LLM_MAX_TOKENS,
+        temperature=0.0,
+        timeout=settings.LLM_TIMEOUT_SEC,
+        response_format={"type": "json_object"},
+    )
+
+    output_text = (response.choices[0].message.content or "").strip()
+    logger.info(f"Async LLM output length={len(output_text)}")
+
+    usage = getattr(response, "usage", None)
+    if usage:
+        logger.info(
+            f"LLM token usage — prompt={usage.prompt_tokens}, "
+            f"completion={usage.completion_tokens}, total={usage.total_tokens}"
+        )
+
+    if not output_text:
+        raise RuntimeError("Empty response from async LLM")
+
+    parsed_json = _parse_or_repair_json(output_text)
+    parsed_json = sanitize_result(parsed_json)
+    _validate_schema(parsed_json)
+
+    return parsed_json
+
+
 def _parse_or_repair_json(text: str) -> dict:
     try:
         return json.loads(text)
@@ -281,26 +357,31 @@ def _enrich_test_with_catalog(t: dict) -> dict:
 
     is_abnormal = False
     severity = "unknown"
+    direction = None  # "low" or "high" — preserved for downstream context
 
     if value is not None and min_v is not None and max_v is not None:
         if value < min_v:
-            deviation = ((min_v - value) / min_v) * 100
+            deviation = ((min_v - value) / min_v) * 100 if min_v != 0 else 0
             is_abnormal = True
-            severity = "low"
+            direction = "low"
         elif value > max_v:
-            deviation = ((value - max_v) / max_v) * 100
+            deviation = ((value - max_v) / max_v) * 100 if max_v != 0 else 0
             is_abnormal = True
-            severity = "high"
+            direction = "high"
         else:
             deviation = 0
-            severity = "unknown"
 
-        if deviation > 30:
-            severity = "severe"
-        elif deviation > 15:
-            severity = "moderate"
-        elif deviation > 0:
-            severity = "mild"
+        # Map deviation percentage to clinical severity.
+        # direction is kept separate so both pieces of information survive.
+        if is_abnormal:
+            if deviation > 50:
+                severity = "critical"
+            elif deviation > 30:
+                severity = "severe"
+            elif deviation > 15:
+                severity = "moderate"
+            else:
+                severity = "mild"
 
     name = catalog.get("display_name") or t.get("name") or "Unknown"
     unit = t.get("unit", "")
@@ -312,7 +393,8 @@ def _enrich_test_with_catalog(t: dict) -> dict:
     )
 
     if is_abnormal:
-        meaning = catalog.get("meaning") or "This value is outside the normal range."
+        direction_label = f"({'below' if direction == 'low' else 'above'} normal)"
+        meaning = catalog.get("meaning") or f"This value is outside the normal range {direction_label}."
     else:
         meaning = catalog.get("normal_meaning") or "This value is within the normal range."
 
@@ -320,9 +402,10 @@ def _enrich_test_with_catalog(t: dict) -> dict:
     questions = []
 
     if is_abnormal:
+        level_word = "low" if direction == "low" else "high"
         questions = [
-            f"What is causing my {name} abnormal result?",
-            f"Is my {name} level serious?",
+            f"What is causing my {level_word} {name} result?",
+            f"Is my {name} level serious at this range?",
             f"Do I need further tests for {name}?",
             f"What lifestyle changes can help improve my {name}?"
         ]
@@ -333,6 +416,7 @@ def _enrich_test_with_catalog(t: dict) -> dict:
         "value_str": value_str,
         "normal_range_str": normal_range_str,
         "severity": severity,
+        "direction": direction,
         "is_abnormal": is_abnormal,
         "meaning": meaning,
         "common_causes": causes,
