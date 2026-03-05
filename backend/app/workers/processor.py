@@ -181,6 +181,16 @@ async def process_job(job_id: str):
 
         parsed_data = await loop.run_in_executor(_executor, parse_medical_text, raw_text)
 
+        # Pass raw OCR text to the LLM so it can extract context the regex
+        # parser missed (hospital name, doctor notes, dosages, dates, etc.).
+        # llm.py truncates this to MAX_RAW_CHARS before sending.
+        parsed_data["raw_text"] = raw_text
+        logger.info(
+            f"Job {job_id} parsed: {len(parsed_data.get('tests', []))} tests, "
+            f"{len(parsed_data.get('medicines', []))} medicines, "
+            f"{len(raw_text)} OCR chars"
+        )
+
         # Stage 3: Generate explanation via async LLM call
         update_job(db, job, JOB_STATUS_PROCESSING, STAGE_GENERATING_EXPLANATION,
                    DEFAULT_PROGRESS_BY_STAGE[STAGE_GENERATING_EXPLANATION])

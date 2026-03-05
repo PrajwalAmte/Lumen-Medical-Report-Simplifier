@@ -13,21 +13,26 @@ logger = get_logger("llm")
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 async_client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
 
-# Maximum characters of raw text to send to LLM to prevent token overflow
-MAX_RAW_CHARS = 3000 
+# Maximum characters of raw text to send to LLM to prevent token overflow.
+# gpt-4.1-mini supports 128k context; 8000 chars ≈ 2000 tokens, well within budget.
+MAX_RAW_CHARS = 8000
 
 # System prompt template that enforces strict JSON output format
 SYSTEM_PROMPT_TEMPLATE = """
-You are Lumen, a medical report explainer.
+You are Lumen, a medical report explainer for Indian patients.
 
 Rules:
-- Output ONLY valid JSON.
-- Do NOT include markdown or commentary.
-- Do NOT omit any required keys.
-- Do NOT add extra keys.
-- Never invent medical facts.
-- Use simple Indian English.
-- If unsure, say "insufficient data".
+- Output ONLY valid JSON. No markdown, no commentary.
+- Do NOT omit any required keys. Do NOT add extra keys.
+- Never invent medical facts. Base everything on the provided data.
+- Use simple Indian English that a non-medical person can understand.
+- If the input contains raw OCR text, extract ALL tests, medicines, values,
+  hospital name, doctor name, and date from it — even if structured fields
+  are empty. The raw text is the ground truth.
+- For each abnormal value, provide specific causes and actionable advice.
+- For each medicine, explain purpose and side effects in plain language.
+- If data is truly insufficient for a field, use "insufficient data".
+- confidence_score: 0.0-1.0 reflecting how much usable data was found.
 
 Always follow this JSON schema exactly:
 {{SCHEMA}}
@@ -125,15 +130,15 @@ def _call_openai(parsed_data: dict) -> dict:
     }
 
     user_prompt = f"""
-Return a JSON object that strictly matches the required schema.
+Analyse the medical document below and return a JSON object matching the required schema.
 
-Use this input data:
+Input data (includes raw OCR text AND pre-extracted structured fields):
 {json.dumps(enriched_payload, separators=(",", ":"))}
 
-Important:
-- Return ONLY JSON.
-- No explanations.
-- No markdown.
+Instructions:
+- Use raw_text as the PRIMARY source — extract every test, value, medicine, hospital, doctor, and date from it.
+- Use the structured fields (tests/medicines) as hints, not the only source.
+- Return ONLY JSON. No explanations, no markdown.
 """
 
     response = client.chat.completions.create(
@@ -199,15 +204,15 @@ async def _call_openai_async(parsed_data: dict) -> dict:
     enriched_payload = {"parsed_data": safe_parsed}
 
     user_prompt = f"""
-Return a JSON object that strictly matches the required schema.
+Analyse the medical document below and return a JSON object matching the required schema.
 
-Use this input data:
+Input data (includes raw OCR text AND pre-extracted structured fields):
 {json.dumps(enriched_payload, separators=(",", ":"))}
 
-Important:
-- Return ONLY JSON.
-- No explanations.
-- No markdown.
+Instructions:
+- Use raw_text as the PRIMARY source — extract every test, value, medicine, hospital, doctor, and date from it.
+- Use the structured fields (tests/medicines) as hints, not the only source.
+- Return ONLY JSON. No explanations, no markdown.
 """
 
     response = await async_client.chat.completions.create(
