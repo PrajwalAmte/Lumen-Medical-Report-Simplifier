@@ -20,7 +20,7 @@ flowchart TB
         Infra --> Storage[("S3")]
         Infra --> OCR["Tesseract OCR"]
         Infra --> LLM["LLM Provider"]
-        Infra --> VDB[("ChromaDB (RAG)")]
+        Infra --> VDB[("pgvector (RAG)")]
     end
 
     subgraph Workers
@@ -39,7 +39,7 @@ flowchart TB
 - **LLM providers** — pluggable Groq / OpenAI / Llama backends: [backend/app/services/llm_providers](backend/app/services/llm_providers)
 - **Medical catalogs** — ~100 lab tests, 494 drugs (from RxNorm), synonyms, units: [backend/app/catalog](backend/app/catalog)
 - **Domain models** — job and result ORM + Pydantic schemas: [backend/app/models](backend/app/models)
-- **Ingestion scripts** — RxNorm drug pull, LOINC test import, ChromaDB indexer: [backend/scripts](backend/scripts)
+- **Ingestion scripts** — RxNorm drug pull, LOINC test import, pgvector indexer: [backend/scripts](backend/scripts)
 - **Frontend pages** — upload → processing → result flow: [frontend/src/pages](frontend/src/pages)
 
 ## Technical details
@@ -52,21 +52,20 @@ flowchart TB
 - **Storage**: AWS S3 (`STORAGE_TYPE=s3`)
 - **OCR**: Tesseract — native PDF text extraction first, image OCR fallback (`pytesseract`, `pdfplumber`, `pdf2image`, `Pillow`)
 - **LLM**: Pluggable provider layer — Groq (default), OpenAI, or local Llama/Ollama. Dual-model routing (heavy/light), retry with exponential backoff
-- **RAG**: ChromaDB + `sentence-transformers` (all-MiniLM-L6-v2) — disabled by default; enable after running `python scripts/index_catalogs.py`
+- **RAG**: pgvector (PostgreSQL extension) + Jina AI embeddings (`jina-embeddings-v3`, 512 dims) — disabled by default; enable after running `python scripts/index_catalogs.py`
 - **Scheduler**: APScheduler — periodic job expiry and file cleanup
 
 ### Docker services
 
-Six containers managed by `docker-compose.yml`:
+Five containers managed by `docker-compose.yml`:
 
 | Container | Image | Port |
 |---|---|---|
 | `lumen-api` | custom (FastAPI) | 8000 |
 | `lumen-worker` | custom (async worker) | — |
 | `lumen-ui` | custom (nginx/React) | 3000 |
-| `lumen-postgres` | postgres:15-alpine | — |
+| `lumen-postgres` | pgvector/pgvector:pg15 | — |
 | `lumen-redis` | redis:7-alpine | — |
-| `lumen-chromadb` | chromadb/chroma:0.4.24 | 8100 |
 
 ### API endpoints
 
@@ -101,7 +100,7 @@ To regenerate from source APIs:
 cd backend
 python scripts/ingest_rxnorm.py          # pull drugs from RxNorm
 python scripts/build_catalogs.py --synonyms --units
-python scripts/index_catalogs.py         # index into ChromaDB
+python scripts/index_catalogs.py         # embed + index into pgvector
 ```
 
 ### Frontend stack
@@ -128,6 +127,7 @@ Key variables:
 | `OPENAI_API_KEY` | Required when `LLM_PROVIDER=openai` |
 | `S3_BUCKET` / `AWS_*` | Required when `STORAGE_TYPE=s3` |
 | `RAG_ENABLED` | `false` (default) — set `true` after indexing |
+| `JINA_API_KEY` | Required when `RAG_ENABLED=true` |
 | `REQUIRE_API_KEY` | Enforce `X-API-Key` header on all routes |
 
 ## Running locally
@@ -136,7 +136,7 @@ Key variables:
 docker compose up -d
 ```
 
-All six containers start automatically. The API is available at `http://localhost:8000`, the UI at `http://localhost:3000`.
+All five containers start automatically. The API is available at `http://localhost:8000`, the UI at `http://localhost:3000`.
 
 ## Navigating the codebase
 

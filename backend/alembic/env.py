@@ -17,7 +17,7 @@ from app.core.config import settings
 from app.db.base import Base
 
 # Import every model so Base.metadata is fully populated.
-from app.models import job, result  # noqa: F401
+from app.models import job, result, medical_knowledge  # noqa: F401
 
 # ---------- Alembic config ----------
 config = context.config

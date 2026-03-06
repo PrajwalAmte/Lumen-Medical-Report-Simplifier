@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Index medical catalog data into ChromaDB for RAG retrieval.
+Index medical catalog data into PostgreSQL (pgvector) for RAG retrieval.
 
-Converts tests.json + medicines.json into embeddable knowledge chunks
-and upserts them into the vector store.
+Converts tests.json + medicines.json into embeddable knowledge chunks,
+embeds them via Jina AI, and upserts into the medical_knowledge table.
 
 Usage:
     python scripts/index_catalogs.py              # index everything
@@ -144,7 +144,7 @@ def index_chunks(
     chunks: List[Tuple[str, Dict]],
     dry_run: bool = False,
 ) -> int:
-    """Index chunks into ChromaDB via retrieval service."""
+    """Index chunks into PostgreSQL via retrieval service."""
     if not chunks:
         log.info("No chunks to index.")
         return 0
@@ -163,7 +163,7 @@ def index_chunks(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Index catalog data into ChromaDB")
+    parser = argparse.ArgumentParser(description="Index catalog data into PostgreSQL (pgvector)")
     parser.add_argument("--tests-only", action="store_true", help="Only index tests")
     parser.add_argument("--meds-only", action="store_true", help="Only index medicines")
     parser.add_argument("--dry-run", action="store_true", help="Preview chunks only")

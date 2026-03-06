@@ -68,13 +68,12 @@ class Settings(BaseSettings):
     LLM_RETRY_BACKOFF_SEC: int = 2
 
     # ------------------------------------------------------------------
-    #  RAG / Embeddings
+    #  RAG / Embeddings (pgvector + Jina AI)
     # ------------------------------------------------------------------
     RAG_ENABLED: bool = True
-    CHROMADB_HOST: str = "chromadb"
-    CHROMADB_PORT: int = 8100
-    CHROMADB_COLLECTION: str = "lumen_medical"
-    EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
+    JINA_API_KEY: Optional[str] = None
+    JINA_EMBEDDING_MODEL: str = "jina-embeddings-v3"
+    JINA_DIMENSIONS: int = 512
     RAG_TOP_K: int = 5
 
     OCR_ENGINE: str = "tesseract"
