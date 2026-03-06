@@ -92,12 +92,3 @@ class ResultResponse(BaseModel):
     metadata: Metadata
 
 
-
-class FeedbackRequest(BaseModel):
-    job_id: str
-    rating: int = Field(..., ge=1, le=5)
-    comment: Optional[str] = None
-
-
-class FeedbackResponse(BaseModel):
-    message: str

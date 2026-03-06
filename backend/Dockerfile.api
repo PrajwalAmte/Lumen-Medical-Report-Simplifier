@@ -3,12 +3,9 @@ FROM python:3.12.2-slim
 
 WORKDIR /app
 
-# System deps for OCR + PDF handling
+# System deps (API container does NOT run OCR — that's the worker)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
-    tesseract-ocr \
-    poppler-utils \
-    libgl1 \
     curl \
     && rm -rf /var/lib/apt/lists/*
 

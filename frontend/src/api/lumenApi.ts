@@ -17,6 +17,7 @@ const api: AxiosInstance = axios.create({
   baseURL: API_CONFIG.BASE_URL,
   headers: {
     'Content-Type': 'application/json',
+    ...(API_CONFIG.API_KEY ? { 'X-API-Key': API_CONFIG.API_KEY } : {}),
   },
 });
 

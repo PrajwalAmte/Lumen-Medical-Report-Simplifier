@@ -1,23 +1,1499 @@
 {
+  "_metadata": {
+    "version": "2.0.0",
+    "last_updated": "2026-03-07",
+    "source": "Indian lab reference ranges (NABL/ICMR guidelines)",
+    "test_count": 180
+  },
+
   "hemoglobin": {
     "display_name": "Hemoglobin",
-    "normal_min": 12.0,
-    "normal_max": 16.0,
+    "category": "cbc",
     "unit": "g/dL",
-    "aliases": ["hb", "hgb"]
+    "aliases": ["hb", "hgb", "haemoglobin"],
+    "ranges": {
+      "male": {"min": 13.0, "max": 17.0},
+      "female": {"min": 12.0, "max": 15.5},
+      "all": {"min": 12.0, "max": 17.0}
+    },
+    "normal_min": 12.0,
+    "normal_max": 17.0,
+    "meaning": "Hemoglobin carries oxygen in your blood. Low levels may indicate anemia.",
+    "normal_meaning": "Your hemoglobin is in healthy range — good oxygen-carrying capacity.",
+    "common_causes": ["Iron deficiency", "Vitamin B12 deficiency", "Chronic disease", "Blood loss"]
   },
+
+  "rbc_count": {
+    "display_name": "RBC Count",
+    "category": "cbc",
+    "unit": "million/mcL",
+    "aliases": ["rbc", "red blood cells", "erythrocytes", "red cell count"],
+    "ranges": {
+      "male": {"min": 4.5, "max": 5.5},
+      "female": {"min": 4.0, "max": 5.0},
+      "all": {"min": 4.0, "max": 5.5}
+    },
+    "normal_min": 4.0,
+    "normal_max": 5.5,
+    "meaning": "Red blood cells carry oxygen. Abnormal counts affect oxygen delivery.",
+    "normal_meaning": "Your red blood cell count is normal.",
+    "common_causes": ["Anemia", "Bone marrow disorders", "Dehydration", "Polycythemia"]
+  },
+
   "wbc_count": {
     "display_name": "WBC Count",
+    "category": "cbc",
+    "unit": "cells/mcL",
+    "aliases": ["wbc", "white blood cells", "leukocytes", "tlc", "total leukocyte count"],
     "normal_min": 4000,
     "normal_max": 11000,
-    "unit": "cells/mcL",
-    "aliases": ["white blood cell", "wbc"]
+    "meaning": "White blood cells fight infection. High counts may indicate infection or inflammation.",
+    "normal_meaning": "Your white blood cell count is normal — immune system looks healthy.",
+    "common_causes": ["Infection", "Inflammation", "Leukemia", "Stress response"]
   },
+
   "platelet_count": {
     "display_name": "Platelet Count",
+    "category": "cbc",
+    "unit": "lakh/mcL",
+    "aliases": ["platelets", "plt", "thrombocytes", "platelet"],
     "normal_min": 1.5,
     "normal_max": 4.5,
-    "unit": "lakh/mcL",
-    "aliases": ["plt", "platelets"]
+    "meaning": "Platelets help blood clot. Low platelets increase bleeding risk.",
+    "normal_meaning": "Your platelet count is in healthy range.",
+    "common_causes": ["Dengue", "Viral infection", "Bone marrow issues", "Medications"]
+  },
+
+  "hematocrit": {
+    "display_name": "Hematocrit (PCV)",
+    "category": "cbc",
+    "unit": "%",
+    "aliases": ["pcv", "packed cell volume", "hct"],
+    "ranges": {
+      "male": {"min": 40, "max": 54},
+      "female": {"min": 36, "max": 48},
+      "all": {"min": 36, "max": 54}
+    },
+    "normal_min": 36,
+    "normal_max": 54,
+    "meaning": "Hematocrit measures the proportion of red cells in blood.",
+    "normal_meaning": "Your hematocrit is normal.",
+    "common_causes": ["Anemia", "Dehydration", "Polycythemia", "Blood loss"]
+  },
+
+  "mcv": {
+    "display_name": "MCV",
+    "category": "cbc",
+    "unit": "fL",
+    "aliases": ["mean corpuscular volume", "mean cell volume"],
+    "normal_min": 80,
+    "normal_max": 100,
+    "meaning": "MCV measures the average size of red blood cells.",
+    "normal_meaning": "Your red blood cell size is normal.",
+    "common_causes": ["Iron deficiency (low)", "B12/folate deficiency (high)", "Liver disease", "Alcohol"]
+  },
+
+  "mch": {
+    "display_name": "MCH",
+    "category": "cbc",
+    "unit": "pg",
+    "aliases": ["mean corpuscular hemoglobin", "mean cell hemoglobin"],
+    "normal_min": 27,
+    "normal_max": 33,
+    "meaning": "MCH measures average hemoglobin per red cell.",
+    "normal_meaning": "Your MCH is normal.",
+    "common_causes": ["Iron deficiency", "Thalassemia", "B12 deficiency"]
+  },
+
+  "mchc": {
+    "display_name": "MCHC",
+    "category": "cbc",
+    "unit": "g/dL",
+    "aliases": ["mean corpuscular hemoglobin concentration"],
+    "normal_min": 32,
+    "normal_max": 36,
+    "meaning": "MCHC measures hemoglobin concentration in red cells.",
+    "normal_meaning": "Your MCHC is normal.",
+    "common_causes": ["Iron deficiency", "Spherocytosis", "Thalassemia"]
+  },
+
+  "rdw": {
+    "display_name": "RDW",
+    "category": "cbc",
+    "unit": "%",
+    "aliases": ["red cell distribution width", "rdw-cv"],
+    "normal_min": 11.5,
+    "normal_max": 14.5,
+    "meaning": "RDW measures variation in red cell size. High values suggest mixed cell populations.",
+    "normal_meaning": "Your red cell size variation is normal.",
+    "common_causes": ["Iron deficiency", "B12/folate deficiency", "Mixed deficiency"]
+  },
+
+  "mpv": {
+    "display_name": "MPV",
+    "category": "cbc",
+    "unit": "fL",
+    "aliases": ["mean platelet volume"],
+    "normal_min": 7.5,
+    "normal_max": 11.5,
+    "meaning": "MPV measures average platelet size.",
+    "normal_meaning": "Your platelet size is normal.",
+    "common_causes": ["Bone marrow recovery", "Platelet destruction", "Myeloproliferative disorders"]
+  },
+
+  "neutrophils": {
+    "display_name": "Neutrophils",
+    "category": "cbc",
+    "unit": "%",
+    "aliases": ["neutrophil", "neut", "polymorphs", "pmn"],
+    "normal_min": 40,
+    "normal_max": 70,
+    "meaning": "Neutrophils are the primary infection-fighting white cells.",
+    "normal_meaning": "Your neutrophil level is normal.",
+    "common_causes": ["Bacterial infection", "Inflammation", "Stress", "Medications"]
+  },
+
+  "neutrophils_absolute": {
+    "display_name": "Absolute Neutrophil Count",
+    "category": "cbc",
+    "unit": "cells/mcL",
+    "aliases": ["anc", "absolute neutrophils"],
+    "normal_min": 2000,
+    "normal_max": 7500,
+    "meaning": "ANC measures actual neutrophil numbers. Low counts increase infection risk.",
+    "normal_meaning": "Your absolute neutrophil count is normal.",
+    "common_causes": ["Chemotherapy", "Bone marrow suppression", "Severe infection", "Autoimmune"]
+  },
+
+  "lymphocytes": {
+    "display_name": "Lymphocytes",
+    "category": "cbc",
+    "unit": "%",
+    "aliases": ["lymph", "lymphocyte"],
+    "normal_min": 20,
+    "normal_max": 40,
+    "meaning": "Lymphocytes fight viral infections and produce antibodies.",
+    "normal_meaning": "Your lymphocyte level is normal.",
+    "common_causes": ["Viral infection", "Leukemia", "HIV", "Autoimmune disease"]
+  },
+
+  "monocytes": {
+    "display_name": "Monocytes",
+    "category": "cbc",
+    "unit": "%",
+    "aliases": ["mono", "monocyte"],
+    "normal_min": 2,
+    "normal_max": 10,
+    "meaning": "Monocytes are part of your immune defense system.",
+    "normal_meaning": "Your monocyte level is normal.",
+    "common_causes": ["Chronic infection", "TB", "Autoimmune disease", "Leukemia"]
+  },
+
+  "eosinophils": {
+    "display_name": "Eosinophils",
+    "category": "cbc",
+    "unit": "%",
+    "aliases": ["eos", "eosinophil"],
+    "normal_min": 1,
+    "normal_max": 6,
+    "meaning": "Eosinophils fight parasites and are involved in allergies.",
+    "normal_meaning": "Your eosinophil level is normal.",
+    "common_causes": ["Allergies", "Parasitic infection", "Asthma", "Drug reaction"]
+  },
+
+  "basophils": {
+    "display_name": "Basophils",
+    "category": "cbc",
+    "unit": "%",
+    "aliases": ["baso", "basophil"],
+    "normal_min": 0,
+    "normal_max": 2,
+    "meaning": "Basophils are involved in allergic reactions.",
+    "normal_meaning": "Your basophil level is normal.",
+    "common_causes": ["Allergic reaction", "Myeloproliferative disorders", "Hypothyroidism"]
+  },
+
+  "esr": {
+    "display_name": "ESR",
+    "category": "cbc",
+    "unit": "mm/hr",
+    "aliases": ["erythrocyte sedimentation rate", "sed rate"],
+    "ranges": {
+      "male": {"min": 0, "max": 15},
+      "female": {"min": 0, "max": 20},
+      "all": {"min": 0, "max": 20}
+    },
+    "normal_min": 0,
+    "normal_max": 20,
+    "meaning": "ESR indicates inflammation in the body.",
+    "normal_meaning": "Your ESR is normal — no significant inflammation detected.",
+    "common_causes": ["Infection", "Autoimmune disease", "Cancer", "Pregnancy"]
+  },
+
+  "reticulocyte_count": {
+    "display_name": "Reticulocyte Count",
+    "category": "cbc",
+    "unit": "%",
+    "aliases": ["retic", "reticulocytes"],
+    "normal_min": 0.5,
+    "normal_max": 2.5,
+    "meaning": "Reticulocytes are young red cells — indicates bone marrow activity.",
+    "normal_meaning": "Your bone marrow is producing red cells normally.",
+    "common_causes": ["Hemolytic anemia", "Blood loss recovery", "Bone marrow suppression"]
+  },
+
+  "sgot": {
+    "display_name": "SGOT (AST)",
+    "category": "lft",
+    "unit": "U/L",
+    "aliases": ["ast", "aspartate transaminase", "aspartate aminotransferase"],
+    "normal_min": 0,
+    "normal_max": 40,
+    "meaning": "SGOT is a liver enzyme. Elevated levels may indicate liver damage.",
+    "normal_meaning": "Your liver enzyme SGOT is normal.",
+    "common_causes": ["Liver disease", "Heart attack", "Muscle injury", "Alcohol"]
+  },
+
+  "sgpt": {
+    "display_name": "SGPT (ALT)",
+    "category": "lft",
+    "unit": "U/L",
+    "aliases": ["alt", "alanine transaminase", "alanine aminotransferase"],
+    "normal_min": 0,
+    "normal_max": 40,
+    "meaning": "SGPT is a liver-specific enzyme. High levels suggest liver inflammation.",
+    "normal_meaning": "Your liver enzyme SGPT is normal.",
+    "common_causes": ["Hepatitis", "Fatty liver", "Medications", "Alcohol"]
+  },
+
+  "alkaline_phosphatase": {
+    "display_name": "Alkaline Phosphatase",
+    "category": "lft",
+    "unit": "U/L",
+    "aliases": ["alp", "alk phos", "alkp"],
+    "normal_min": 44,
+    "normal_max": 147,
+    "meaning": "ALP is found in liver and bones. High levels may indicate bile duct or bone issues.",
+    "normal_meaning": "Your alkaline phosphatase is normal.",
+    "common_causes": ["Bile duct obstruction", "Bone disease", "Pregnancy", "Growing children"]
+  },
+
+  "total_bilirubin": {
+    "display_name": "Total Bilirubin",
+    "category": "lft",
+    "unit": "mg/dL",
+    "aliases": ["bilirubin", "tbil", "t.bil"],
+    "normal_min": 0.1,
+    "normal_max": 1.2,
+    "meaning": "Bilirubin is a waste product from red cell breakdown. High levels cause jaundice.",
+    "normal_meaning": "Your bilirubin is normal — no jaundice risk.",
+    "common_causes": ["Liver disease", "Hemolysis", "Bile duct obstruction", "Gilbert syndrome"]
+  },
+
+  "direct_bilirubin": {
+    "display_name": "Direct Bilirubin",
+    "category": "lft",
+    "unit": "mg/dL",
+    "aliases": ["conjugated bilirubin", "dbil"],
+    "normal_min": 0,
+    "normal_max": 0.3,
+    "meaning": "Direct bilirubin is processed by the liver.",
+    "normal_meaning": "Your direct bilirubin is normal.",
+    "common_causes": ["Bile duct obstruction", "Hepatitis", "Liver cirrhosis"]
+  },
+
+  "indirect_bilirubin": {
+    "display_name": "Indirect Bilirubin",
+    "category": "lft",
+    "unit": "mg/dL",
+    "aliases": ["unconjugated bilirubin", "ibil"],
+    "normal_min": 0.1,
+    "normal_max": 0.9,
+    "meaning": "Indirect bilirubin is not yet processed by liver.",
+    "normal_meaning": "Your indirect bilirubin is normal.",
+    "common_causes": ["Hemolysis", "Gilbert syndrome", "Ineffective erythropoiesis"]
+  },
+
+  "total_protein": {
+    "display_name": "Total Protein",
+    "category": "lft",
+    "unit": "g/dL",
+    "aliases": ["tp", "serum protein"],
+    "normal_min": 6.0,
+    "normal_max": 8.3,
+    "meaning": "Total protein measures albumin and globulin combined.",
+    "normal_meaning": "Your total protein is normal.",
+    "common_causes": ["Malnutrition", "Liver disease", "Kidney disease", "Multiple myeloma"]
+  },
+
+  "albumin": {
+    "display_name": "Albumin",
+    "category": "lft",
+    "unit": "g/dL",
+    "aliases": ["alb", "serum albumin"],
+    "normal_min": 3.5,
+    "normal_max": 5.0,
+    "meaning": "Albumin is made by liver — maintains fluid balance and transports substances.",
+    "normal_meaning": "Your albumin is normal — liver function looks good.",
+    "common_causes": ["Liver disease", "Kidney disease", "Malnutrition", "Inflammation"]
+  },
+
+  "globulin": {
+    "display_name": "Globulin",
+    "category": "lft",
+    "unit": "g/dL",
+    "aliases": ["glob", "serum globulin"],
+    "normal_min": 2.0,
+    "normal_max": 3.5,
+    "meaning": "Globulins include antibodies and transport proteins.",
+    "normal_meaning": "Your globulin is normal.",
+    "common_causes": ["Chronic infection", "Autoimmune disease", "Multiple myeloma", "Liver disease"]
+  },
+
+  "ag_ratio": {
+    "display_name": "A/G Ratio",
+    "category": "lft",
+    "unit": "",
+    "aliases": ["albumin globulin ratio", "a:g ratio"],
+    "normal_min": 1.0,
+    "normal_max": 2.5,
+    "meaning": "A/G ratio compares albumin to globulin levels.",
+    "normal_meaning": "Your A/G ratio is normal.",
+    "common_causes": ["Liver disease", "Kidney disease", "Autoimmune disease", "Multiple myeloma"]
+  },
+
+  "ggt": {
+    "display_name": "GGT",
+    "category": "lft",
+    "unit": "U/L",
+    "aliases": ["gamma gt", "gamma glutamyl transferase", "ggtp"],
+    "normal_min": 0,
+    "normal_max": 60,
+    "meaning": "GGT is a liver enzyme sensitive to alcohol and bile duct issues.",
+    "normal_meaning": "Your GGT is normal.",
+    "common_causes": ["Alcohol use", "Bile duct disease", "Liver disease", "Medications"]
+  },
+
+  "ldh": {
+    "display_name": "LDH",
+    "category": "lft",
+    "unit": "U/L",
+    "aliases": ["lactate dehydrogenase", "lactic dehydrogenase"],
+    "normal_min": 140,
+    "normal_max": 280,
+    "meaning": "LDH is found in many tissues. High levels indicate tissue damage.",
+    "normal_meaning": "Your LDH is normal.",
+    "common_causes": ["Heart attack", "Liver disease", "Hemolysis", "Cancer"]
+  },
+
+  "blood_urea": {
+    "display_name": "Blood Urea",
+    "category": "kft",
+    "unit": "mg/dL",
+    "aliases": ["urea", "serum urea"],
+    "normal_min": 15,
+    "normal_max": 40,
+    "meaning": "Urea is a waste product filtered by kidneys.",
+    "normal_meaning": "Your kidney function for urea clearance is normal.",
+    "common_causes": ["Kidney disease", "Dehydration", "High protein diet", "GI bleeding"]
+  },
+
+  "bun": {
+    "display_name": "BUN",
+    "category": "kft",
+    "unit": "mg/dL",
+    "aliases": ["blood urea nitrogen"],
+    "normal_min": 7,
+    "normal_max": 20,
+    "meaning": "BUN measures nitrogen from urea in blood.",
+    "normal_meaning": "Your BUN is normal.",
+    "common_causes": ["Kidney disease", "Dehydration", "Heart failure", "High protein diet"]
+  },
+
+  "creatinine": {
+    "display_name": "Creatinine",
+    "category": "kft",
+    "unit": "mg/dL",
+    "aliases": ["serum creatinine", "creat", "s.creatinine"],
+    "ranges": {
+      "male": {"min": 0.7, "max": 1.3},
+      "female": {"min": 0.6, "max": 1.1},
+      "all": {"min": 0.6, "max": 1.3}
+    },
+    "normal_min": 0.6,
+    "normal_max": 1.3,
+    "meaning": "Creatinine is a muscle waste product filtered by kidneys. High levels suggest kidney issues.",
+    "normal_meaning": "Your creatinine is normal — kidneys are filtering well.",
+    "common_causes": ["Kidney disease", "Dehydration", "Muscle injury", "Medications"]
+  },
+
+  "uric_acid": {
+    "display_name": "Uric Acid",
+    "category": "kft",
+    "unit": "mg/dL",
+    "aliases": ["serum uric acid", "urate"],
+    "ranges": {
+      "male": {"min": 3.5, "max": 7.2},
+      "female": {"min": 2.5, "max": 6.0},
+      "all": {"min": 2.5, "max": 7.2}
+    },
+    "normal_min": 2.5,
+    "normal_max": 7.2,
+    "meaning": "Uric acid is a waste from purine breakdown. High levels cause gout.",
+    "normal_meaning": "Your uric acid is normal — low gout risk.",
+    "common_causes": ["Gout", "Kidney disease", "High purine diet", "Medications"]
+  },
+
+  "sodium": {
+    "display_name": "Sodium",
+    "category": "electrolytes",
+    "unit": "mEq/L",
+    "aliases": ["na", "serum sodium", "na+"],
+    "normal_min": 136,
+    "normal_max": 145,
+    "meaning": "Sodium regulates fluid balance and nerve function.",
+    "normal_meaning": "Your sodium level is normal.",
+    "common_causes": ["Dehydration", "Kidney disease", "Heart failure", "Medications"]
+  },
+
+  "potassium": {
+    "display_name": "Potassium",
+    "category": "electrolytes",
+    "unit": "mEq/L",
+    "aliases": ["k", "serum potassium", "k+"],
+    "normal_min": 3.5,
+    "normal_max": 5.0,
+    "meaning": "Potassium is critical for heart and muscle function.",
+    "normal_meaning": "Your potassium level is normal.",
+    "common_causes": ["Kidney disease", "Medications", "Dehydration", "Adrenal issues"]
+  },
+
+  "chloride": {
+    "display_name": "Chloride",
+    "category": "electrolytes",
+    "unit": "mEq/L",
+    "aliases": ["cl", "serum chloride", "cl-"],
+    "normal_min": 98,
+    "normal_max": 106,
+    "meaning": "Chloride helps maintain fluid and acid-base balance.",
+    "normal_meaning": "Your chloride level is normal.",
+    "common_causes": ["Dehydration", "Kidney disease", "Diarrhea", "Vomiting"]
+  },
+
+  "calcium": {
+    "display_name": "Calcium",
+    "category": "electrolytes",
+    "unit": "mg/dL",
+    "aliases": ["ca", "serum calcium", "ca++"],
+    "normal_min": 8.5,
+    "normal_max": 10.5,
+    "meaning": "Calcium is essential for bones, nerves, and muscles.",
+    "normal_meaning": "Your calcium level is normal.",
+    "common_causes": ["Parathyroid issues", "Vitamin D deficiency", "Kidney disease", "Cancer"]
+  },
+
+  "phosphorus": {
+    "display_name": "Phosphorus",
+    "category": "electrolytes",
+    "unit": "mg/dL",
+    "aliases": ["phosphate", "inorganic phosphorus", "po4"],
+    "normal_min": 2.5,
+    "normal_max": 4.5,
+    "meaning": "Phosphorus works with calcium for bone health.",
+    "normal_meaning": "Your phosphorus level is normal.",
+    "common_causes": ["Kidney disease", "Parathyroid issues", "Malnutrition", "Vitamin D issues"]
+  },
+
+  "magnesium": {
+    "display_name": "Magnesium",
+    "category": "electrolytes",
+    "unit": "mg/dL",
+    "aliases": ["mg", "serum magnesium", "mg++"],
+    "normal_min": 1.7,
+    "normal_max": 2.2,
+    "meaning": "Magnesium is important for muscle and nerve function.",
+    "normal_meaning": "Your magnesium level is normal.",
+    "common_causes": ["Malnutrition", "Alcoholism", "Medications", "Kidney disease"]
+  },
+
+  "bicarbonate": {
+    "display_name": "Bicarbonate",
+    "category": "electrolytes",
+    "unit": "mEq/L",
+    "aliases": ["hco3", "co2", "total co2"],
+    "normal_min": 22,
+    "normal_max": 29,
+    "meaning": "Bicarbonate helps regulate blood pH.",
+    "normal_meaning": "Your bicarbonate level is normal.",
+    "common_causes": ["Kidney disease", "Lung disease", "Diabetic ketoacidosis", "Vomiting"]
+  },
+
+  "egfr": {
+    "display_name": "eGFR",
+    "category": "kft",
+    "unit": "mL/min/1.73m²",
+    "aliases": ["estimated gfr", "glomerular filtration rate", "gfr"],
+    "normal_min": 90,
+    "normal_max": 120,
+    "meaning": "eGFR estimates how well kidneys filter blood. Below 60 indicates kidney disease.",
+    "normal_meaning": "Your kidney filtration rate is normal.",
+    "common_causes": ["Chronic kidney disease", "Diabetes", "Hypertension", "Aging"]
+  },
+
+  "total_cholesterol": {
+    "display_name": "Total Cholesterol",
+    "category": "lipid",
+    "unit": "mg/dL",
+    "aliases": ["cholesterol", "tc", "t.cholesterol"],
+    "normal_min": 0,
+    "normal_max": 200,
+    "meaning": "Total cholesterol measures all cholesterol in blood.",
+    "normal_meaning": "Your cholesterol is in healthy range.",
+    "common_causes": ["Diet", "Genetics", "Obesity", "Hypothyroidism"]
+  },
+
+  "hdl": {
+    "display_name": "HDL Cholesterol",
+    "category": "lipid",
+    "unit": "mg/dL",
+    "aliases": ["hdl-c", "good cholesterol", "high density lipoprotein"],
+    "ranges": {
+      "male": {"min": 40, "max": 60},
+      "female": {"min": 50, "max": 60},
+      "all": {"min": 40, "max": 60}
+    },
+    "normal_min": 40,
+    "normal_max": 60,
+    "meaning": "HDL is 'good' cholesterol — higher is better for heart health.",
+    "normal_meaning": "Your HDL (good cholesterol) is in healthy range.",
+    "common_causes": ["Exercise", "Smoking", "Obesity", "Genetics"]
+  },
+
+  "ldl": {
+    "display_name": "LDL Cholesterol",
+    "category": "lipid",
+    "unit": "mg/dL",
+    "aliases": ["ldl-c", "bad cholesterol", "low density lipoprotein"],
+    "normal_min": 0,
+    "normal_max": 100,
+    "meaning": "LDL is 'bad' cholesterol — high levels increase heart disease risk.",
+    "normal_meaning": "Your LDL (bad cholesterol) is in healthy range.",
+    "common_causes": ["Diet", "Genetics", "Obesity", "Diabetes"]
+  },
+
+  "vldl": {
+    "display_name": "VLDL Cholesterol",
+    "category": "lipid",
+    "unit": "mg/dL",
+    "aliases": ["vldl-c", "very low density lipoprotein"],
+    "normal_min": 0,
+    "normal_max": 30,
+    "meaning": "VLDL carries triglycerides in blood.",
+    "normal_meaning": "Your VLDL is normal.",
+    "common_causes": ["High triglycerides", "Obesity", "Diabetes", "Diet"]
+  },
+
+  "triglycerides": {
+    "display_name": "Triglycerides",
+    "category": "lipid",
+    "unit": "mg/dL",
+    "aliases": ["tg", "trigs", "triglyceride"],
+    "normal_min": 0,
+    "normal_max": 150,
+    "meaning": "Triglycerides are fat in blood. High levels increase heart disease risk.",
+    "normal_meaning": "Your triglycerides are in healthy range.",
+    "common_causes": ["Diet", "Obesity", "Diabetes", "Alcohol"]
+  },
+
+  "cholesterol_hdl_ratio": {
+    "display_name": "Total Cholesterol/HDL Ratio",
+    "category": "lipid",
+    "unit": "",
+    "aliases": ["tc/hdl ratio", "cholesterol ratio"],
+    "normal_min": 0,
+    "normal_max": 5.0,
+    "meaning": "This ratio assesses heart disease risk — lower is better.",
+    "normal_meaning": "Your cholesterol ratio is healthy.",
+    "common_causes": ["High cholesterol", "Low HDL", "Poor diet"]
+  },
+
+  "fasting_glucose": {
+    "display_name": "Fasting Blood Glucose",
+    "category": "diabetes",
+    "unit": "mg/dL",
+    "aliases": ["fbs", "fasting sugar", "fbg", "fasting blood sugar"],
+    "normal_min": 70,
+    "normal_max": 100,
+    "meaning": "Fasting glucose measures blood sugar after 8+ hours without eating.",
+    "normal_meaning": "Your fasting blood sugar is normal — no diabetes sign.",
+    "common_causes": ["Diabetes", "Prediabetes", "Stress", "Medications"]
+  },
+
+  "pp_glucose": {
+    "display_name": "Postprandial Glucose",
+    "category": "diabetes",
+    "unit": "mg/dL",
+    "aliases": ["ppbs", "pp sugar", "postprandial blood sugar", "2hr glucose"],
+    "normal_min": 70,
+    "normal_max": 140,
+    "meaning": "PP glucose measures blood sugar 2 hours after eating.",
+    "normal_meaning": "Your post-meal blood sugar is normal.",
+    "common_causes": ["Diabetes", "Prediabetes", "Insulin resistance"]
+  },
+
+  "random_glucose": {
+    "display_name": "Random Blood Glucose",
+    "category": "diabetes",
+    "unit": "mg/dL",
+    "aliases": ["rbs", "random sugar", "random blood sugar"],
+    "normal_min": 70,
+    "normal_max": 140,
+    "meaning": "Random glucose can be checked any time. High values may indicate diabetes.",
+    "normal_meaning": "Your random blood sugar is normal.",
+    "common_causes": ["Diabetes", "Recent meal", "Stress"]
+  },
+
+  "hba1c": {
+    "display_name": "HbA1c",
+    "category": "diabetes",
+    "unit": "%",
+    "aliases": ["glycated hemoglobin", "a1c", "glycosylated hemoglobin", "glycohemoglobin"],
+    "normal_min": 4.0,
+    "normal_max": 5.6,
+    "meaning": "HbA1c shows average blood sugar over 2-3 months. Above 6.5% indicates diabetes.",
+    "normal_meaning": "Your HbA1c is normal — good long-term sugar control.",
+    "common_causes": ["Diabetes", "Prediabetes", "Poor diet control"]
+  },
+
+  "fasting_insulin": {
+    "display_name": "Fasting Insulin",
+    "category": "diabetes",
+    "unit": "μIU/mL",
+    "aliases": ["serum insulin", "insulin fasting"],
+    "normal_min": 2.6,
+    "normal_max": 24.9,
+    "meaning": "Fasting insulin measures hormone that controls blood sugar.",
+    "normal_meaning": "Your fasting insulin is normal.",
+    "common_causes": ["Insulin resistance", "Type 2 diabetes", "PCOS", "Obesity"]
+  },
+
+  "tsh": {
+    "display_name": "TSH",
+    "category": "thyroid",
+    "unit": "μIU/mL",
+    "aliases": ["thyroid stimulating hormone", "thyrotropin"],
+    "normal_min": 0.4,
+    "normal_max": 4.0,
+    "meaning": "TSH controls thyroid hormone production. High TSH suggests underactive thyroid.",
+    "normal_meaning": "Your TSH is normal — thyroid function looks good.",
+    "common_causes": ["Hypothyroidism", "Hyperthyroidism", "Pituitary issues"]
+  },
+
+  "t3": {
+    "display_name": "T3 (Triiodothyronine)",
+    "category": "thyroid",
+    "unit": "ng/dL",
+    "aliases": ["total t3", "triiodothyronine"],
+    "normal_min": 80,
+    "normal_max": 200,
+    "meaning": "T3 is an active thyroid hormone.",
+    "normal_meaning": "Your T3 level is normal.",
+    "common_causes": ["Hyperthyroidism (high)", "Hypothyroidism (low)", "Medications"]
+  },
+
+  "t4": {
+    "display_name": "T4 (Thyroxine)",
+    "category": "thyroid",
+    "unit": "μg/dL",
+    "aliases": ["total t4", "thyroxine"],
+    "normal_min": 5.0,
+    "normal_max": 12.0,
+    "meaning": "T4 is the main thyroid hormone.",
+    "normal_meaning": "Your T4 level is normal.",
+    "common_causes": ["Hyperthyroidism (high)", "Hypothyroidism (low)", "Pregnancy"]
+  },
+
+  "free_t3": {
+    "display_name": "Free T3",
+    "category": "thyroid",
+    "unit": "pg/mL",
+    "aliases": ["ft3"],
+    "normal_min": 2.3,
+    "normal_max": 4.2,
+    "meaning": "Free T3 is the active, unbound form of T3.",
+    "normal_meaning": "Your free T3 is normal.",
+    "common_causes": ["Hyperthyroidism", "Hypothyroidism", "Medications"]
+  },
+
+  "free_t4": {
+    "display_name": "Free T4",
+    "category": "thyroid",
+    "unit": "ng/dL",
+    "aliases": ["ft4"],
+    "normal_min": 0.8,
+    "normal_max": 1.8,
+    "meaning": "Free T4 is the active, unbound form of thyroxine.",
+    "normal_meaning": "Your free T4 is normal.",
+    "common_causes": ["Hyperthyroidism", "Hypothyroidism", "Pregnancy"]
+  },
+
+  "anti_tpo": {
+    "display_name": "Anti-TPO Antibodies",
+    "category": "thyroid",
+    "unit": "IU/mL",
+    "aliases": ["tpo antibodies", "thyroid peroxidase antibody", "atpo"],
+    "normal_min": 0,
+    "normal_max": 34,
+    "meaning": "Anti-TPO antibodies indicate autoimmune thyroid disease.",
+    "normal_meaning": "No thyroid autoantibodies detected.",
+    "common_causes": ["Hashimoto's thyroiditis", "Graves' disease"]
+  },
+
+  "serum_iron": {
+    "display_name": "Serum Iron",
+    "category": "iron_studies",
+    "unit": "μg/dL",
+    "aliases": ["iron", "fe"],
+    "ranges": {
+      "male": {"min": 65, "max": 175},
+      "female": {"min": 50, "max": 170},
+      "all": {"min": 50, "max": 175}
+    },
+    "normal_min": 50,
+    "normal_max": 175,
+    "meaning": "Serum iron measures iron in blood for hemoglobin production.",
+    "normal_meaning": "Your iron level is normal.",
+    "common_causes": ["Iron deficiency anemia", "Hemochromatosis", "Chronic disease"]
+  },
+
+  "tibc": {
+    "display_name": "TIBC",
+    "category": "iron_studies",
+    "unit": "μg/dL",
+    "aliases": ["total iron binding capacity"],
+    "normal_min": 250,
+    "normal_max": 370,
+    "meaning": "TIBC measures blood's capacity to bind iron.",
+    "normal_meaning": "Your TIBC is normal.",
+    "common_causes": ["Iron deficiency (high)", "Hemochromatosis (low)", "Liver disease"]
+  },
+
+  "ferritin": {
+    "display_name": "Ferritin",
+    "category": "iron_studies",
+    "unit": "ng/mL",
+    "aliases": ["serum ferritin"],
+    "ranges": {
+      "male": {"min": 30, "max": 400},
+      "female": {"min": 15, "max": 150},
+      "all": {"min": 15, "max": 400}
+    },
+    "normal_min": 15,
+    "normal_max": 400,
+    "meaning": "Ferritin is stored iron. Low levels indicate iron deficiency.",
+    "normal_meaning": "Your iron stores are adequate.",
+    "common_causes": ["Iron deficiency", "Inflammation", "Hemochromatosis", "Liver disease"]
+  },
+
+  "transferrin_saturation": {
+    "display_name": "Transferrin Saturation",
+    "category": "iron_studies",
+    "unit": "%",
+    "aliases": ["tsat", "iron saturation"],
+    "normal_min": 20,
+    "normal_max": 50,
+    "meaning": "Transferrin saturation shows how much iron is bound to transferrin.",
+    "normal_meaning": "Your transferrin saturation is normal.",
+    "common_causes": ["Iron deficiency (low)", "Hemochromatosis (high)"]
+  },
+
+  "vitamin_d": {
+    "display_name": "Vitamin D",
+    "category": "vitamins",
+    "unit": "ng/mL",
+    "aliases": ["25-oh vitamin d", "25-hydroxy vitamin d", "vit d", "cholecalciferol"],
+    "normal_min": 30,
+    "normal_max": 100,
+    "meaning": "Vitamin D is essential for bone health and immunity.",
+    "normal_meaning": "Your Vitamin D level is sufficient.",
+    "common_causes": ["Low sun exposure", "Poor diet", "Malabsorption", "Kidney disease"]
+  },
+
+  "vitamin_b12": {
+    "display_name": "Vitamin B12",
+    "category": "vitamins",
+    "unit": "pg/mL",
+    "aliases": ["cobalamin", "vit b12", "b12"],
+    "normal_min": 200,
+    "normal_max": 900,
+    "meaning": "B12 is essential for nerve function and red cell production.",
+    "normal_meaning": "Your Vitamin B12 is adequate.",
+    "common_causes": ["Vegetarian diet", "Pernicious anemia", "Malabsorption", "Medications"]
+  },
+
+  "folate": {
+    "display_name": "Folate (Folic Acid)",
+    "category": "vitamins",
+    "unit": "ng/mL",
+    "aliases": ["folic acid", "serum folate", "vitamin b9"],
+    "normal_min": 3.0,
+    "normal_max": 17.0,
+    "meaning": "Folate is essential for cell division and preventing birth defects.",
+    "normal_meaning": "Your folate level is adequate.",
+    "common_causes": ["Poor diet", "Pregnancy", "Alcoholism", "Medications"]
+  },
+
+  "troponin_i": {
+    "display_name": "Troponin I",
+    "category": "cardiac",
+    "unit": "ng/mL",
+    "aliases": ["cardiac troponin i", "ctni", "trop i"],
+    "normal_min": 0,
+    "normal_max": 0.04,
+    "meaning": "Troponin I is released when heart muscle is damaged. Elevated levels suggest heart attack.",
+    "normal_meaning": "No heart muscle damage detected.",
+    "common_causes": ["Heart attack", "Myocarditis", "Heart failure", "Pulmonary embolism"]
+  },
+
+  "troponin_t": {
+    "display_name": "Troponin T",
+    "category": "cardiac",
+    "unit": "ng/mL",
+    "aliases": ["cardiac troponin t", "ctnt", "trop t"],
+    "normal_min": 0,
+    "normal_max": 0.01,
+    "meaning": "Troponin T is a marker of heart muscle injury.",
+    "normal_meaning": "No heart muscle damage detected.",
+    "common_causes": ["Heart attack", "Myocarditis", "Heart failure"]
+  },
+
+  "ck_mb": {
+    "display_name": "CK-MB",
+    "category": "cardiac",
+    "unit": "U/L",
+    "aliases": ["creatine kinase mb", "cpk-mb"],
+    "normal_min": 0,
+    "normal_max": 25,
+    "meaning": "CK-MB is a heart-specific enzyme. Elevated in heart muscle damage.",
+    "normal_meaning": "No significant heart muscle damage.",
+    "common_causes": ["Heart attack", "Myocarditis", "Cardiac surgery"]
+  },
+
+  "bnp": {
+    "display_name": "BNP",
+    "category": "cardiac",
+    "unit": "pg/mL",
+    "aliases": ["b-type natriuretic peptide", "brain natriuretic peptide"],
+    "normal_min": 0,
+    "normal_max": 100,
+    "meaning": "BNP is released when heart is stressed. High levels indicate heart failure.",
+    "normal_meaning": "Your BNP is normal — no heart failure signs.",
+    "common_causes": ["Heart failure", "Kidney disease", "Pulmonary hypertension"]
+  },
+
+  "nt_pro_bnp": {
+    "display_name": "NT-proBNP",
+    "category": "cardiac",
+    "unit": "pg/mL",
+    "aliases": ["n-terminal pro-bnp"],
+    "normal_min": 0,
+    "normal_max": 125,
+    "meaning": "NT-proBNP is a heart failure marker.",
+    "normal_meaning": "Your NT-proBNP is normal.",
+    "common_causes": ["Heart failure", "Kidney disease", "Atrial fibrillation"]
+  },
+
+  "cpk": {
+    "display_name": "CPK (Total)",
+    "category": "cardiac",
+    "unit": "U/L",
+    "aliases": ["creatine phosphokinase", "ck", "creatine kinase"],
+    "ranges": {
+      "male": {"min": 39, "max": 308},
+      "female": {"min": 26, "max": 192},
+      "all": {"min": 26, "max": 308}
+    },
+    "normal_min": 26,
+    "normal_max": 308,
+    "meaning": "CPK is an enzyme from muscles. High levels indicate muscle damage.",
+    "normal_meaning": "Your CPK is normal.",
+    "common_causes": ["Muscle injury", "Heart attack", "Intense exercise", "Medications"]
+  },
+
+  "crp": {
+    "display_name": "CRP",
+    "category": "inflammation",
+    "unit": "mg/L",
+    "aliases": ["c-reactive protein"],
+    "normal_min": 0,
+    "normal_max": 10,
+    "meaning": "CRP indicates inflammation in the body.",
+    "normal_meaning": "No significant inflammation detected.",
+    "common_causes": ["Infection", "Autoimmune disease", "Injury", "Cancer"]
+  },
+
+  "hs_crp": {
+    "display_name": "hs-CRP",
+    "category": "cardiac",
+    "unit": "mg/L",
+    "aliases": ["high sensitivity crp", "high-sensitivity c-reactive protein"],
+    "normal_min": 0,
+    "normal_max": 3.0,
+    "meaning": "hs-CRP is a sensitive marker for cardiovascular inflammation risk.",
+    "normal_meaning": "Your cardiovascular inflammation risk is low.",
+    "common_causes": ["Cardiovascular disease", "Chronic inflammation", "Smoking"]
+  },
+
+  "homocysteine": {
+    "display_name": "Homocysteine",
+    "category": "cardiac",
+    "unit": "μmol/L",
+    "aliases": ["hcy"],
+    "normal_min": 5,
+    "normal_max": 15,
+    "meaning": "High homocysteine increases heart disease and stroke risk.",
+    "normal_meaning": "Your homocysteine is normal.",
+    "common_causes": ["B12 deficiency", "Folate deficiency", "Genetics", "Kidney disease"]
+  },
+
+  "pt": {
+    "display_name": "Prothrombin Time",
+    "category": "coagulation",
+    "unit": "seconds",
+    "aliases": ["prothrombin time", "protime"],
+    "normal_min": 11,
+    "normal_max": 13.5,
+    "meaning": "PT measures blood clotting time. Prolonged PT indicates bleeding risk.",
+    "normal_meaning": "Your clotting time is normal.",
+    "common_causes": ["Liver disease", "Vitamin K deficiency", "Blood thinners", "Clotting disorders"]
+  },
+
+  "inr": {
+    "display_name": "INR",
+    "category": "coagulation",
+    "unit": "",
+    "aliases": ["international normalized ratio"],
+    "normal_min": 0.8,
+    "normal_max": 1.2,
+    "meaning": "INR standardizes PT for monitoring blood thinners.",
+    "normal_meaning": "Your INR is normal.",
+    "common_causes": ["Warfarin therapy", "Liver disease", "Vitamin K deficiency"]
+  },
+
+  "aptt": {
+    "display_name": "aPTT",
+    "category": "coagulation",
+    "unit": "seconds",
+    "aliases": ["activated partial thromboplastin time", "ptt"],
+    "normal_min": 25,
+    "normal_max": 35,
+    "meaning": "aPTT measures intrinsic clotting pathway.",
+    "normal_meaning": "Your aPTT is normal.",
+    "common_causes": ["Heparin therapy", "Clotting factor deficiency", "Lupus anticoagulant"]
+  },
+
+  "fibrinogen": {
+    "display_name": "Fibrinogen",
+    "category": "coagulation",
+    "unit": "mg/dL",
+    "aliases": ["factor i"],
+    "normal_min": 200,
+    "normal_max": 400,
+    "meaning": "Fibrinogen is a clotting protein made by liver.",
+    "normal_meaning": "Your fibrinogen is normal.",
+    "common_causes": ["Inflammation (high)", "Liver disease (low)", "DIC"]
+  },
+
+  "d_dimer": {
+    "display_name": "D-Dimer",
+    "category": "coagulation",
+    "unit": "ng/mL",
+    "aliases": ["d dimer", "fibrin degradation products"],
+    "normal_min": 0,
+    "normal_max": 500,
+    "meaning": "D-Dimer indicates blood clot breakdown. High levels suggest clotting activity.",
+    "normal_meaning": "No evidence of abnormal blood clotting.",
+    "common_causes": ["DVT", "Pulmonary embolism", "DIC", "Post-surgery", "COVID-19"]
+  },
+
+  "urine_protein": {
+    "display_name": "Urine Protein",
+    "category": "urine",
+    "unit": "mg/dL",
+    "aliases": ["proteinuria", "urinary protein"],
+    "normal_min": 0,
+    "normal_max": 14,
+    "meaning": "Protein in urine may indicate kidney damage.",
+    "normal_meaning": "No significant protein in urine.",
+    "common_causes": ["Kidney disease", "Diabetes", "Hypertension", "Infection"]
+  },
+
+  "urine_glucose": {
+    "display_name": "Urine Glucose",
+    "category": "urine",
+    "unit": "mg/dL",
+    "aliases": ["glucosuria", "urinary glucose"],
+    "normal_min": 0,
+    "normal_max": 0,
+    "meaning": "Glucose in urine suggests high blood sugar.",
+    "normal_meaning": "No glucose in urine — normal finding.",
+    "common_causes": ["Diabetes", "Renal glucosuria", "Pregnancy"]
+  },
+
+  "urine_ketones": {
+    "display_name": "Urine Ketones",
+    "category": "urine",
+    "unit": "mg/dL",
+    "aliases": ["ketonuria", "ketone bodies"],
+    "normal_min": 0,
+    "normal_max": 0,
+    "meaning": "Ketones in urine indicate fat breakdown for energy.",
+    "normal_meaning": "No ketones in urine — normal finding.",
+    "common_causes": ["Diabetic ketoacidosis", "Fasting", "Keto diet", "Starvation"]
+  },
+
+  "urine_blood": {
+    "display_name": "Urine Blood",
+    "category": "urine",
+    "unit": "",
+    "aliases": ["hematuria", "blood in urine", "rbc in urine"],
+    "normal_min": 0,
+    "normal_max": 0,
+    "meaning": "Blood in urine needs investigation — may indicate kidney or bladder issues.",
+    "normal_meaning": "No blood detected in urine.",
+    "common_causes": ["UTI", "Kidney stones", "Glomerulonephritis", "Bladder cancer"]
+  },
+
+  "urine_ph": {
+    "display_name": "Urine pH",
+    "category": "urine",
+    "unit": "",
+    "aliases": ["urinary ph"],
+    "normal_min": 4.5,
+    "normal_max": 8.0,
+    "meaning": "Urine pH indicates acidity or alkalinity of urine.",
+    "normal_meaning": "Your urine pH is normal.",
+    "common_causes": ["Diet", "UTI", "Kidney stones", "Medications"]
+  },
+
+  "urine_specific_gravity": {
+    "display_name": "Urine Specific Gravity",
+    "category": "urine",
+    "unit": "",
+    "aliases": ["sp gravity", "spg"],
+    "normal_min": 1.005,
+    "normal_max": 1.030,
+    "meaning": "Specific gravity measures urine concentration.",
+    "normal_meaning": "Your urine concentration is normal.",
+    "common_causes": ["Dehydration (high)", "Excessive fluid intake (low)", "Kidney disease"]
+  },
+
+  "microalbumin": {
+    "display_name": "Microalbumin (Urine)",
+    "category": "urine",
+    "unit": "mg/L",
+    "aliases": ["urine microalbumin", "uacr"],
+    "normal_min": 0,
+    "normal_max": 30,
+    "meaning": "Microalbumin detects early kidney damage in diabetes.",
+    "normal_meaning": "No microalbumin — kidneys are healthy.",
+    "common_causes": ["Diabetic nephropathy", "Hypertension", "Early kidney disease"]
+  },
+
+  "testosterone": {
+    "display_name": "Testosterone",
+    "category": "hormones",
+    "unit": "ng/dL",
+    "aliases": ["serum testosterone", "total testosterone"],
+    "ranges": {
+      "male": {"min": 270, "max": 1070},
+      "female": {"min": 15, "max": 70},
+      "all": {"min": 15, "max": 1070}
+    },
+    "normal_min": 15,
+    "normal_max": 1070,
+    "meaning": "Testosterone is the primary male sex hormone.",
+    "normal_meaning": "Your testosterone is in normal range.",
+    "common_causes": ["Hypogonadism", "PCOS", "Aging", "Pituitary disorders"]
+  },
+
+  "estradiol": {
+    "display_name": "Estradiol",
+    "category": "hormones",
+    "unit": "pg/mL",
+    "aliases": ["e2", "estrogen"],
+    "ranges": {
+      "male": {"min": 10, "max": 40},
+      "female": {"min": 30, "max": 400},
+      "all": {"min": 10, "max": 400}
+    },
+    "normal_min": 10,
+    "normal_max": 400,
+    "meaning": "Estradiol is the main estrogen hormone.",
+    "normal_meaning": "Your estradiol level is normal.",
+    "common_causes": ["Menopause", "PCOS", "Ovarian issues", "Medications"]
+  },
+
+  "progesterone": {
+    "display_name": "Progesterone",
+    "category": "hormones",
+    "unit": "ng/mL",
+    "aliases": ["serum progesterone"],
+    "normal_min": 0.1,
+    "normal_max": 25,
+    "meaning": "Progesterone supports pregnancy and menstrual cycle.",
+    "normal_meaning": "Your progesterone is normal.",
+    "common_causes": ["Pregnancy", "Ovulation", "Menstrual cycle phase", "Ovarian issues"]
+  },
+
+  "prolactin": {
+    "display_name": "Prolactin",
+    "category": "hormones",
+    "unit": "ng/mL",
+    "aliases": ["prl", "serum prolactin"],
+    "ranges": {
+      "male": {"min": 2, "max": 18},
+      "female": {"min": 2, "max": 29},
+      "all": {"min": 2, "max": 29}
+    },
+    "normal_min": 2,
+    "normal_max": 29,
+    "meaning": "Prolactin stimulates milk production. High levels may affect fertility.",
+    "normal_meaning": "Your prolactin is normal.",
+    "common_causes": ["Pituitary tumor", "Medications", "Hypothyroidism", "Pregnancy"]
+  },
+
+  "fsh": {
+    "display_name": "FSH",
+    "category": "hormones",
+    "unit": "mIU/mL",
+    "aliases": ["follicle stimulating hormone"],
+    "ranges": {
+      "male": {"min": 1.5, "max": 12.4},
+      "female": {"min": 3.5, "max": 12.5},
+      "all": {"min": 1.5, "max": 12.5}
+    },
+    "normal_min": 1.5,
+    "normal_max": 12.5,
+    "meaning": "FSH regulates reproductive function.",
+    "normal_meaning": "Your FSH is normal.",
+    "common_causes": ["Menopause", "PCOS", "Pituitary disorders", "Ovarian failure"]
+  },
+
+  "lh": {
+    "display_name": "LH",
+    "category": "hormones",
+    "unit": "mIU/mL",
+    "aliases": ["luteinizing hormone"],
+    "ranges": {
+      "male": {"min": 1.7, "max": 8.6},
+      "female": {"min": 2.4, "max": 12.6},
+      "all": {"min": 1.7, "max": 12.6}
+    },
+    "normal_min": 1.7,
+    "normal_max": 12.6,
+    "meaning": "LH triggers ovulation and testosterone production.",
+    "normal_meaning": "Your LH is normal.",
+    "common_causes": ["PCOS", "Menopause", "Pituitary disorders"]
+  },
+
+  "cortisol": {
+    "display_name": "Cortisol",
+    "category": "hormones",
+    "unit": "μg/dL",
+    "aliases": ["serum cortisol", "morning cortisol"],
+    "normal_min": 5,
+    "normal_max": 25,
+    "meaning": "Cortisol is the stress hormone made by adrenal glands.",
+    "normal_meaning": "Your cortisol is normal.",
+    "common_causes": ["Cushing's syndrome", "Adrenal insufficiency", "Stress", "Medications"]
+  },
+
+  "amh": {
+    "display_name": "AMH",
+    "category": "hormones",
+    "unit": "ng/mL",
+    "aliases": ["anti-mullerian hormone", "anti mullerian hormone"],
+    "normal_min": 1.0,
+    "normal_max": 4.0,
+    "meaning": "AMH indicates ovarian reserve — egg supply remaining.",
+    "normal_meaning": "Your ovarian reserve is normal.",
+    "common_causes": ["Low ovarian reserve", "PCOS", "Menopause approaching"]
+  },
+
+  "beta_hcg": {
+    "display_name": "Beta hCG",
+    "category": "hormones",
+    "unit": "mIU/mL",
+    "aliases": ["hcg", "pregnancy test", "human chorionic gonadotropin"],
+    "normal_min": 0,
+    "normal_max": 5,
+    "meaning": "Beta hCG confirms pregnancy. Levels rise rapidly in early pregnancy.",
+    "normal_meaning": "Not pregnant (in non-pregnant individuals).",
+    "common_causes": ["Pregnancy", "Ectopic pregnancy", "Gestational trophoblastic disease"]
+  },
+
+  "psa": {
+    "display_name": "PSA",
+    "category": "tumor_markers",
+    "unit": "ng/mL",
+    "aliases": ["prostate specific antigen"],
+    "normal_min": 0,
+    "normal_max": 4.0,
+    "meaning": "PSA screens for prostate issues including cancer.",
+    "normal_meaning": "Your PSA is normal.",
+    "common_causes": ["Prostate cancer", "BPH", "Prostatitis", "Recent ejaculation"]
+  },
+
+  "cea": {
+    "display_name": "CEA",
+    "category": "tumor_markers",
+    "unit": "ng/mL",
+    "aliases": ["carcinoembryonic antigen"],
+    "normal_min": 0,
+    "normal_max": 3.0,
+    "meaning": "CEA is a tumor marker, especially for colorectal cancer.",
+    "normal_meaning": "Your CEA is normal.",
+    "common_causes": ["Colorectal cancer", "Lung cancer", "Smoking", "Inflammatory bowel disease"]
+  },
+
+  "afp": {
+    "display_name": "AFP",
+    "category": "tumor_markers",
+    "unit": "ng/mL",
+    "aliases": ["alpha fetoprotein", "alpha-fetoprotein"],
+    "normal_min": 0,
+    "normal_max": 10,
+    "meaning": "AFP is a tumor marker for liver cancer and germ cell tumors.",
+    "normal_meaning": "Your AFP is normal.",
+    "common_causes": ["Liver cancer", "Testicular cancer", "Pregnancy", "Hepatitis"]
+  },
+
+  "ca_125": {
+    "display_name": "CA-125",
+    "category": "tumor_markers",
+    "unit": "U/mL",
+    "aliases": ["cancer antigen 125", "ca125"],
+    "normal_min": 0,
+    "normal_max": 35,
+    "meaning": "CA-125 is a marker for ovarian cancer.",
+    "normal_meaning": "Your CA-125 is normal.",
+    "common_causes": ["Ovarian cancer", "Endometriosis", "Pelvic inflammatory disease", "Pregnancy"]
+  },
+
+  "ca_19_9": {
+    "display_name": "CA 19-9",
+    "category": "tumor_markers",
+    "unit": "U/mL",
+    "aliases": ["cancer antigen 19-9", "ca199"],
+    "normal_min": 0,
+    "normal_max": 37,
+    "meaning": "CA 19-9 is a marker for pancreatic and GI cancers.",
+    "normal_meaning": "Your CA 19-9 is normal.",
+    "common_causes": ["Pancreatic cancer", "Bile duct cancer", "Pancreatitis", "Liver disease"]
+  },
+
+  "amylase": {
+    "display_name": "Amylase",
+    "category": "pancreatic",
+    "unit": "U/L",
+    "aliases": ["serum amylase"],
+    "normal_min": 28,
+    "normal_max": 100,
+    "meaning": "Amylase is a pancreatic enzyme. High levels indicate pancreatitis.",
+    "normal_meaning": "Your amylase is normal.",
+    "common_causes": ["Pancreatitis", "Salivary gland disease", "Bowel obstruction"]
+  },
+
+  "lipase": {
+    "display_name": "Lipase",
+    "category": "pancreatic",
+    "unit": "U/L",
+    "aliases": ["serum lipase"],
+    "normal_min": 0,
+    "normal_max": 160,
+    "meaning": "Lipase is a pancreatic enzyme. More specific for pancreatitis than amylase.",
+    "normal_meaning": "Your lipase is normal.",
+    "common_causes": ["Pancreatitis", "Pancreatic cancer", "Kidney disease"]
+  },
+
+  "procalcitonin": {
+    "display_name": "Procalcitonin",
+    "category": "inflammation",
+    "unit": "ng/mL",
+    "aliases": ["pct"],
+    "normal_min": 0,
+    "normal_max": 0.5,
+    "meaning": "Procalcitonin rises specifically in bacterial infections and sepsis.",
+    "normal_meaning": "No bacterial infection marker detected.",
+    "common_causes": ["Bacterial sepsis", "Severe bacterial infection", "Surgery", "Trauma"]
+  },
+
+  "ana": {
+    "display_name": "ANA",
+    "category": "autoimmune",
+    "unit": "",
+    "aliases": ["antinuclear antibody", "antinuclear antibodies"],
+    "normal_min": 0,
+    "normal_max": 0,
+    "meaning": "ANA screens for autoimmune diseases like lupus.",
+    "normal_meaning": "ANA negative — no autoimmune marker detected.",
+    "common_causes": ["Lupus", "Rheumatoid arthritis", "Sjogren's syndrome", "Autoimmune hepatitis"]
+  },
+
+  "rheumatoid_factor": {
+    "display_name": "Rheumatoid Factor",
+    "category": "autoimmune",
+    "unit": "IU/mL",
+    "aliases": ["rf", "ra factor"],
+    "normal_min": 0,
+    "normal_max": 14,
+    "meaning": "RF is elevated in rheumatoid arthritis.",
+    "normal_meaning": "Rheumatoid factor is negative.",
+    "common_causes": ["Rheumatoid arthritis", "Sjogren's syndrome", "Chronic infection"]
+  },
+
+  "anti_ccp": {
+    "display_name": "Anti-CCP Antibodies",
+    "category": "autoimmune",
+    "unit": "U/mL",
+    "aliases": ["ccp antibodies", "cyclic citrullinated peptide"],
+    "normal_min": 0,
+    "normal_max": 20,
+    "meaning": "Anti-CCP is highly specific for rheumatoid arthritis.",
+    "normal_meaning": "Anti-CCP negative — no RA antibodies.",
+    "common_causes": ["Rheumatoid arthritis"]
+  },
+
+  "hbsag": {
+    "display_name": "HBsAg",
+    "category": "infectious",
+    "unit": "",
+    "aliases": ["hepatitis b surface antigen", "hep b"],
+    "normal_min": 0,
+    "normal_max": 0,
+    "meaning": "HBsAg indicates hepatitis B infection.",
+    "normal_meaning": "Hepatitis B surface antigen negative — no active infection.",
+    "common_causes": ["Hepatitis B infection"]
+  },
+
+  "anti_hcv": {
+    "display_name": "Anti-HCV",
+    "category": "infectious",
+    "unit": "",
+    "aliases": ["hepatitis c antibody", "hcv antibody", "hep c"],
+    "normal_min": 0,
+    "normal_max": 0,
+    "meaning": "Anti-HCV indicates exposure to hepatitis C.",
+    "normal_meaning": "Hepatitis C antibody negative — no exposure detected.",
+    "common_causes": ["Hepatitis C infection (past or present)"]
+  },
+
+  "hiv": {
+    "display_name": "HIV Antibody",
+    "category": "infectious",
+    "unit": "",
+    "aliases": ["hiv test", "hiv1", "hiv2", "hiv 1/2"],
+    "normal_min": 0,
+    "normal_max": 0,
+    "meaning": "HIV test screens for HIV infection.",
+    "normal_meaning": "HIV test negative.",
+    "common_causes": ["HIV infection"]
+  },
+
+  "vdrl": {
+    "display_name": "VDRL",
+    "category": "infectious",
+    "unit": "",
+    "aliases": ["syphilis test", "rpr"],
+    "normal_min": 0,
+    "normal_max": 0,
+    "meaning": "VDRL screens for syphilis infection.",
+    "normal_meaning": "VDRL non-reactive — no syphilis detected.",
+    "common_causes": ["Syphilis infection", "False positive in autoimmune disease"]
+  },
+
+  "dengue_ns1": {
+    "display_name": "Dengue NS1 Antigen",
+    "category": "infectious",
+    "unit": "",
+    "aliases": ["ns1", "dengue antigen"],
+    "normal_min": 0,
+    "normal_max": 0,
+    "meaning": "NS1 detects early dengue infection.",
+    "normal_meaning": "Dengue NS1 negative — no active early dengue infection.",
+    "common_causes": ["Dengue fever"]
+  },
+
+  "malaria_antigen": {
+    "display_name": "Malaria Antigen",
+    "category": "infectious",
+    "unit": "",
+    "aliases": ["malaria test", "mp", "malaria parasite"],
+    "normal_min": 0,
+    "normal_max": 0,
+    "meaning": "Detects malaria parasite antigens.",
+    "normal_meaning": "Malaria antigen negative — no malaria detected.",
+    "common_causes": ["Malaria infection"]
+  },
+
+  "widal_o": {
+    "display_name": "Widal Test O",
+    "category": "infectious",
+    "unit": "",
+    "aliases": ["typhoid o", "to"],
+    "normal_min": 0,
+    "normal_max": 80,
+    "meaning": "Widal O tests for typhoid fever antibodies.",
+    "normal_meaning": "Widal O within normal limits.",
+    "common_causes": ["Typhoid fever", "Past infection"]
+  },
+
+  "widal_h": {
+    "display_name": "Widal Test H",
+    "category": "infectious",
+    "unit": "",
+    "aliases": ["typhoid h", "th"],
+    "normal_min": 0,
+    "normal_max": 80,
+    "meaning": "Widal H tests for typhoid fever antibodies.",
+    "normal_meaning": "Widal H within normal limits.",
+    "common_causes": ["Typhoid fever", "Past infection or vaccination"]
+  },
+
+  "blood_group": {
+    "display_name": "Blood Group",
+    "category": "other",
+    "unit": "",
+    "aliases": ["abo", "blood type"],
+    "normal_min": 0,
+    "normal_max": 0,
+    "meaning": "Blood group identifies your ABO and Rh type.",
+    "normal_meaning": "Blood group identified.",
+    "common_causes": []
+  },
+
+  "g6pd": {
+    "display_name": "G6PD",
+    "category": "other",
+    "unit": "U/g Hb",
+    "aliases": ["glucose-6-phosphate dehydrogenase"],
+    "normal_min": 4.6,
+    "normal_max": 13.5,
+    "meaning": "G6PD deficiency can cause hemolytic anemia with certain triggers.",
+    "normal_meaning": "Your G6PD enzyme level is normal.",
+    "common_causes": ["G6PD deficiency (genetic)"]
+  },
+
+  "stool_occult_blood": {
+    "display_name": "Stool Occult Blood",
+    "category": "stool",
+    "unit": "",
+    "aliases": ["fobt", "fecal occult blood", "stool for ob"],
+    "normal_min": 0,
+    "normal_max": 0,
+    "meaning": "Detects hidden blood in stool — screens for GI bleeding or colon cancer.",
+    "normal_meaning": "No occult blood detected in stool.",
+    "common_causes": ["Colorectal cancer", "Polyps", "Hemorrhoids", "GI bleeding"]
   }
 }

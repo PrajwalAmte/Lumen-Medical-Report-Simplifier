@@ -8,4 +8,5 @@ instance/
 data/
 .env
 .env.*
+!.env.example
 *.sqlite

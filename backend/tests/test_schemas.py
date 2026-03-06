@@ -38,8 +38,8 @@ def test_result_response_creation():
     metadata = Metadata(
         processing_time_sec=30,
         ocr_engine="tesseract",
-        llm_provider="openai",
-        model="gpt-4",
+        llm_provider="groq",
+        model="llama-3.3-70b-versatile",
         cached=False
     )
     
@@ -111,8 +111,8 @@ def test_result_response_validation():
     metadata = Metadata(
         processing_time_sec=30,
         ocr_engine="tesseract",
-        llm_provider="openai",
-        model="gpt-4",
+        llm_provider="groq",
+        model="llama-3.3-70b-versatile",
         cached=False
     )
     

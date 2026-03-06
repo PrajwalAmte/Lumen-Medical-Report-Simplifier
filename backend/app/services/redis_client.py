@@ -8,12 +8,13 @@ it trivial to swap the implementation (e.g. cluster, sentinel) later.
 """
 
 import redis
+from typing import Optional
 from app.core.config import settings
 from app.core.logging import get_logger
 
 logger = get_logger("redis")
 
-_redis_client: redis.Redis | None = None
+_redis_client: Optional[redis.Redis] = None
 
 
 def get_redis_client() -> redis.Redis:

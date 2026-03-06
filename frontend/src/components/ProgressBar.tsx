@@ -6,12 +6,13 @@ interface ProgressBarProps {
 }
 
 const stageLabels: Record<string, string> = {
-  extracting_text: 'Extracting Text',
-  parsing_content: 'Parsing Content',
-  generating_summary: 'Generating Summary',
-  analyzing_values: 'Analyzing Values',
-  formatting_output: 'Formatting Output',
-  completed: 'Completed',
+  uploading: 'Uploading File',
+  extracting_text: 'Extracting Text (OCR)',
+  parsing: 'Parsing Medical Data',
+  generating_explanation: 'Generating Explanation (AI)',
+  finalizing: 'Finalizing Results',
+  done: 'Completed',
+  failed: 'Failed',
 };
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({ progress, stage }) => {

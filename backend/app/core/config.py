@@ -1,59 +1,81 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import field_validator
-from typing import List
+from typing import List, Optional
 import os
 
-# Base directory for the application
+# Base directory (used by relative path settings)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-class Settings(BaseSettings):
-    """Application configuration settings loaded from environment variables."""
 
-    # Application metadata
+class Settings(BaseSettings):
+    """Application settings — all values overridable via environment variables."""
+
     APP_NAME: str = "Lumen"
     ENV: str = "development"
     IS_PROD: bool = False
 
-    # Database configuration - defaults to SQLite for development
     DATABASE_URL: str = os.getenv(
         "DATABASE_URL",
         "sqlite:////data/lumen.db"
     )
 
-    # Redis configuration for job queue and caching
     REDIS_URL: str = "redis://redis:6379/0"
     QUEUE_NAME: str = "lumen_jobs"
-    REDIS_RESULT_TTL_SECONDS: int = 86400  # 24 hours
+    REDIS_RESULT_TTL_SECONDS: int = 86400
 
-    # File storage configuration
-    STORAGE_TYPE: str = "s3"  # Options: s3, local
-    STORAGE_PATH: str | None = None
-    S3_BUCKET: str | None = None
+    STORAGE_TYPE: str = "s3"
+    STORAGE_PATH: Optional[str] = None
+    S3_BUCKET: Optional[str] = None
     S3_REGION: str = "ap-south-1"
-    S3_TTL_DAYS: int = 7  # Auto-cleanup after 7 days
+    S3_TTL_DAYS: int = 7
 
-    # File upload constraints
     MAX_FILE_SIZE_MB: int = 10
     MAX_FILE_SIZE_BYTES: int = 10 * 1024 * 1024
     ALLOWED_EXTENSIONS: List[str] = [".pdf", ".jpg", ".jpeg", ".png"]
 
-    # CORS configuration for frontend access
     CORS_ORIGINS: List[str] = ["*"]
-
-    # Rate limiting
     RATE_LIMIT_PER_MINUTE: int = 10
 
-    # LLM configuration for medical explanations
-    LLM_PROVIDER: str = "openai"
-    OPENAI_API_KEY: str | None = None
-    LLM_MODEL: str = "gpt-4.1-mini"
-    LLM_MAX_TOKENS: int = 4000
-    LLM_TEMPERATURE: float = 0.1
+    # ------------------------------------------------------------------
+    #  LLM configuration
+    # ------------------------------------------------------------------
+    LLM_PROVIDER: str = "groq"          # groq | openai | llama | ollama
 
-    LLM_TIMEOUT_SEC: int = 60
+    # ── Groq (OpenAI-compatible SDK) ──
+    GROQ_API_KEY: Optional[str] = None
+    GROQ_BASE_URL: str = "https://api.groq.com/openai/v1"
+
+    # ── OpenAI (direct) ──
+    OPENAI_API_KEY: Optional[str] = None
+
+    # ── Llama (Ollama / vLLM local) ──
+    LLAMA_ENDPOINT: str = "http://localhost:11434"
+    LLAMA_MODEL: str = "llama3.1:8b"
+    LLAMA_MAX_TOKENS: int = 4096
+
+    # Model routing: heavy model for full analysis, light model for
+    # simpler tasks (medicine lookups, summary generation, etc.)
+    LLM_MODEL_HEAVY: str = "llama-3.3-70b-versatile"
+    LLM_MODEL_LIGHT: str = "openai/gpt-oss-20b"
+
+    # Token limits — Llama 3.3 70B max output = 32 768
+    LLM_MAX_TOKENS_HEAVY: int = 4096
+    LLM_MAX_TOKENS_LIGHT: int = 2048
+
+    LLM_TEMPERATURE: float = 0.0
+    LLM_TIMEOUT_SEC: int = 90
     LLM_RETRY_COUNT: int = 3
     LLM_RETRY_BACKOFF_SEC: int = 2
-    LLM_FAIL_FAST: bool = False
+
+    # ------------------------------------------------------------------
+    #  RAG / Embeddings
+    # ------------------------------------------------------------------
+    RAG_ENABLED: bool = True
+    CHROMADB_HOST: str = "chromadb"
+    CHROMADB_PORT: int = 8100
+    CHROMADB_COLLECTION: str = "lumen_medical"
+    EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
+    RAG_TOP_K: int = 5
 
     OCR_ENGINE: str = "tesseract"
 
@@ -82,9 +104,9 @@ class Settings(BaseSettings):
             return [i.strip() for i in v.split(",")]
         return v
 
-    @field_validator("OPENAI_API_KEY")
+    @field_validator("GROQ_API_KEY")
     @classmethod
-    def validate_openai_key(cls, v):
+    def validate_groq_key(cls, v):
         if v in ("", None):
             return None
         return v
@@ -98,8 +120,8 @@ class Settings(BaseSettings):
 
 settings = Settings()
 
-if settings.ENV == "production" and not settings.OPENAI_API_KEY:
-    raise RuntimeError("OPENAI_API_KEY must be set when ENV=production")
+if settings.ENV == "production" and settings.LLM_PROVIDER == "groq" and not settings.GROQ_API_KEY:
+    raise RuntimeError("GROQ_API_KEY must be set in production when LLM_PROVIDER=groq")
 
 if settings.STORAGE_TYPE == "s3" and not settings.S3_BUCKET:
     raise RuntimeError("S3_BUCKET must be set when STORAGE_TYPE=s3")

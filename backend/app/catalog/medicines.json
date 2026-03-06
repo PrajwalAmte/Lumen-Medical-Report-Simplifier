@@ -1,17 +1,4820 @@
 {
-  "augmentin": {
-    "display_name": "Augmentin",
+  "sulbenicillin": {
+    "display_name": "Sulbenicillin",
     "category": "antibiotic",
-    "aliases": ["augmentin 625", "amoxiclav"]
+    "aliases": [
+      "sulbenicillin"
+    ]
   },
-  "paracetamol": {
-    "display_name": "Paracetamol",
-    "category": "painkiller",
-    "aliases": ["acetaminophen", "calpol"]
+  "talampicillin": {
+    "display_name": "Talampicillin",
+    "category": "antibiotic",
+    "aliases": [
+      "talampicillin"
+    ]
   },
-  "iron": {
-    "display_name": "Iron",
+  "ticarcillin": {
+    "display_name": "Ticarcillin",
+    "category": "antibiotic",
+    "aliases": [
+      "ticarcillin"
+    ]
+  },
+  "azlocillin": {
+    "display_name": "Azlocillin",
+    "category": "antibiotic",
+    "aliases": [
+      "azlocillin"
+    ]
+  },
+  "bacampicillin": {
+    "display_name": "Bacampicillin",
+    "category": "antibiotic",
+    "aliases": [
+      "bacampicillin"
+    ]
+  },
+  "carbenicillin": {
+    "display_name": "Carbenicillin",
+    "category": "antibiotic",
+    "aliases": [
+      "carbenicillin"
+    ]
+  },
+  "hetacillin": {
+    "display_name": "Hetacillin",
+    "category": "antibiotic",
+    "aliases": [
+      "hetacillin"
+    ]
+  },
+  "methampicillin": {
+    "display_name": "Methampicillin",
+    "category": "antibiotic",
+    "aliases": [
+      "methampicillin"
+    ]
+  },
+  "temocillin": {
+    "display_name": "Temocillin",
+    "category": "antibiotic",
+    "aliases": [
+      "temocillin"
+    ]
+  },
+  "amdinocillin": {
+    "display_name": "Amdinocillin",
+    "category": "antibiotic",
+    "aliases": [
+      "amdinocillin"
+    ]
+  },
+  "amdinocillin_pivoxil": {
+    "display_name": "Amdinocillin Pivoxil",
+    "category": "antibiotic",
+    "aliases": [
+      "Pivya",
+      "amdinocillin pivoxil"
+    ]
+  },
+  "mezlocillin": {
+    "display_name": "Mezlocillin",
+    "category": "antibiotic",
+    "aliases": [
+      "mezlocillin"
+    ]
+  },
+  "amoxicillin": {
+    "display_name": "Amoxicillin",
+    "category": "antibiotic",
+    "aliases": [
+      "Amoxil",
+      "Mox",
+      "Novamox",
+      "Amoxi-tabs",
+      "Augmentin",
+      "Clavacillin",
+      "Biomox",
+      "Trimox",
+      "Talicia",
+      "Umbrellin",
+      "Betacilin",
+      "Kesium",
+      "Moxatag",
+      "Clavamox",
+      "Amoxi Drop",
+      "amoxicillin"
+    ]
+  },
+  "ampicillin": {
+    "display_name": "Ampicillin",
+    "category": "antibiotic",
+    "aliases": [
+      "Polyflex",
+      "Unasyn",
+      "ampicillin"
+    ]
+  },
+  "piperacillin": {
+    "display_name": "Piperacillin",
+    "category": "antibiotic",
+    "aliases": [
+      "Zosyn",
+      "piperacillin"
+    ]
+  },
+  "pivampicillin": {
+    "display_name": "Pivampicillin",
+    "category": "antibiotic",
+    "aliases": [
+      "pivampicillin"
+    ]
+  },
+  "ampicillin___sulbactam": {
+    "display_name": "Ampicillin / Sulbactam",
+    "category": "antibiotic",
+    "aliases": [
+      "Unasyn",
+      "ampicillin / sulbactam"
+    ]
+  },
+  "cefprozil": {
+    "display_name": "Cefprozil",
+    "category": "antibiotic",
+    "aliases": [
+      "cefprozil"
+    ]
+  },
+  "ceforanide": {
+    "display_name": "Ceforanide",
+    "category": "antibiotic",
+    "aliases": [
+      "ceforanide"
+    ]
+  },
+  "cefaclor": {
+    "display_name": "Cefaclor",
+    "category": "antibiotic",
+    "aliases": [
+      "cefaclor"
+    ]
+  },
+  "cefamandole": {
+    "display_name": "Cefamandole",
+    "category": "antibiotic",
+    "aliases": [
+      "cefamandole"
+    ]
+  },
+  "cefmetazole": {
+    "display_name": "Cefmetazole",
+    "category": "antibiotic",
+    "aliases": [
+      "cefmetazole"
+    ]
+  },
+  "cefonicid": {
+    "display_name": "Cefonicid",
+    "category": "antibiotic",
+    "aliases": [
+      "cefonicid"
+    ]
+  },
+  "cefotetan": {
+    "display_name": "Cefotetan",
+    "category": "antibiotic",
+    "aliases": [
+      "Cefotan",
+      "cefotetan"
+    ]
+  },
+  "cefotiam": {
+    "display_name": "Cefotiam",
+    "category": "antibiotic",
+    "aliases": [
+      "cefotiam"
+    ]
+  },
+  "cefoxitin": {
+    "display_name": "Cefoxitin",
+    "category": "antibiotic",
+    "aliases": [
+      "cefoxitin"
+    ]
+  },
+  "cefuroxime": {
+    "display_name": "Cefuroxime",
+    "category": "antibiotic",
+    "aliases": [
+      "cefuroxime"
+    ]
+  },
+  "loracarbef": {
+    "display_name": "Loracarbef",
+    "category": "antibiotic",
+    "aliases": [
+      "loracarbef"
+    ]
+  },
+  "cefetamet": {
+    "display_name": "Cefetamet",
+    "category": "antibiotic",
+    "aliases": [
+      "cefetamet"
+    ]
+  },
+  "cefodizime": {
+    "display_name": "Cefodizime",
+    "category": "antibiotic",
+    "aliases": [
+      "cefodizime"
+    ]
+  },
+  "cefpodoxime": {
+    "display_name": "Cefpodoxime",
+    "category": "antibiotic",
+    "aliases": [
+      "Cepodem",
+      "Cefpod",
+      "Cefpoderm",
+      "Dermaceph",
+      "Simplicef",
+      "cefpodoxime"
+    ]
+  },
+  "ceftibuten": {
+    "display_name": "Ceftibuten",
+    "category": "antibiotic",
+    "aliases": [
+      "ceftibuten"
+    ]
+  },
+  "cefoperazone": {
+    "display_name": "Cefoperazone",
+    "category": "antibiotic",
+    "aliases": [
+      "cefoperazone"
+    ]
+  },
+  "cefotaxime": {
+    "display_name": "Cefotaxime",
+    "category": "antibiotic",
+    "aliases": [
+      "Claforan",
+      "cefotaxime"
+    ]
+  },
+  "cefsulodin": {
+    "display_name": "Cefsulodin",
+    "category": "antibiotic",
+    "aliases": [
+      "cefsulodin"
+    ]
+  },
+  "ceftazidime": {
+    "display_name": "Ceftazidime",
+    "category": "antibiotic",
+    "aliases": [
+      "Avycaz",
+      "Fortaz",
+      "Tazicef",
+      "ceftazidime"
+    ]
+  },
+  "ceftizoxime": {
+    "display_name": "Ceftizoxime",
+    "category": "antibiotic",
+    "aliases": [
+      "ceftizoxime"
+    ]
+  },
+  "ceftriaxone": {
+    "display_name": "Ceftriaxone",
+    "category": "antibiotic",
+    "aliases": [
+      "ceftriaxone"
+    ]
+  },
+  "cefixime": {
+    "display_name": "Cefixime",
+    "category": "antibiotic",
+    "aliases": [
+      "Taxim-O",
+      "Cefix",
+      "Zifi",
+      "Suprax",
+      "cefixime"
+    ]
+  },
+  "cefdinir": {
+    "display_name": "Cefdinir",
+    "category": "antibiotic",
+    "aliases": [
+      "cefdinir"
+    ]
+  },
+  "moxalactam": {
+    "display_name": "Moxalactam",
+    "category": "antibiotic",
+    "aliases": [
+      "moxalactam"
+    ]
+  },
+  "cefditoren": {
+    "display_name": "Cefditoren",
+    "category": "antibiotic",
+    "aliases": [
+      "Spectracef",
+      "cefditoren"
+    ]
+  },
+  "troleandomycin": {
+    "display_name": "Troleandomycin",
+    "category": "antibiotic",
+    "aliases": [
+      "troleandomycin"
+    ]
+  },
+  "azithromycin": {
+    "display_name": "Azithromycin",
+    "category": "antibiotic",
+    "aliases": [
+      "Azee",
+      "Zithromax",
+      "Azithral",
+      "AzaSite",
+      "azithromycin"
+    ]
+  },
+  "clarithromycin": {
+    "display_name": "Clarithromycin",
+    "category": "antibiotic",
+    "aliases": [
+      "Biaxin",
+      "clarithromycin"
+    ]
+  },
+  "dirithromycin": {
+    "display_name": "Dirithromycin",
+    "category": "antibiotic",
+    "aliases": [
+      "dirithromycin"
+    ]
+  },
+  "telithromycin": {
+    "display_name": "Telithromycin",
+    "category": "antibiotic",
+    "aliases": [
+      "telithromycin"
+    ]
+  },
+  "midecamycin": {
+    "display_name": "Midecamycin",
+    "category": "antibiotic",
+    "aliases": [
+      "midecamycin"
+    ]
+  },
+  "erythromycin": {
+    "display_name": "Erythromycin",
+    "category": "antibiotic",
+    "aliases": [
+      "Benzamycin",
+      "Ery-Tab",
+      "Erygel",
+      "EryPed",
+      "Emgel",
+      "Theramycin",
+      "Eyemycin",
+      "Emcin Clear",
+      "Erythrocin",
+      "Erythrocin Stearate",
+      "Ery",
+      "E.E.S.",
+      "Maracyn",
+      "erythromycin"
+    ]
+  },
+  "josamycin": {
+    "display_name": "Josamycin",
+    "category": "antibiotic",
+    "aliases": [
+      "josamycin"
+    ]
+  },
+  "miocamycin": {
+    "display_name": "Miocamycin",
+    "category": "antibiotic",
+    "aliases": [
+      "miocamycin"
+    ]
+  },
+  "oleandomycin": {
+    "display_name": "Oleandomycin",
+    "category": "antibiotic",
+    "aliases": [
+      "oleandomycin"
+    ]
+  },
+  "roxithromycin": {
+    "display_name": "Roxithromycin",
+    "category": "antibiotic",
+    "aliases": [
+      "roxithromycin"
+    ]
+  },
+  "spiramycin": {
+    "display_name": "Spiramycin",
+    "category": "antibiotic",
+    "aliases": [
+      "spiramycin"
+    ]
+  },
+  "trovafloxacin": {
+    "display_name": "Trovafloxacin",
+    "category": "antibiotic",
+    "aliases": [
+      "trovafloxacin"
+    ]
+  },
+  "gemifloxacin": {
+    "display_name": "Gemifloxacin",
+    "category": "antibiotic",
+    "aliases": [
+      "Factive",
+      "gemifloxacin"
+    ]
+  },
+  "moxifloxacin": {
+    "display_name": "Moxifloxacin",
+    "category": "antibiotic",
+    "aliases": [
+      "Avelox",
+      "Vigamox",
+      "moxifloxacin"
+    ]
+  },
+  "sparfloxacin": {
+    "display_name": "Sparfloxacin",
+    "category": "antibiotic",
+    "aliases": [
+      "sparfloxacin"
+    ]
+  },
+  "delafloxacin": {
+    "display_name": "Delafloxacin",
+    "category": "antibiotic",
+    "aliases": [
+      "Baxdela",
+      "delafloxacin"
+    ]
+  },
+  "gatifloxacin": {
+    "display_name": "Gatifloxacin",
+    "category": "antibiotic",
+    "aliases": [
+      "Zymaxid",
+      "gatifloxacin"
+    ]
+  },
+  "ciprofloxacin": {
+    "display_name": "Ciprofloxacin",
+    "category": "antibiotic",
+    "aliases": [
+      "Ciplox",
+      "Cifran",
+      "Otiprio",
+      "Otovel",
+      "Cipro",
+      "Ciloxan",
+      "Cipro HC",
+      "Ciprodex",
+      "Proquin",
+      "Cetraxal",
+      "ciprofloxacin"
+    ]
+  },
+  "lomefloxacin": {
+    "display_name": "Lomefloxacin",
+    "category": "antibiotic",
+    "aliases": [
+      "lomefloxacin"
+    ]
+  },
+  "temafloxacin": {
+    "display_name": "Temafloxacin",
+    "category": "antibiotic",
+    "aliases": [
+      "temafloxacin"
+    ]
+  },
+  "enoxacin": {
+    "display_name": "Enoxacin",
+    "category": "antibiotic",
+    "aliases": [
+      "enoxacin"
+    ]
+  },
+  "fleroxacin": {
+    "display_name": "Fleroxacin",
+    "category": "antibiotic",
+    "aliases": [
+      "fleroxacin"
+    ]
+  },
+  "norfloxacin": {
+    "display_name": "Norfloxacin",
+    "category": "antibiotic",
+    "aliases": [
+      "norfloxacin"
+    ]
+  },
+  "ofloxacin": {
+    "display_name": "Ofloxacin",
+    "category": "antibiotic",
+    "aliases": [
+      "Oflox",
+      "Zanocin",
+      "Floxin",
+      "Ocuflox",
+      "ofloxacin"
+    ]
+  },
+  "pefloxacin": {
+    "display_name": "Pefloxacin",
+    "category": "antibiotic",
+    "aliases": [
+      "pefloxacin"
+    ]
+  },
+  "levofloxacin": {
+    "display_name": "Levofloxacin",
+    "category": "antibiotic",
+    "aliases": [
+      "Levoflox",
+      "Levomac",
+      "Glevo",
+      "Levaquin",
+      "levofloxacin"
+    ]
+  },
+  "grepafloxacin": {
+    "display_name": "Grepafloxacin",
+    "category": "antibiotic",
+    "aliases": [
+      "grepafloxacin"
+    ]
+  },
+  "tetracycline": {
+    "display_name": "Tetracycline",
+    "category": "antibiotic",
+    "aliases": [
+      "Viabecline",
+      "Vitastem",
+      "Pylera",
+      "tetracycline"
+    ]
+  },
+  "eravacycline": {
+    "display_name": "Eravacycline",
+    "category": "antibiotic",
+    "aliases": [
+      "Xerava",
+      "eravacycline"
+    ]
+  },
+  "sarecycline": {
+    "display_name": "Sarecycline",
+    "category": "antibiotic",
+    "aliases": [
+      "Seysara",
+      "sarecycline"
+    ]
+  },
+  "omadacycline": {
+    "display_name": "Omadacycline",
+    "category": "antibiotic",
+    "aliases": [
+      "Nuzyra",
+      "omadacycline"
+    ]
+  },
+  "clomocycline": {
+    "display_name": "Clomocycline",
+    "category": "antibiotic",
+    "aliases": [
+      "clomocycline"
+    ]
+  },
+  "chlortetracycline": {
+    "display_name": "Chlortetracycline",
+    "category": "antibiotic",
+    "aliases": [
+      "chlortetracycline"
+    ]
+  },
+  "demeclocycline": {
+    "display_name": "Demeclocycline",
+    "category": "antibiotic",
+    "aliases": [
+      "demeclocycline"
+    ]
+  },
+  "doxycycline": {
+    "display_name": "Doxycycline",
+    "category": "antibiotic",
+    "aliases": [
+      "Doxy-1",
+      "Doxt-SL",
+      "Morgidox",
+      "Acticlate",
+      "Mondoxyne",
+      "Targadox",
+      "Vibramycin",
+      "Okebo",
+      "Doryx",
+      "Monodox",
+      "Periostat",
+      "Adoxa",
+      "Doxy",
+      "Oracea",
+      "Alodox",
+      "Avidoxy",
+      "doxycycline"
+    ]
+  },
+  "tigecycline": {
+    "display_name": "Tigecycline",
+    "category": "antibiotic",
+    "aliases": [
+      "Tygacil",
+      "tigecycline"
+    ]
+  },
+  "lymecycline": {
+    "display_name": "Lymecycline",
+    "category": "antibiotic",
+    "aliases": [
+      "lymecycline"
+    ]
+  },
+  "methacycline": {
+    "display_name": "Methacycline",
+    "category": "antibiotic",
+    "aliases": [
+      "methacycline"
+    ]
+  },
+  "minocycline": {
+    "display_name": "Minocycline",
+    "category": "antibiotic",
+    "aliases": [
+      "Ximino",
+      "Minocin",
+      "Minolira",
+      "Amzeeq",
+      "Zilxi",
+      "Emrosi",
+      "Arestin",
+      "Solodyn",
+      "Cleeravue-M",
+      "minocycline"
+    ]
+  },
+  "oxytetracycline": {
+    "display_name": "Oxytetracycline",
+    "category": "antibiotic",
+    "aliases": [
+      "Noromycin",
+      "Bio-Mycin",
+      "Terra-Vet",
+      "Vetrimycin",
+      "Agrimycin",
+      "Terramycin",
+      "Compudose",
+      "Liquamycin",
+      "oxytetracycline"
+    ]
+  },
+  "rolitetracycline": {
+    "display_name": "Rolitetracycline",
+    "category": "antibiotic",
+    "aliases": [
+      "rolitetracycline"
+    ]
+  },
+  "sulfamerazine___trimethoprim": {
+    "display_name": "Sulfamerazine / Trimethoprim",
+    "category": "antibiotic",
+    "aliases": [
+      "sulfamerazine / trimethoprim"
+    ]
+  },
+  "sulfadiazine___tetroxoprim": {
+    "display_name": "Sulfadiazine / Tetroxoprim",
+    "category": "antibiotic",
+    "aliases": [
+      "sulfadiazine / tetroxoprim"
+    ]
+  },
+  "sulfamethoxazole___trimethoprim": {
+    "display_name": "Sulfamethoxazole / Trimethoprim",
+    "category": "antibiotic",
+    "aliases": [
+      "Bactrim",
+      "Sulfatrim",
+      "sulfamethoxazole / trimethoprim"
+    ]
+  },
+  "sulfadiazine___trimethoprim": {
+    "display_name": "Sulfadiazine / Trimethoprim",
+    "category": "antibiotic",
+    "aliases": [
+      "Equisul SDT",
+      "Uniprim",
+      "sulfadiazine / trimethoprim"
+    ]
+  },
+  "sulfamoxole___trimethoprim": {
+    "display_name": "Sulfamoxole / Trimethoprim",
+    "category": "antibiotic",
+    "aliases": [
+      "sulfamoxole / trimethoprim"
+    ]
+  },
+  "sulfametrole___trimethoprim": {
+    "display_name": "Sulfametrole / Trimethoprim",
+    "category": "antibiotic",
+    "aliases": [
+      "sulfametrole / trimethoprim"
+    ]
+  },
+  "tinidazole": {
+    "display_name": "Tinidazole",
+    "category": "antibiotic",
+    "aliases": [
+      "Tindamax",
+      "tinidazole"
+    ]
+  },
+  "metronidazole": {
+    "display_name": "Metronidazole",
+    "category": "antibiotic",
+    "aliases": [
+      "Flagyl",
+      "Metrogyl",
+      "Rosadan",
+      "Nuvessa",
+      "MetroGel",
+      "MetroCream",
+      "MetroLotion",
+      "Noritate",
+      "Likmez",
+      "Vandazole",
+      "Nydamax",
+      "Pylera",
+      "metronidazole"
+    ]
+  },
+  "ornidazole": {
+    "display_name": "Ornidazole",
+    "category": "antibiotic",
+    "aliases": [
+      "ornidazole"
+    ]
+  },
+  "acetaminophen": {
+    "display_name": "Acetaminophen",
+    "category": "analgesic",
+    "aliases": [
+      "paracetamol",
+      "Crocin",
+      "Calpol",
+      "Dolo 650",
+      "Little Fevers",
+      "Bactimicina",
+      "Pamprin Max Formula",
+      "Pamprin Multi-Symptom",
+      "Pamprin Cramp Formula",
+      "Percogesic Reformulated Jan 2011",
+      "Premsyn PMS",
+      "Panadol PM",
+      "CounterAct Pain",
+      "Capacet",
+      "Nortemp",
+      "Acetadryl",
+      "Ringl",
+      "Pharbetol",
+      "Arthriten Inflammatory Pain",
+      "Backaid",
+      "Cetafen",
+      "Exaprin",
+      "Backaid IPF",
+      "Lortab",
+      "Primlev",
+      "Verdrocet",
+      "Excedrin Mild Headache",
+      "Excedrin PM Triple Action",
+      "Ninjacof A",
+      "Vanatol",
+      "Fioricet",
+      "Sed-Max",
+      "Panadol Extra",
+      "Apadaz",
+      "Panadol",
+      "Tylenol",
+      "Nalocet",
+      "Dvorah",
+      "Anacin AF",
+      "Bupap",
+      "Endocet",
+      "Esgic",
+      "Excedrin",
+      "Excedrin PM",
+      "Feverall",
+      "Fioricet with Codeine",
+      "Legatrin PM",
+      "Mapap",
+      "Marten-Tab",
+      "Norco",
+      "Redutemp",
+      "Repan",
+      "Saleto",
+      "Tempra Quicklets",
+      "Tencon",
+      "Tycolene",
+      "Tylenol Gelcap Extra Strength",
+      "Tylenol PM",
+      "Tylenol with Codeine",
+      "Unisom with Pain Relief",
+      "Vanquish",
+      "Zebutal",
+      "Acephen",
+      "Vtol",
+      "Allzital",
+      "Prolate",
+      "Combogesic",
+      "Exaprin Plus",
+      "Contragesic",
+      "Relagesic",
+      "Ultracet",
+      "Excedrin Tension Headache",
+      "Percocet",
+      "Lorcet",
+      "Frenadol",
+      "Dologesic",
+      "Hycet",
+      "Anabar",
+      "Ed Flex",
+      "By Ache",
+      "Excedrin Quick Tab",
+      "Comtrex Sore Throat Relief",
+      "Excedrin Back & Body",
+      "Anacin Advanced Headache Formula",
+      "Trezix",
+      "Tactinal",
+      "Backprin",
+      "acetaminophen"
+    ]
+  },
+  "phenacetin": {
+    "display_name": "Phenacetin",
+    "category": "analgesic",
+    "aliases": [
+      "phenacetin"
+    ]
+  },
+  "aspirin": {
+    "display_name": "Aspirin",
+    "category": "analgesic",
+    "aliases": [
+      "Ecosprin",
+      "Disprin",
+      "Pamprin Max Formula",
+      "Stanback Headache Powder Reformulated Jan 2011",
+      "BC Arthritis",
+      "BC Original Formula",
+      "Arthriten Inflammatory Pain",
+      "Bromo Seltzer Antacid Pain Reliever",
+      "Exaprin",
+      "Backaid IPF",
+      "Ascomp",
+      "Excedrin PM Triple Action",
+      "Aspi-Cor",
+      "Durlaza",
+      "Alka-Seltzer",
+      "Yosprala",
+      "Aspergum",
+      "Ecotrin",
+      "Anacin",
+      "Bayer Aspirin",
+      "Bufferin",
+      "Excedrin",
+      "Norgesic",
+      "Norwich Aspirin",
+      "P-A-C Analgesic",
+      "Saleto",
+      "St. Joseph Aspirin",
+      "Vanquish",
+      "Equagesic",
+      "Vazalore",
+      "Orphengesic",
+      "Exaprin Plus",
+      "Excedrin Back & Body",
+      "Anacin Advanced Headache Formula",
+      "Anacin Aspirin Regimen",
+      "Miniprin",
+      "aspirin"
+    ]
+  },
+  "benorilate": {
+    "display_name": "Benorilate",
+    "category": "analgesic",
+    "aliases": [
+      "benorilate"
+    ]
+  },
+  "aloxiprin": {
+    "display_name": "Aloxiprin",
+    "category": "analgesic",
+    "aliases": [
+      "aloxiprin"
+    ]
+  },
+  "choline_salicylate": {
+    "display_name": "Choline Salicylate",
+    "category": "analgesic",
+    "aliases": [
+      "choline salicylate"
+    ]
+  },
+  "potassium_salicylate": {
+    "display_name": "Potassium Salicylate",
+    "category": "analgesic",
+    "aliases": [
+      "potassium salicylate"
+    ]
+  },
+  "morpholine_salicylate": {
+    "display_name": "Morpholine Salicylate",
+    "category": "analgesic",
+    "aliases": [
+      "morpholine salicylate"
+    ]
+  },
+  "ethenzamide": {
+    "display_name": "Ethenzamide",
+    "category": "analgesic",
+    "aliases": [
+      "ethenzamide"
+    ]
+  },
+  "imidazole-2-hydroxybenzoate": {
+    "display_name": "Imidazole-2-Hydroxybenzoate",
+    "category": "analgesic",
+    "aliases": [
+      "imidazole-2-hydroxybenzoate"
+    ]
+  },
+  "diflunisal": {
+    "display_name": "Diflunisal",
+    "category": "analgesic",
+    "aliases": [
+      "Dolobid",
+      "diflunisal"
+    ]
+  },
+  "salsalate": {
+    "display_name": "Salsalate",
+    "category": "analgesic",
+    "aliases": [
+      "Disalcid",
+      "salsalate"
+    ]
+  },
+  "salicylamide": {
+    "display_name": "Salicylamide",
+    "category": "analgesic",
+    "aliases": [
+      "Exaprin",
+      "Saleto",
+      "Frenadol",
+      "Anabar",
+      "Ed Flex",
+      "By Ache",
+      "salicylamide"
+    ]
+  },
+  "sodium_salicylate": {
+    "display_name": "Sodium Salicylate",
+    "category": "analgesic",
+    "aliases": [
+      "Azo Urinary Tract Defense",
+      "Cystex",
+      "sodium salicylate"
+    ]
+  },
+  "suprofen": {
+    "display_name": "Suprofen",
+    "category": "nsaid",
+    "aliases": [
+      "suprofen"
+    ]
+  },
+  "misoprostol___naproxen": {
+    "display_name": "Misoprostol / Naproxen",
+    "category": "nsaid",
+    "aliases": [
+      "misoprostol / naproxen"
+    ]
+  },
+  "diphenhydramine___naproxen": {
+    "display_name": "Diphenhydramine / Naproxen",
+    "category": "nsaid",
+    "aliases": [
+      "Aleve PM",
+      "diphenhydramine / naproxen"
+    ]
+  },
+  "alminoprofen": {
+    "display_name": "Alminoprofen",
+    "category": "nsaid",
+    "aliases": [
+      "alminoprofen"
+    ]
+  },
+  "dexketoprofen": {
+    "display_name": "Dexketoprofen",
+    "category": "nsaid",
+    "aliases": [
+      "dexketoprofen"
+    ]
+  },
+  "fenbufen": {
+    "display_name": "Fenbufen",
+    "category": "nsaid",
+    "aliases": [
+      "fenbufen"
+    ]
+  },
+  "loxoprofen": {
+    "display_name": "Loxoprofen",
+    "category": "nsaid",
+    "aliases": [
+      "loxoprofen"
+    ]
+  },
+  "oxaprozin": {
+    "display_name": "Oxaprozin",
+    "category": "nsaid",
+    "aliases": [
+      "Daypro",
+      "Coxanto",
+      "oxaprozin"
+    ]
+  },
+  "tiaprofenic_acid": {
+    "display_name": "Tiaprofenic Acid",
+    "category": "nsaid",
+    "aliases": [
+      "tiaprofenic acid"
+    ]
+  },
+  "fenoprofen": {
+    "display_name": "Fenoprofen",
+    "category": "nsaid",
+    "aliases": [
+      "Fenopron",
+      "Nalfon",
+      "fenoprofen"
+    ]
+  },
+  "flurbiprofen": {
+    "display_name": "Flurbiprofen",
+    "category": "nsaid",
+    "aliases": [
+      "Ansaid",
+      "Lurbipr",
+      "Lurbiro",
+      "Ocufen",
+      "flurbiprofen"
+    ]
+  },
+  "ibuprofen": {
+    "display_name": "Ibuprofen",
+    "category": "nsaid",
+    "aliases": [
+      "Brufen",
+      "Ibugesic",
+      "Duexis",
+      "Proprinal",
+      "Ibudone",
+      "Advil",
+      "Xylon",
+      "Motrin",
+      "Genpril",
+      "Ibu",
+      "Vicoprofen",
+      "Combogesic",
+      "Samson 8",
+      "Reprexain",
+      "Neoprofen",
+      "Wal-Profen",
+      "Ibuprohm",
+      "Caldolor",
+      "Motrin PM",
+      "Addaprin",
+      "ibuprofen"
+    ]
+  },
+  "ketoprofen": {
+    "display_name": "Ketoprofen",
+    "category": "nsaid",
+    "aliases": [
+      "Ketofen",
+      "Orudis",
+      "Draxxin KP",
+      "Ketomed",
+      "Kiprofen",
+      "ketoprofen"
+    ]
+  },
+  "naproxen": {
+    "display_name": "Naproxen",
+    "category": "nsaid",
+    "aliases": [
+      "Naprosyn",
+      "Xenobid",
+      "Vimovo",
+      "Aleve PM",
+      "Anaprox",
+      "Aleve",
+      "Naprelan",
+      "Wal-Proxen",
+      "Treximet",
+      "naproxen"
+    ]
+  },
+  "esomeprazole___naproxen": {
+    "display_name": "Esomeprazole / Naproxen",
+    "category": "nsaid",
+    "aliases": [
+      "Vimovo",
+      "esomeprazole / naproxen"
+    ]
+  },
+  "sulindac": {
+    "display_name": "Sulindac",
+    "category": "nsaid",
+    "aliases": [
+      "sulindac"
+    ]
+  },
+  "tolmetin": {
+    "display_name": "Tolmetin",
+    "category": "nsaid",
+    "aliases": [
+      "Tolectin 600",
+      "tolmetin"
+    ]
+  },
+  "aceclofenac": {
+    "display_name": "Aceclofenac",
+    "category": "nsaid",
+    "aliases": [
+      "Zerodol",
+      "Hifenac",
+      "aceclofenac"
+    ]
+  },
+  "acemetacin": {
+    "display_name": "Acemetacin",
+    "category": "nsaid",
+    "aliases": [
+      "acemetacin"
+    ]
+  },
+  "bufexamac": {
+    "display_name": "Bufexamac",
+    "category": "nsaid",
+    "aliases": [
+      "bufexamac"
+    ]
+  },
+  "bumadizone": {
+    "display_name": "Bumadizone",
+    "category": "nsaid",
+    "aliases": [
+      "bumadizone"
+    ]
+  },
+  "etodolac": {
+    "display_name": "Etodolac",
+    "category": "nsaid",
+    "aliases": [
+      "Lodine",
+      "etodolac"
+    ]
+  },
+  "lonazolac": {
+    "display_name": "Lonazolac",
+    "category": "nsaid",
+    "aliases": [
+      "lonazolac"
+    ]
+  },
+  "diclofenac": {
+    "display_name": "Diclofenac",
+    "category": "nsaid",
+    "aliases": [
+      "Voveran",
+      "Dynapar",
+      "Surpass Anti-Inflammatory",
+      "Flector",
+      "Zorvolex",
+      "Voltaren",
+      "Cataflam",
+      "Licart",
+      "Aleve Arthritis Pain",
+      "Lofena",
+      "Trifena",
+      "Xiclo",
+      "Solaraze",
+      "Arthrotec",
+      "Zipsor",
+      "Cambia",
+      "Pennsaid",
+      "diclofenac"
+    ]
+  },
+  "proglumetacin": {
+    "display_name": "Proglumetacin",
+    "category": "nsaid",
+    "aliases": [
+      "proglumetacin"
+    ]
+  },
+  "ketorolac": {
+    "display_name": "Ketorolac",
+    "category": "nsaid",
+    "aliases": [
+      "Acular",
+      "Omidria",
+      "Acuvail",
+      "Sprix",
+      "ketorolac"
+    ]
+  },
+  "zomepirac": {
+    "display_name": "Zomepirac",
+    "category": "nsaid",
+    "aliases": [
+      "zomepirac"
+    ]
+  },
+  "indomethacin": {
+    "display_name": "Indomethacin",
+    "category": "nsaid",
+    "aliases": [
+      "Tivorbex",
+      "Indocin",
+      "indomethacin"
+    ]
+  },
+  "celecoxib": {
+    "display_name": "Celecoxib",
+    "category": "nsaid",
+    "aliases": [
+      "Consensi",
+      "Celebrex",
+      "Elyxyb",
+      "Seglentis",
+      "Vyscoxa",
+      "celecoxib"
+    ]
+  },
+  "rofecoxib": {
+    "display_name": "Rofecoxib",
+    "category": "nsaid",
+    "aliases": [
+      "rofecoxib"
+    ]
+  },
+  "valdecoxib": {
+    "display_name": "Valdecoxib",
+    "category": "nsaid",
+    "aliases": [
+      "valdecoxib"
+    ]
+  },
+  "parecoxib": {
+    "display_name": "Parecoxib",
+    "category": "nsaid",
+    "aliases": [
+      "parecoxib"
+    ]
+  },
+  "etoricoxib": {
+    "display_name": "Etoricoxib",
+    "category": "nsaid",
+    "aliases": [
+      "Nucoxia",
+      "Arcoxia",
+      "etoricoxib"
+    ]
+  },
+  "metformin": {
+    "display_name": "Metformin",
+    "category": "antidiabetic",
+    "aliases": [
+      "Glycomet",
+      "Glyciphage",
+      "Kazano",
+      "Jentadueto",
+      "Kombiglyze",
+      "Janumet",
+      "Glucophage",
+      "Invokamet",
+      "Xigduo",
+      "Synjardy",
+      "Segluromet",
+      "Trijardy",
+      "Zituvimet",
+      "Riomet",
+      "Actoplus Met",
+      "Glumetza",
+      "metformin"
+    ]
+  },
+  "phenformin": {
+    "display_name": "Phenformin",
+    "category": "antidiabetic",
+    "aliases": [
+      "phenformin"
+    ]
+  },
+  "glibornuride": {
+    "display_name": "Glibornuride",
+    "category": "antidiabetic",
+    "aliases": [
+      "glibornuride"
+    ]
+  },
+  "tolazamide": {
+    "display_name": "Tolazamide",
+    "category": "antidiabetic",
+    "aliases": [
+      "tolazamide"
+    ]
+  },
+  "tolbutamide": {
+    "display_name": "Tolbutamide",
+    "category": "antidiabetic",
+    "aliases": [
+      "tolbutamide"
+    ]
+  },
+  "acetohexamide": {
+    "display_name": "Acetohexamide",
+    "category": "antidiabetic",
+    "aliases": [
+      "acetohexamide"
+    ]
+  },
+  "carbutamide": {
+    "display_name": "Carbutamide",
+    "category": "antidiabetic",
+    "aliases": [
+      "carbutamide"
+    ]
+  },
+  "chlorpropamide": {
+    "display_name": "Chlorpropamide",
+    "category": "antidiabetic",
+    "aliases": [
+      "chlorpropamide"
+    ]
+  },
+  "glimepiride": {
+    "display_name": "Glimepiride",
+    "category": "antidiabetic",
+    "aliases": [
+      "Amaryl",
+      "Glimisave",
+      "Duetact",
+      "glimepiride"
+    ]
+  },
+  "gliquidone": {
+    "display_name": "Gliquidone",
+    "category": "antidiabetic",
+    "aliases": [
+      "gliquidone"
+    ]
+  },
+  "glyburide": {
+    "display_name": "Glyburide",
+    "category": "antidiabetic",
+    "aliases": [
+      "Glynase",
+      "glyburide"
+    ]
+  },
+  "gliclazide": {
+    "display_name": "Gliclazide",
+    "category": "antidiabetic",
+    "aliases": [
+      "Diamicron",
+      "Glizid",
+      "gliclazide"
+    ]
+  },
+  "glipizide": {
+    "display_name": "Glipizide",
+    "category": "antidiabetic",
+    "aliases": [
+      "Glucotrol",
+      "glipizide"
+    ]
+  },
+  "linagliptin": {
+    "display_name": "Linagliptin",
+    "category": "antidiabetic",
+    "aliases": [
+      "Tradjenta",
+      "Jentadueto",
+      "Glyxambi",
+      "Trijardy",
+      "linagliptin"
+    ]
+  },
+  "simvastatin___sitagliptin": {
+    "display_name": "Simvastatin / Sitagliptin",
+    "category": "antidiabetic",
+    "aliases": [
+      "simvastatin / sitagliptin"
+    ]
+  },
+  "alogliptin": {
+    "display_name": "Alogliptin",
+    "category": "antidiabetic",
+    "aliases": [
+      "Nesina",
+      "Kazano",
+      "Oseni",
+      "alogliptin"
+    ]
+  },
+  "sitagliptin": {
+    "display_name": "Sitagliptin",
+    "category": "antidiabetic",
+    "aliases": [
+      "Januvia",
+      "Istavel",
+      "Janumet",
+      "Steglujan",
+      "Zituvio",
+      "Zituvimet",
+      "Brynovin",
+      "sitagliptin"
+    ]
+  },
+  "vildagliptin": {
+    "display_name": "Vildagliptin",
+    "category": "antidiabetic",
+    "aliases": [
+      "Galvus",
+      "Zomelis",
+      "vildagliptin"
+    ]
+  },
+  "saxagliptin": {
+    "display_name": "Saxagliptin",
+    "category": "antidiabetic",
+    "aliases": [
+      "Kombiglyze",
+      "Qtern",
+      "Onglyza",
+      "saxagliptin"
+    ]
+  },
+  "canagliflozin": {
+    "display_name": "Canagliflozin",
+    "category": "antidiabetic",
+    "aliases": [
+      "Invokana",
+      "Invokamet",
+      "canagliflozin"
+    ]
+  },
+  "dapagliflozin": {
+    "display_name": "Dapagliflozin",
+    "category": "antidiabetic",
+    "aliases": [
+      "Forxiga",
+      "Oxra",
+      "Farxiga",
+      "Xigduo",
+      "Qtern",
+      "dapagliflozin"
+    ]
+  },
+  "empagliflozin": {
+    "display_name": "Empagliflozin",
+    "category": "antidiabetic",
+    "aliases": [
+      "Jardiance",
+      "Glyxambi",
+      "Synjardy",
+      "Trijardy",
+      "empagliflozin"
+    ]
+  },
+  "ertugliflozin": {
+    "display_name": "Ertugliflozin",
+    "category": "antidiabetic",
+    "aliases": [
+      "Segluromet",
+      "Steglatro",
+      "Steglujan",
+      "ertugliflozin"
+    ]
+  },
+  "bexagliflozin": {
+    "display_name": "Bexagliflozin",
+    "category": "antidiabetic",
+    "aliases": [
+      "Bexacat",
+      "Brenzavvy",
+      "bexagliflozin"
+    ]
+  },
+  "sotagliflozin": {
+    "display_name": "Sotagliflozin",
+    "category": "antidiabetic",
+    "aliases": [
+      "Inpefa",
+      "sotagliflozin"
+    ]
+  },
+  "insulin_detemir": {
+    "display_name": "Insulin Detemir",
+    "category": "antidiabetic",
+    "aliases": [
+      "Levemir",
+      "insulin detemir"
+    ]
+  },
+  "insulin_degludec": {
+    "display_name": "Insulin Degludec",
+    "category": "antidiabetic",
+    "aliases": [
+      "Tresiba",
+      "Xultophy",
+      "insulin degludec"
+    ]
+  },
+  "insulin_degludec___liraglutide": {
+    "display_name": "Insulin Degludec / Liraglutide",
+    "category": "antidiabetic",
+    "aliases": [
+      "Xultophy",
+      "insulin degludec / liraglutide"
+    ]
+  },
+  "insulin_glargine___lixisenatide": {
+    "display_name": "Insulin Glargine / Lixisenatide",
+    "category": "antidiabetic",
+    "aliases": [
+      "Soliqua",
+      "insulin glargine / lixisenatide"
+    ]
+  },
+  "insulin,_regular,_pork": {
+    "display_name": "Insulin, Regular, Pork",
+    "category": "antidiabetic",
+    "aliases": [
+      "insulin, regular, pork"
+    ]
+  },
+  "insulin,_regular,_human": {
+    "display_name": "Insulin, Regular, Human",
+    "category": "antidiabetic",
+    "aliases": [
+      "Novolin",
+      "Humulin",
+      "Afrezza",
+      "Myxredlin",
+      "Humulin R",
+      "Novolin R",
+      "insulin, regular, human"
+    ]
+  },
+  "insulin_glargine": {
+    "display_name": "Insulin Glargine",
+    "category": "antidiabetic",
+    "aliases": [
+      "Lantus",
+      "Basalog",
+      "Glaritus",
+      "Toujeo",
+      "Basaglar",
+      "Soliqua",
+      "Semglee",
+      "Rezvoglar",
+      "insulin glargine"
+    ]
+  },
+  "benazepril": {
+    "display_name": "Benazepril",
+    "category": "antihypertensive",
+    "aliases": [
+      "Lotensin",
+      "Lotensin HCT",
+      "Lotrel",
+      "Cardalis",
+      "benazepril"
+    ]
+  },
+  "captopril": {
+    "display_name": "Captopril",
+    "category": "antihypertensive",
+    "aliases": [
+      "captopril"
+    ]
+  },
+  "cilazapril": {
+    "display_name": "Cilazapril",
+    "category": "antihypertensive",
+    "aliases": [
+      "cilazapril"
+    ]
+  },
+  "lisinopril": {
+    "display_name": "Lisinopril",
+    "category": "antihypertensive",
+    "aliases": [
+      "Qbrelis",
+      "Zestril",
+      "Prinivil",
+      "Zestoretic",
+      "lisinopril"
+    ]
+  },
+  "moexipril": {
+    "display_name": "Moexipril",
+    "category": "antihypertensive",
+    "aliases": [
+      "moexipril"
+    ]
+  },
+  "quinapril": {
+    "display_name": "Quinapril",
+    "category": "antihypertensive",
+    "aliases": [
+      "Accuretic",
+      "Accupril",
+      "quinapril"
+    ]
+  },
+  "ramipril": {
+    "display_name": "Ramipril",
+    "category": "antihypertensive",
+    "aliases": [
+      "Cardace",
+      "Ramistar",
+      "Altace",
+      "Vostally",
+      "ramipril"
+    ]
+  },
+  "spirapril": {
+    "display_name": "Spirapril",
+    "category": "antihypertensive",
+    "aliases": [
+      "spirapril"
+    ]
+  },
+  "enalapril": {
+    "display_name": "Enalapril",
+    "category": "antihypertensive",
+    "aliases": [
+      "Envas",
+      "Enam",
+      "Epaned",
+      "Vaseretic",
+      "Vasotec",
+      "enalapril"
+    ]
+  },
+  "trandolapril": {
+    "display_name": "Trandolapril",
+    "category": "antihypertensive",
+    "aliases": [
+      "trandolapril"
+    ]
+  },
+  "zofenopril": {
+    "display_name": "Zofenopril",
+    "category": "antihypertensive",
+    "aliases": [
+      "zofenopril"
+    ]
+  },
+  "fosinopril": {
+    "display_name": "Fosinopril",
+    "category": "antihypertensive",
+    "aliases": [
+      "fosinopril"
+    ]
+  },
+  "perindopril": {
+    "display_name": "Perindopril",
+    "category": "antihypertensive",
+    "aliases": [
+      "Prestalia",
+      "Aceon",
+      "perindopril"
+    ]
+  },
+  "imidapril": {
+    "display_name": "Imidapril",
+    "category": "antihypertensive",
+    "aliases": [
+      "imidapril"
+    ]
+  },
+  "azilsartan_medoxomil": {
+    "display_name": "Azilsartan Medoxomil",
+    "category": "antihypertensive",
+    "aliases": [
+      "Edarbi",
+      "Edarbyclor",
+      "azilsartan medoxomil"
+    ]
+  },
+  "olmesartan_medoxomil": {
+    "display_name": "Olmesartan Medoxomil",
+    "category": "antihypertensive",
+    "aliases": [
+      "Tribenzor",
+      "Benicar",
+      "Benicar HCT",
+      "Azor",
+      "olmesartan medoxomil"
+    ]
+  },
+  "candesartan": {
+    "display_name": "Candesartan",
+    "category": "antihypertensive",
+    "aliases": [
+      "Atacand",
+      "Atacand HCT",
+      "candesartan"
+    ]
+  },
+  "losartan": {
+    "display_name": "Losartan",
+    "category": "antihypertensive",
+    "aliases": [
+      "Losar",
+      "Losacar",
+      "Repace",
+      "Cozaar",
+      "Hyzaar",
+      "Arbli",
+      "losartan"
+    ]
+  },
+  "valsartan": {
+    "display_name": "Valsartan",
+    "category": "antihypertensive",
+    "aliases": [
+      "Exforge HCT",
+      "Entresto",
+      "Byvalson",
+      "Diovan",
+      "Diovan HCT",
+      "Exforge",
+      "valsartan"
+    ]
+  },
+  "telmisartan": {
+    "display_name": "Telmisartan",
+    "category": "antihypertensive",
+    "aliases": [
+      "Telma",
+      "Telmikind",
+      "Twynsta",
+      "Semintra",
+      "Micardis",
+      "Widaplik",
+      "Micardis-HCT",
+      "telmisartan"
+    ]
+  },
+  "eprosartan": {
+    "display_name": "Eprosartan",
+    "category": "antihypertensive",
+    "aliases": [
+      "eprosartan"
+    ]
+  },
+  "irbesartan": {
+    "display_name": "Irbesartan",
+    "category": "antihypertensive",
+    "aliases": [
+      "Avapro",
+      "Avalide",
+      "irbesartan"
+    ]
+  },
+  "lercanidipine": {
+    "display_name": "Lercanidipine",
+    "category": "antihypertensive",
+    "aliases": [
+      "lercanidipine"
+    ]
+  },
+  "amlodipine": {
+    "display_name": "Amlodipine",
+    "category": "antihypertensive",
+    "aliases": [
+      "Amlong",
+      "Amlip",
+      "Stamlo",
+      "Tribenzor",
+      "Exforge HCT",
+      "Twynsta",
+      "Prestalia",
+      "Consensi",
+      "Lotrel",
+      "Katerzia",
+      "Norliqva",
+      "Sdamlo",
+      "Widaplik",
+      "Caduet",
+      "Norvasc",
+      "Exforge",
+      "Azor",
+      "amlodipine"
+    ]
+  },
+  "amlodipine___celecoxib": {
+    "display_name": "Amlodipine / Celecoxib",
+    "category": "antihypertensive",
+    "aliases": [
+      "Consensi",
+      "amlodipine / celecoxib"
+    ]
+  },
+  "clevidipine": {
+    "display_name": "Clevidipine",
+    "category": "antihypertensive",
+    "aliases": [
+      "Cleviprex",
+      "clevidipine"
+    ]
+  },
+  "levamlodipine": {
+    "display_name": "Levamlodipine",
+    "category": "antihypertensive",
+    "aliases": [
+      "Conjupri",
+      "levamlodipine"
+    ]
+  },
+  "lacidipine": {
+    "display_name": "Lacidipine",
+    "category": "antihypertensive",
+    "aliases": [
+      "lacidipine"
+    ]
+  },
+  "manidipine": {
+    "display_name": "Manidipine",
+    "category": "antihypertensive",
+    "aliases": [
+      "manidipine"
+    ]
+  },
+  "isradipine": {
+    "display_name": "Isradipine",
+    "category": "antihypertensive",
+    "aliases": [
+      "isradipine"
+    ]
+  },
+  "mepirodipine": {
+    "display_name": "Mepirodipine",
+    "category": "antihypertensive",
+    "aliases": [
+      "mepirodipine"
+    ]
+  },
+  "felodipine": {
+    "display_name": "Felodipine",
+    "category": "antihypertensive",
+    "aliases": [
+      "felodipine"
+    ]
+  },
+  "nilvadipine": {
+    "display_name": "Nilvadipine",
+    "category": "antihypertensive",
+    "aliases": [
+      "nilvadipine"
+    ]
+  },
+  "nicardipine": {
+    "display_name": "Nicardipine",
+    "category": "antihypertensive",
+    "aliases": [
+      "Cardene",
+      "nicardipine"
+    ]
+  },
+  "nifedipine": {
+    "display_name": "Nifedipine",
+    "category": "antihypertensive",
+    "aliases": [
+      "Procardia",
+      "Afeditab CR",
+      "nifedipine"
+    ]
+  },
+  "nimodipine": {
+    "display_name": "Nimodipine",
+    "category": "antihypertensive",
+    "aliases": [
+      "Nymalize",
+      "Nimotop",
+      "nimodipine"
+    ]
+  },
+  "nisoldipine": {
+    "display_name": "Nisoldipine",
+    "category": "antihypertensive",
+    "aliases": [
+      "Sular",
+      "nisoldipine"
+    ]
+  },
+  "nitrendipine": {
+    "display_name": "Nitrendipine",
+    "category": "antihypertensive",
+    "aliases": [
+      "nitrendipine"
+    ]
+  },
+  "atenolol": {
+    "display_name": "Atenolol",
+    "category": "antihypertensive",
+    "aliases": [
+      "Aten",
+      "Tenormin",
+      "Tenoretic",
+      "atenolol"
+    ]
+  },
+  "acebutolol": {
+    "display_name": "Acebutolol",
+    "category": "antihypertensive",
+    "aliases": [
+      "acebutolol"
+    ]
+  },
+  "betaxolol": {
+    "display_name": "Betaxolol",
+    "category": "antihypertensive",
+    "aliases": [
+      "Betoptic S",
+      "betaxolol"
+    ]
+  },
+  "bisoprolol": {
+    "display_name": "Bisoprolol",
+    "category": "antihypertensive",
+    "aliases": [
+      "Ziac",
+      "bisoprolol"
+    ]
+  },
+  "celiprolol": {
+    "display_name": "Celiprolol",
+    "category": "antihypertensive",
+    "aliases": [
+      "celiprolol"
+    ]
+  },
+  "landiolol": {
+    "display_name": "Landiolol",
+    "category": "antihypertensive",
+    "aliases": [
+      "Rapiblyk",
+      "landiolol"
+    ]
+  },
+  "nebivolol": {
+    "display_name": "Nebivolol",
+    "category": "antihypertensive",
+    "aliases": [
+      "Nebicard",
+      "Nebula",
+      "Byvalson",
+      "Bystolic",
+      "nebivolol"
+    ]
+  },
+  "talinolol": {
+    "display_name": "Talinolol",
+    "category": "antihypertensive",
+    "aliases": [
+      "talinolol"
+    ]
+  },
+  "esmolol": {
+    "display_name": "Esmolol",
+    "category": "antihypertensive",
+    "aliases": [
+      "Brevibloc",
+      "esmolol"
+    ]
+  },
+  "metoprolol": {
+    "display_name": "Metoprolol",
+    "category": "antihypertensive",
+    "aliases": [
+      "Betaloc",
+      "Met XL",
+      "Lopressor",
+      "Kapspargo",
+      "Lopressor HCT",
+      "Toprol",
+      "metoprolol"
+    ]
+  },
+  "practolol": {
+    "display_name": "Practolol",
+    "category": "antihypertensive",
+    "aliases": [
+      "practolol"
+    ]
+  },
+  "trichlormethiazide": {
+    "display_name": "Trichlormethiazide",
+    "category": "diuretic",
+    "aliases": [
+      "trichlormethiazide"
+    ]
+  },
+  "bendroflumethiazide": {
+    "display_name": "Bendroflumethiazide",
+    "category": "diuretic",
+    "aliases": [
+      "bendroflumethiazide"
+    ]
+  },
+  "cyclothiazide": {
+    "display_name": "Cyclothiazide",
+    "category": "diuretic",
+    "aliases": [
+      "cyclothiazide"
+    ]
+  },
+  "chlorothiazide": {
+    "display_name": "Chlorothiazide",
+    "category": "diuretic",
+    "aliases": [
+      "Diuril",
+      "chlorothiazide"
+    ]
+  },
+  "cyclopenthiazide": {
+    "display_name": "Cyclopenthiazide",
+    "category": "diuretic",
+    "aliases": [
+      "cyclopenthiazide"
+    ]
+  },
+  "hydrochlorothiazide": {
+    "display_name": "Hydrochlorothiazide",
+    "category": "diuretic",
+    "aliases": [
+      "Aquazide",
+      "Esidrex",
+      "Tribenzor",
+      "Exforge HCT",
+      "Tekturna HCT",
+      "Accuretic",
+      "Aldactazide",
+      "Vaseretic",
+      "Diovan HCT",
+      "Hyzaar",
+      "Lopressor HCT",
+      "Lotensin HCT",
+      "Dyazide",
+      "Avalide",
+      "Inzirqo",
+      "Atacand HCT",
+      "Micardis-HCT",
+      "Benicar HCT",
+      "Maxzide",
+      "Ziac",
+      "Zestoretic",
+      "hydrochlorothiazide"
+    ]
+  },
+  "hydroflumethiazide": {
+    "display_name": "Hydroflumethiazide",
+    "category": "diuretic",
+    "aliases": [
+      "hydroflumethiazide"
+    ]
+  },
+  "methyclothiazide": {
+    "display_name": "Methyclothiazide",
+    "category": "diuretic",
+    "aliases": [
+      "methyclothiazide"
+    ]
+  },
+  "polythiazide": {
+    "display_name": "Polythiazide",
+    "category": "diuretic",
+    "aliases": [
+      "polythiazide"
+    ]
+  },
+  "bumetanide": {
+    "display_name": "Bumetanide",
+    "category": "diuretic",
+    "aliases": [
+      "Bumex",
+      "Enbumyst",
+      "bumetanide"
+    ]
+  },
+  "piretanide": {
+    "display_name": "Piretanide",
+    "category": "diuretic",
+    "aliases": [
+      "piretanide"
+    ]
+  },
+  "torsemide": {
+    "display_name": "Torsemide",
+    "category": "diuretic",
+    "aliases": [
+      "Soaanz",
+      "Upcard",
+      "torsemide"
+    ]
+  },
+  "furosemide": {
+    "display_name": "Furosemide",
+    "category": "diuretic",
+    "aliases": [
+      "Lasix",
+      "Fruselac",
+      "Disal",
+      "Furoscix",
+      "Salix - substance",
+      "furosemide"
+    ]
+  },
+  "rosuvastatin": {
+    "display_name": "Rosuvastatin",
+    "category": "statin",
+    "aliases": [
+      "Rozavel",
+      "Crestor",
+      "Rosuvas",
+      "Ezallor",
+      "Roszet",
+      "rosuvastatin"
+    ]
+  },
+  "simvastatin": {
+    "display_name": "Simvastatin",
+    "category": "statin",
+    "aliases": [
+      "Flolipid",
+      "Zocor",
+      "Vytorin",
+      "simvastatin"
+    ]
+  },
+  "fluvastatin": {
+    "display_name": "Fluvastatin",
+    "category": "statin",
+    "aliases": [
+      "Lescol",
+      "fluvastatin"
+    ]
+  },
+  "pravastatin": {
+    "display_name": "Pravastatin",
+    "category": "statin",
+    "aliases": [
+      "Pravachol",
+      "pravastatin"
+    ]
+  },
+  "cerivastatin": {
+    "display_name": "Cerivastatin",
+    "category": "statin",
+    "aliases": [
+      "cerivastatin"
+    ]
+  },
+  "lovastatin": {
+    "display_name": "Lovastatin",
+    "category": "statin",
+    "aliases": [
+      "Altoprev",
+      "lovastatin"
+    ]
+  },
+  "atorvastatin": {
+    "display_name": "Atorvastatin",
+    "category": "statin",
+    "aliases": [
+      "Atorva",
+      "Lipitor",
+      "Tonact",
+      "Atorvaliq",
+      "Caduet",
+      "atorvastatin"
+    ]
+  },
+  "pitavastatin": {
+    "display_name": "Pitavastatin",
+    "category": "statin",
+    "aliases": [
+      "Zypitamag",
+      "Nikita",
+      "Livalo",
+      "pitavastatin"
+    ]
+  },
+  "choline_fenofibrate": {
+    "display_name": "Choline Fenofibrate",
+    "category": "lipid_lowering",
+    "aliases": [
+      "choline fenofibrate"
+    ]
+  },
+  "bezafibrate": {
+    "display_name": "Bezafibrate",
+    "category": "lipid_lowering",
+    "aliases": [
+      "bezafibrate"
+    ]
+  },
+  "ciprofibrate": {
+    "display_name": "Ciprofibrate",
+    "category": "lipid_lowering",
+    "aliases": [
+      "ciprofibrate"
+    ]
+  },
+  "etofibrate": {
+    "display_name": "Etofibrate",
+    "category": "lipid_lowering",
+    "aliases": [
+      "etofibrate"
+    ]
+  },
+  "clofibrate": {
+    "display_name": "Clofibrate",
+    "category": "lipid_lowering",
+    "aliases": [
+      "clofibrate"
+    ]
+  },
+  "gemfibrozil": {
+    "display_name": "Gemfibrozil",
+    "category": "lipid_lowering",
+    "aliases": [
+      "Lopid",
+      "gemfibrozil"
+    ]
+  },
+  "fenofibrate": {
+    "display_name": "Fenofibrate",
+    "category": "lipid_lowering",
+    "aliases": [
+      "Lipicard",
+      "Fenolip",
+      "Tricor",
+      "Antara",
+      "Lipofen",
+      "Fenoglide",
+      "Trilipix",
+      "Fibricor",
+      "fenofibrate"
+    ]
+  },
+  "rabeprazole": {
+    "display_name": "Rabeprazole",
+    "category": "ppi",
+    "aliases": [
+      "Razo",
+      "Rablet",
+      "Aciphex",
+      "rabeprazole"
+    ]
+  },
+  "lansoprazole": {
+    "display_name": "Lansoprazole",
+    "category": "ppi",
+    "aliases": [
+      "Prevacid",
+      "lansoprazole"
+    ]
+  },
+  "vonoprazan": {
+    "display_name": "Vonoprazan",
+    "category": "ppi",
+    "aliases": [
+      "Voquezna",
+      "vonoprazan"
+    ]
+  },
+  "esomeprazole": {
+    "display_name": "Esomeprazole",
+    "category": "ppi",
+    "aliases": [
+      "Neksium",
+      "Esoz",
+      "Vimovo",
+      "Nexium",
+      "esomeprazole"
+    ]
+  },
+  "pantoprazole": {
+    "display_name": "Pantoprazole",
+    "category": "ppi",
+    "aliases": [
+      "Pan",
+      "Pan-D",
+      "Pantocid",
+      "Protonix",
+      "pantoprazole"
+    ]
+  },
+  "omeprazole": {
+    "display_name": "Omeprazole",
+    "category": "ppi",
+    "aliases": [
+      "Omez",
+      "Ocid",
+      "Yosprala",
+      "Prilosec",
+      "Talicia",
+      "Konvomep",
+      "Primeguard",
+      "Zegerid Reformulated Aug 2006",
+      "UlcerGard",
+      "omeprazole"
+    ]
+  },
+  "dexlansoprazole": {
+    "display_name": "Dexlansoprazole",
+    "category": "ppi",
+    "aliases": [
+      "Dexilant",
+      "dexlansoprazole"
+    ]
+  },
+  "roxatidine": {
+    "display_name": "Roxatidine",
+    "category": "h2_blocker",
+    "aliases": [
+      "roxatidine"
+    ]
+  },
+  "cimetidine": {
+    "display_name": "Cimetidine",
+    "category": "h2_blocker",
+    "aliases": [
+      "Tagamet",
+      "cimetidine"
+    ]
+  },
+  "nizatidine": {
+    "display_name": "Nizatidine",
+    "category": "h2_blocker",
+    "aliases": [
+      "nizatidine"
+    ]
+  },
+  "famotidine": {
+    "display_name": "Famotidine",
+    "category": "h2_blocker",
+    "aliases": [
+      "Calmicid",
+      "Duexis",
+      "Duo Fusion",
+      "Pepcid",
+      "Zantac Reformulated Aug 2022",
+      "Pepcid Complete",
+      "Tums Dual Action",
+      "famotidine"
+    ]
+  },
+  "ranitidine_bismuth_citrate": {
+    "display_name": "Ranitidine Bismuth Citrate",
+    "category": "h2_blocker",
+    "aliases": [
+      "ranitidine bismuth citrate"
+    ]
+  },
+  "ranitidine": {
+    "display_name": "Ranitidine",
+    "category": "h2_blocker",
+    "aliases": [
+      "Zinetac",
+      "Aciloc",
+      "Zantac",
+      "ranitidine"
+    ]
+  },
+  "mosapride": {
+    "display_name": "Mosapride",
+    "category": "prokinetic",
+    "aliases": [
+      "mosapride"
+    ]
+  },
+  "alizapride": {
+    "display_name": "Alizapride",
+    "category": "prokinetic",
+    "aliases": [
+      "alizapride"
+    ]
+  },
+  "bromopride": {
+    "display_name": "Bromopride",
+    "category": "prokinetic",
+    "aliases": [
+      "bromopride"
+    ]
+  },
+  "cinitapride": {
+    "display_name": "Cinitapride",
+    "category": "prokinetic",
+    "aliases": [
+      "cinitapride"
+    ]
+  },
+  "clebopride": {
+    "display_name": "Clebopride",
+    "category": "prokinetic",
+    "aliases": [
+      "clebopride"
+    ]
+  },
+  "cisapride": {
+    "display_name": "Cisapride",
+    "category": "prokinetic",
+    "aliases": [
+      "cisapride"
+    ]
+  },
+  "domperidone": {
+    "display_name": "Domperidone",
+    "category": "prokinetic",
+    "aliases": [
+      "Domstal",
+      "Vomistop",
+      "Equidone",
+      "domperidone"
+    ]
+  },
+  "metoclopramide": {
+    "display_name": "Metoclopramide",
+    "category": "prokinetic",
+    "aliases": [
+      "Pileran",
+      "Gimoti",
+      "Metozolv",
+      "Reglan",
+      "metoclopramide"
+    ]
+  },
+  "cetirizine": {
+    "display_name": "Cetirizine",
+    "category": "antihistamine",
+    "aliases": [
+      "Alerid",
+      "Cetzine",
+      "Okacet",
+      "Wal-Zyr",
+      "Wal Zyr 24 Hour Allergy",
+      "Zerviate",
+      "Quzyttir",
+      "Zyrtec-D",
+      "Zyrtec",
+      "Aller-Tec",
+      "Aller-Tec D",
+      "Alleroff",
+      "Wal Zyr D",
+      "cetirizine"
+    ]
+  },
+  "chlorcyclizine": {
+    "display_name": "Chlorcyclizine",
+    "category": "antihistamine",
+    "aliases": [
+      "Dallergy Reformulated Nov 2011",
+      "Stahist AD",
+      "Statuss Green Reformulated Jan 2012",
+      "Biclora",
+      "Ahist Antihistamine",
+      "chlorcyclizine"
+    ]
+  },
+  "cyclizine": {
+    "display_name": "Cyclizine",
+    "category": "antihistamine",
+    "aliases": [
+      "cyclizine"
+    ]
+  },
+  "levocetirizine": {
+    "display_name": "Levocetirizine",
+    "category": "antihistamine",
+    "aliases": [
+      "Xyzal",
+      "Levocet",
+      "levocetirizine"
+    ]
+  },
+  "oxatomide": {
+    "display_name": "Oxatomide",
+    "category": "antihistamine",
+    "aliases": [
+      "oxatomide"
+    ]
+  },
+  "buclizine": {
+    "display_name": "Buclizine",
+    "category": "antihistamine",
+    "aliases": [
+      "buclizine"
+    ]
+  },
+  "meclizine": {
+    "display_name": "Meclizine",
+    "category": "antihistamine",
+    "aliases": [
+      "Verticalm",
+      "Wal-Dram 2",
+      "Bonine",
+      "Dramamine Nausea Relief",
+      "Pepto Nausea",
+      "Dramamine Less Drowsy",
+      "Antivert",
+      "Zentrip",
+      "meclizine"
+    ]
+  },
+  "triprolidine": {
+    "display_name": "Triprolidine",
+    "category": "antihistamine",
+    "aliases": [
+      "Wal-Act",
+      "A-Phedrin",
+      "Aphedrid",
+      "Genac brand of pseudoephedrine/triprolidine",
+      "Pediaclear Childrens",
+      "Vi-Sudo",
+      "Flonase Nighttime",
+      "triprolidine"
+    ]
+  },
+  "azatadine": {
+    "display_name": "Azatadine",
+    "category": "antihistamine",
+    "aliases": [
+      "azatadine"
+    ]
+  },
+  "azelastine": {
+    "display_name": "Azelastine",
+    "category": "antihistamine",
+    "aliases": [
+      "Dymista",
+      "Astepro",
+      "azelastine"
+    ]
+  },
+  "bamipine": {
+    "display_name": "Bamipine",
+    "category": "antihistamine",
+    "aliases": [
+      "bamipine"
+    ]
+  },
+  "acrivastine": {
+    "display_name": "Acrivastine",
+    "category": "antihistamine",
+    "aliases": [
+      "acrivastine"
+    ]
+  },
+  "ebastine": {
+    "display_name": "Ebastine",
+    "category": "antihistamine",
+    "aliases": [
+      "ebastine"
+    ]
+  },
+  "desloratadine": {
+    "display_name": "Desloratadine",
+    "category": "antihistamine",
+    "aliases": [
+      "Clarinex",
+      "Clarinex-D",
+      "desloratadine"
+    ]
+  },
+  "loratadine": {
+    "display_name": "Loratadine",
+    "category": "antihistamine",
+    "aliases": [
+      "Wal-itin D",
+      "Loradamed",
+      "Wal-vert",
+      "Allerclear",
+      "Cleartime Indoor & Outdoor Allergies",
+      "Claritin",
+      "Claritin-D",
+      "Alavert",
+      "Tavist Non-Sedating",
+      "Alavert D",
+      "Wal-itin",
+      "loratadine"
+    ]
+  },
+  "mebhydroline": {
+    "display_name": "Mebhydroline",
+    "category": "antihistamine",
+    "aliases": [
+      "mebhydroline"
+    ]
+  },
+  "cyproheptadine": {
+    "display_name": "Cyproheptadine",
+    "category": "antihistamine",
+    "aliases": [
+      "cyproheptadine"
+    ]
+  },
+  "phenindamine": {
+    "display_name": "Phenindamine",
+    "category": "antihistamine",
+    "aliases": [
+      "phenindamine"
+    ]
+  },
+  "pimethixene": {
+    "display_name": "Pimethixene",
+    "category": "antihistamine",
+    "aliases": [
+      "pimethixene"
+    ]
+  },
+  "tritoqualine": {
+    "display_name": "Tritoqualine",
+    "category": "antihistamine",
+    "aliases": [
+      "tritoqualine"
+    ]
+  },
+  "epinastine": {
+    "display_name": "Epinastine",
+    "category": "antihistamine",
+    "aliases": [
+      "Elestat",
+      "epinastine"
+    ]
+  },
+  "astemizole": {
+    "display_name": "Astemizole",
+    "category": "antihistamine",
+    "aliases": [
+      "astemizole"
+    ]
+  },
+  "terfenadine": {
+    "display_name": "Terfenadine",
+    "category": "antihistamine",
+    "aliases": [
+      "terfenadine"
+    ]
+  },
+  "mizolastine": {
+    "display_name": "Mizolastine",
+    "category": "antihistamine",
+    "aliases": [
+      "mizolastine"
+    ]
+  },
+  "ketotifen": {
+    "display_name": "Ketotifen",
+    "category": "antihistamine",
+    "aliases": [
+      "Wal-Zyr Itchy Eye",
+      "Zaditor",
+      "Alaway",
+      "Claritin Eye",
+      "ketotifen"
+    ]
+  },
+  "antazoline": {
+    "display_name": "Antazoline",
+    "category": "antihistamine",
+    "aliases": [
+      "antazoline"
+    ]
+  },
+  "fexofenadine": {
+    "display_name": "Fexofenadine",
+    "category": "antihistamine",
+    "aliases": [
+      "Allegra",
+      "Fexova",
+      "Wal-Fex",
+      "Wal-Fex D",
+      "Allegra-D",
+      "fexofenadine"
+    ]
+  },
+  "triamcinolone": {
+    "display_name": "Triamcinolone",
+    "category": "corticosteroid",
+    "aliases": [
+      "Trianex",
+      "Nasacort",
+      "Genesis",
+      "Zilretta",
+      "Kenalog",
+      "Triderm",
+      "Aller-Cort",
+      "Hexatrione",
+      "Tritocin",
+      "Xipere",
+      "Kourzeq",
+      "Oralone",
+      "Triesence",
+      "AllerNaze",
+      "triamcinolone"
+    ]
+  },
+  "prednylidene": {
+    "display_name": "Prednylidene",
+    "category": "corticosteroid",
+    "aliases": [
+      "prednylidene"
+    ]
+  },
+  "betamethasone": {
+    "display_name": "Betamethasone",
+    "category": "corticosteroid",
+    "aliases": [
+      "Gentacalm",
+      "Genone",
+      "Betavet",
+      "Otomax",
+      "Enstilar",
+      "Sernivo",
+      "Del-Beta",
+      "Diprolene",
+      "Wynzora",
+      "Luxiq",
+      "Duotic",
+      "Osurnia",
+      "Celestone Soluspan",
+      "Taclonex",
+      "GentaVed",
+      "betamethasone"
+    ]
+  },
+  "cloprednol": {
+    "display_name": "Cloprednol",
+    "category": "corticosteroid",
+    "aliases": [
+      "cloprednol"
+    ]
+  },
+  "cortivazol": {
+    "display_name": "Cortivazol",
+    "category": "corticosteroid",
+    "aliases": [
+      "cortivazol"
+    ]
+  },
+  "deflazacort": {
+    "display_name": "Deflazacort",
+    "category": "corticosteroid",
+    "aliases": [
+      "Emflaza",
+      "Jaythari",
+      "Pyquvi",
+      "Kymbee",
+      "deflazacort"
+    ]
+  },
+  "vamorolone": {
+    "display_name": "Vamorolone",
+    "category": "corticosteroid",
+    "aliases": [
+      "Agamree",
+      "vamorolone"
+    ]
+  },
+  "cortisone": {
+    "display_name": "Cortisone",
+    "category": "corticosteroid",
+    "aliases": [
+      "cortisone"
+    ]
+  },
+  "meprednisone": {
+    "display_name": "Meprednisone",
+    "category": "corticosteroid",
+    "aliases": [
+      "meprednisone"
+    ]
+  },
+  "dexamethasone": {
+    "display_name": "Dexamethasone",
+    "category": "corticosteroid",
+    "aliases": [
+      "Decdan",
+      "Dexona",
+      "Tresaderm",
+      "Dexium",
+      "Maxitrol",
+      "Dexasone",
+      "Maxidex",
+      "Dexycu",
+      "Dextenza",
+      "Poly-Dex",
+      "Tobradex",
+      "Decadron",
+      "Hemady",
+      "Ciprodex",
+      "Ozurdex",
+      "dexamethasone"
+    ]
+  },
+  "fluocortolone": {
+    "display_name": "Fluocortolone",
+    "category": "corticosteroid",
+    "aliases": [
+      "fluocortolone"
+    ]
+  },
+  "hydrocortisone": {
+    "display_name": "Hydrocortisone",
+    "category": "corticosteroid",
+    "aliases": [
+      "Ana-Lex",
+      "Scalpicin Itch Relief",
+      "Vagisil Satin",
+      "Beta-HC",
+      "Z-Pram",
+      "Procort 1.85/1.15",
+      "Neo-Polycin HC",
+      "Monistat Itch Relief",
+      "Alcortin A",
+      "Hemril",
+      "Proctosol",
+      "Kera-HC",
+      "Hemorrodil Plus",
+      "Anusol HC",
+      "Hemmorex",
+      "Procto-Med",
+      "Cortizone",
+      "Malacetic",
+      "Cortenema",
+      "Cortef",
+      "Dermacort",
+      "Proctocort",
+      "Solu-Cortef",
+      "Ala-Cort",
+      "Ala-Quin",
+      "Analpram HC",
+      "Anucort-HC",
+      "Aquanil HC",
+      "Caldecort",
+      "Cipro HC",
+      "Cortaid",
+      "Cortisporin-TC",
+      "Dermtex HC",
+      "Cortisporin",
+      "Pandel",
+      "Pramosone",
+      "Recort Plus",
+      "Sarnol-HC",
+      "Texacort",
+      "Vanoxide-HC",
+      "Vytone",
+      "Westcort",
+      "Alkindi",
+      "Aquaphor Itch Relief",
+      "Khindivi",
+      "Alocane Anti-Itch",
+      "Proctozone HC",
+      "Proctofoam-HC",
+      "Dermazene",
+      "Instacort",
+      "U-Cort",
+      "Epifoam",
+      "Locoid",
+      "Procto-Pak",
+      "Novacort",
+      "Alcortin",
+      "Cortane-B",
+      "Nuzon",
+      "Gynecort",
+      "MiCort-HC",
+      "Procto-Kit",
+      "Oticin HC",
+      "Corticool",
+      "Nucort",
+      "Scalacort",
+      "ZyPram",
+      "Ala-Scalp",
+      "Cortifoam",
+      "Xerese",
+      "hydrocortisone"
+    ]
+  },
+  "rimexolone": {
+    "display_name": "Rimexolone",
+    "category": "corticosteroid",
+    "aliases": [
+      "rimexolone"
+    ]
+  },
+  "methylprednisolone": {
+    "display_name": "Methylprednisolone",
+    "category": "corticosteroid",
+    "aliases": [
+      "Medrol",
+      "Solu-Medrol",
+      "HybriSil",
+      "Depo-Medrol",
+      "methylprednisolone"
+    ]
+  },
+  "paramethasone": {
+    "display_name": "Paramethasone",
+    "category": "corticosteroid",
+    "aliases": [
+      "paramethasone"
+    ]
+  },
+  "prednisolone": {
+    "display_name": "Prednisolone",
+    "category": "corticosteroid",
+    "aliases": [
+      "Omnacortil",
+      "Wysolone",
+      "Prednistab",
+      "Pred Forte",
+      "Pred Mild",
+      "Blephamide",
+      "Pediapred",
+      "Pred-G",
+      "Cortamine",
+      "Orapred",
+      "MILLIPRED",
+      "Veripred",
+      "Surolan",
+      "Temaril-P",
+      "prednisolone"
+    ]
+  },
+  "prednisone": {
+    "display_name": "Prednisone",
+    "category": "corticosteroid",
+    "aliases": [
+      "Rayos",
+      "Deltasone",
+      "prednisone"
+    ]
+  },
+  "tiratricol": {
+    "display_name": "Tiratricol",
+    "category": "thyroid",
+    "aliases": [
+      "tiratricol"
+    ]
+  },
+  "liothyronine_sodium": {
+    "display_name": "Liothyronine Sodium",
+    "category": "thyroid",
+    "aliases": [
+      "Triostat",
+      "Liomny",
+      "Cytomel",
+      "Thyrolar",
+      "liothyronine sodium"
+    ]
+  },
+  "levothyroxine_sodium": {
+    "display_name": "Levothyroxine Sodium",
+    "category": "thyroid",
+    "aliases": [
+      "Thyro-Tabs",
+      "ThyroKare",
+      "Euthyrox",
+      "Levo-T",
+      "Levoxyl",
+      "Synthroid",
+      "Thyquidity",
+      "Ermeza",
+      "Thyrocryn",
+      "Unithroid",
+      "Thyrolar",
+      "Tirosint",
+      "levothyroxine sodium"
+    ]
+  },
+  "carbimazole": {
+    "display_name": "Carbimazole",
+    "category": "antithyroid",
+    "aliases": [
+      "Neo-Mercazole",
+      "carbimazole"
+    ]
+  },
+  "methimazole": {
+    "display_name": "Methimazole",
+    "category": "antithyroid",
+    "aliases": [
+      "Felanorm",
+      "Felimazole",
+      "methimazole"
+    ]
+  },
+  "ticlopidine": {
+    "display_name": "Ticlopidine",
+    "category": "antiplatelet",
+    "aliases": [
+      "ticlopidine"
+    ]
+  },
+  "ticagrelor": {
+    "display_name": "Ticagrelor",
+    "category": "antiplatelet",
+    "aliases": [
+      "Brilinta",
+      "ticagrelor"
+    ]
+  },
+  "vorapaxar": {
+    "display_name": "Vorapaxar",
+    "category": "antiplatelet",
+    "aliases": [
+      "Zontivity",
+      "vorapaxar"
+    ]
+  },
+  "cangrelor": {
+    "display_name": "Cangrelor",
+    "category": "antiplatelet",
+    "aliases": [
+      "Kengreal",
+      "cangrelor"
+    ]
+  },
+  "selexipag": {
+    "display_name": "Selexipag",
+    "category": "antiplatelet",
+    "aliases": [
+      "Uptravi",
+      "selexipag"
+    ]
+  },
+  "cilostazol": {
+    "display_name": "Cilostazol",
+    "category": "antiplatelet",
+    "aliases": [
+      "cilostazol"
+    ]
+  },
+  "indobufen": {
+    "display_name": "Indobufen",
+    "category": "antiplatelet",
+    "aliases": [
+      "indobufen"
+    ]
+  },
+  "clopidogrel": {
+    "display_name": "Clopidogrel",
+    "category": "antiplatelet",
+    "aliases": [
+      "Clopitab",
+      "Plavix",
+      "Deplatt",
+      "clopidogrel"
+    ]
+  },
+  "treprostinil": {
+    "display_name": "Treprostinil",
+    "category": "antiplatelet",
+    "aliases": [
+      "Orenitram",
+      "Yutrepia",
+      "Remodulin",
+      "Tyvaso",
+      "treprostinil"
+    ]
+  },
+  "dipyridamole": {
+    "display_name": "Dipyridamole",
+    "category": "antiplatelet",
+    "aliases": [
+      "dipyridamole"
+    ]
+  },
+  "triflusal": {
+    "display_name": "Triflusal",
+    "category": "antiplatelet",
+    "aliases": [
+      "triflusal"
+    ]
+  },
+  "iloprost": {
+    "display_name": "Iloprost",
+    "category": "antiplatelet",
+    "aliases": [
+      "Aurlumyn",
+      "Ventavis",
+      "iloprost"
+    ]
+  },
+  "prasugrel": {
+    "display_name": "Prasugrel",
+    "category": "antiplatelet",
+    "aliases": [
+      "Effient",
+      "prasugrel"
+    ]
+  },
+  "tirofiban": {
+    "display_name": "Tirofiban",
+    "category": "antiplatelet",
+    "aliases": [
+      "Aggrastat",
+      "tirofiban"
+    ]
+  },
+  "eptifibatide": {
+    "display_name": "Eptifibatide",
+    "category": "antiplatelet",
+    "aliases": [
+      "eptifibatide"
+    ]
+  },
+  "abciximab": {
+    "display_name": "Abciximab",
+    "category": "antiplatelet",
+    "aliases": [
+      "abciximab"
+    ]
+  },
+  "epoprostenol": {
+    "display_name": "Epoprostenol",
+    "category": "antiplatelet",
+    "aliases": [
+      "Veletri",
+      "Flolan",
+      "epoprostenol"
+    ]
+  },
+  "warfarin": {
+    "display_name": "Warfarin",
+    "category": "anticoagulant",
+    "aliases": [
+      "Warf",
+      "Coumadin",
+      "Jantoven",
+      "warfarin"
+    ]
+  },
+  "acenocoumarol": {
+    "display_name": "Acenocoumarol",
+    "category": "anticoagulant",
+    "aliases": [
+      "acenocoumarol"
+    ]
+  },
+  "dicumarol": {
+    "display_name": "Dicumarol",
+    "category": "anticoagulant",
+    "aliases": [
+      "dicumarol"
+    ]
+  },
+  "tioclomarol": {
+    "display_name": "Tioclomarol",
+    "category": "anticoagulant",
+    "aliases": [
+      "tioclomarol"
+    ]
+  },
+  "fluindione": {
+    "display_name": "Fluindione",
+    "category": "anticoagulant",
+    "aliases": [
+      "fluindione"
+    ]
+  },
+  "phenindione": {
+    "display_name": "Phenindione",
+    "category": "anticoagulant",
+    "aliases": [
+      "phenindione"
+    ]
+  },
+  "phenprocoumon": {
+    "display_name": "Phenprocoumon",
+    "category": "anticoagulant",
+    "aliases": [
+      "phenprocoumon"
+    ]
+  },
+  "rivaroxaban": {
+    "display_name": "Rivaroxaban",
+    "category": "anticoagulant",
+    "aliases": [
+      "Xarelto",
+      "Xeralto",
+      "rivaroxaban"
+    ]
+  },
+  "apixaban": {
+    "display_name": "Apixaban",
+    "category": "anticoagulant",
+    "aliases": [
+      "Eliquis",
+      "Apigat",
+      "apixaban"
+    ]
+  },
+  "edoxaban": {
+    "display_name": "Edoxaban",
+    "category": "anticoagulant",
+    "aliases": [
+      "Savaysa",
+      "edoxaban"
+    ]
+  },
+  "betrixaban": {
+    "display_name": "Betrixaban",
+    "category": "anticoagulant",
+    "aliases": [
+      "betrixaban"
+    ]
+  },
+  "terbutaline": {
+    "display_name": "Terbutaline",
+    "category": "bronchodilator",
+    "aliases": [
+      "terbutaline"
+    ]
+  },
+  "indacaterol": {
+    "display_name": "Indacaterol",
+    "category": "bronchodilator",
+    "aliases": [
+      "indacaterol"
+    ]
+  },
+  "olodaterol": {
+    "display_name": "Olodaterol",
+    "category": "bronchodilator",
+    "aliases": [
+      "Striverdi",
+      "Stiolto",
+      "olodaterol"
+    ]
+  },
+  "bitolterol": {
+    "display_name": "Bitolterol",
+    "category": "bronchodilator",
+    "aliases": [
+      "bitolterol"
+    ]
+  },
+  "formoterol": {
+    "display_name": "Formoterol",
+    "category": "bronchodilator",
+    "aliases": [
+      "Dulera",
+      "Bevespi",
+      "Duaklir",
+      "Breztri",
+      "Breyna",
+      "Symbicort",
+      "Perforomist",
+      "formoterol"
+    ]
+  },
+  "clenbuterol": {
+    "display_name": "Clenbuterol",
+    "category": "bronchodilator",
+    "aliases": [
+      "Ventipulmin",
+      "clenbuterol"
+    ]
+  },
+  "pirbuterol": {
+    "display_name": "Pirbuterol",
+    "category": "bronchodilator",
+    "aliases": [
+      "pirbuterol"
+    ]
+  },
+  "procaterol": {
+    "display_name": "Procaterol",
+    "category": "bronchodilator",
+    "aliases": [
+      "procaterol"
+    ]
+  },
+  "reproterol": {
+    "display_name": "Reproterol",
+    "category": "bronchodilator",
+    "aliases": [
+      "reproterol"
+    ]
+  },
+  "salmeterol": {
+    "display_name": "Salmeterol",
+    "category": "bronchodilator",
+    "aliases": [
+      "AirDuo",
+      "Serevent",
+      "Wixela",
+      "Advair",
+      "salmeterol"
+    ]
+  },
+  "tulobuterol": {
+    "display_name": "Tulobuterol",
+    "category": "bronchodilator",
+    "aliases": [
+      "tulobuterol"
+    ]
+  },
+  "fenoterol": {
+    "display_name": "Fenoterol",
+    "category": "bronchodilator",
+    "aliases": [
+      "fenoterol"
+    ]
+  },
+  "albuterol": {
+    "display_name": "Albuterol",
+    "category": "bronchodilator",
+    "aliases": [
+      "Combivent",
+      "Proventil",
+      "Airsupra",
+      "ProAir",
+      "Ventolin",
+      "albuterol"
+    ]
+  },
+  "hexoprenaline": {
+    "display_name": "Hexoprenaline",
+    "category": "bronchodilator",
+    "aliases": [
+      "hexoprenaline"
+    ]
+  },
+  "isoetharine": {
+    "display_name": "Isoetharine",
+    "category": "bronchodilator",
+    "aliases": [
+      "isoetharine"
+    ]
+  },
+  "rimiterol": {
+    "display_name": "Rimiterol",
+    "category": "bronchodilator",
+    "aliases": [
+      "rimiterol"
+    ]
+  },
+  "aclidinium_bromide": {
+    "display_name": "Aclidinium Bromide",
+    "category": "bronchodilator",
+    "aliases": [
+      "Tudorza",
+      "Duaklir",
+      "aclidinium bromide"
+    ]
+  },
+  "umeclidinium_bromide": {
+    "display_name": "Umeclidinium Bromide",
+    "category": "bronchodilator",
+    "aliases": [
+      "umeclidinium bromide"
+    ]
+  },
+  "ipratropium_bromide": {
+    "display_name": "Ipratropium Bromide",
+    "category": "bronchodilator",
+    "aliases": [
+      "Atrovent",
+      "Combivent",
+      "ipratropium bromide"
+    ]
+  },
+  "revefenacin": {
+    "display_name": "Revefenacin",
+    "category": "bronchodilator",
+    "aliases": [
+      "Yupelri",
+      "revefenacin"
+    ]
+  },
+  "tiotropium_bromide": {
+    "display_name": "Tiotropium Bromide",
+    "category": "bronchodilator",
+    "aliases": [
+      "tiotropium bromide"
+    ]
+  },
+  "oxitropium_bromide": {
+    "display_name": "Oxitropium Bromide",
+    "category": "bronchodilator",
+    "aliases": [
+      "oxitropium bromide"
+    ]
+  },
+  "mometasone": {
+    "display_name": "Mometasone",
+    "category": "inhaled_corticosteroid",
+    "aliases": [
+      "Propel",
+      "Dulera",
+      "Nasonex",
+      "Motazol",
+      "Mometamax",
+      "Sinuva",
+      "Posatex",
+      "Ryaltris",
+      "Simplera",
+      "Mometavet",
+      "Mometamax Single",
+      "Klentz",
+      "Asmanex",
+      "mometasone"
+    ]
+  },
+  "beclomethasone": {
+    "display_name": "Beclomethasone",
+    "category": "inhaled_corticosteroid",
+    "aliases": [
+      "Qnasl",
+      "Beconase",
+      "Qvar",
+      "beclomethasone"
+    ]
+  },
+  "budesonide": {
+    "display_name": "Budesonide",
+    "category": "inhaled_corticosteroid",
+    "aliases": [
+      "Budecort",
+      "Pulmicort",
+      "Uceris",
+      "Entocort",
+      "Rhinocort",
+      "Ortikos",
+      "Breztri",
+      "Tarpeyo",
+      "Breyna",
+      "Airsupra",
+      "Eohilia",
+      "Symbicort",
+      "budesonide"
+    ]
+  },
+  "flunisolide": {
+    "display_name": "Flunisolide",
+    "category": "inhaled_corticosteroid",
+    "aliases": [
+      "Aerospan",
+      "flunisolide"
+    ]
+  },
+  "ciclesonide": {
+    "display_name": "Ciclesonide",
+    "category": "inhaled_corticosteroid",
+    "aliases": [
+      "Zetonna",
+      "Aservo",
+      "Alvesco",
+      "Omnaris",
+      "ciclesonide"
+    ]
+  },
+  "fluticasone": {
+    "display_name": "Fluticasone",
+    "category": "inhaled_corticosteroid",
+    "aliases": [
+      "Flohale",
+      "Flomist",
+      "Cutivate",
+      "Dymista",
+      "Breo",
+      "Arnuity",
+      "Clarispray",
+      "Aller-Flo",
+      "Flonase Sensimist",
+      "Nasopro 24",
+      "AirDuo",
+      "Armonair",
+      "Trelegy",
+      "Xhance",
+      "Fluticare",
+      "Wixela",
+      "Beser",
+      "Flovent",
+      "Advair",
+      "Flonase",
+      "fluticasone"
+    ]
+  },
+  "fluticasone_furoate": {
+    "display_name": "Fluticasone Furoate",
+    "category": "inhaled_corticosteroid",
+    "aliases": [
+      "Breo",
+      "Arnuity",
+      "Flonase Sensimist",
+      "Trelegy",
+      "fluticasone furoate"
+    ]
+  },
+  "citalopram": {
+    "display_name": "Citalopram",
+    "category": "antidepressant",
+    "aliases": [
+      "Celexa",
+      "citalopram"
+    ]
+  },
+  "escitalopram": {
+    "display_name": "Escitalopram",
+    "category": "antidepressant",
+    "aliases": [
+      "Nexito",
+      "Cipralex",
+      "Lexapro",
+      "escitalopram"
+    ]
+  },
+  "paroxetine": {
+    "display_name": "Paroxetine",
+    "category": "antidepressant",
+    "aliases": [
+      "Paxil",
+      "Brisdelle",
+      "Pexeva",
+      "paroxetine"
+    ]
+  },
+  "sertraline": {
+    "display_name": "Sertraline",
+    "category": "antidepressant",
+    "aliases": [
+      "Daxid",
+      "Serta",
+      "Zoloft",
+      "sertraline"
+    ]
+  },
+  "fluvoxamine": {
+    "display_name": "Fluvoxamine",
+    "category": "antidepressant",
+    "aliases": [
+      "fluvoxamine"
+    ]
+  },
+  "fluoxetine": {
+    "display_name": "Fluoxetine",
+    "category": "antidepressant",
+    "aliases": [
+      "Fludac",
+      "Flunil",
+      "Symbyax",
+      "Prozac",
+      "RECONCILE",
+      "fluoxetine"
+    ]
+  },
+  "bromazepam": {
+    "display_name": "Bromazepam",
+    "category": "anxiolytic",
+    "aliases": [
+      "bromazepam"
+    ]
+  },
+  "clobazam": {
+    "display_name": "Clobazam",
+    "category": "anxiolytic",
+    "aliases": [
+      "Onfi",
+      "Sympazan",
+      "clobazam"
+    ]
+  },
+  "cloxazolam": {
+    "display_name": "Cloxazolam",
+    "category": "anxiolytic",
+    "aliases": [
+      "cloxazolam"
+    ]
+  },
+  "chlordiazepoxide": {
+    "display_name": "Chlordiazepoxide",
+    "category": "anxiolytic",
+    "aliases": [
+      "Librax",
+      "chlordiazepoxide"
+    ]
+  },
+  "ethyl_loflazepate": {
+    "display_name": "Ethyl Loflazepate",
+    "category": "anxiolytic",
+    "aliases": [
+      "ethyl loflazepate"
+    ]
+  },
+  "clorazepate_dipotassium": {
+    "display_name": "Clorazepate Dipotassium",
+    "category": "anxiolytic",
+    "aliases": [
+      "Tranxene",
+      "clorazepate dipotassium"
+    ]
+  },
+  "clotiazepam": {
+    "display_name": "Clotiazepam",
+    "category": "anxiolytic",
+    "aliases": [
+      "clotiazepam"
+    ]
+  },
+  "halazepam": {
+    "display_name": "Halazepam",
+    "category": "anxiolytic",
+    "aliases": [
+      "halazepam"
+    ]
+  },
+  "ketazolam": {
+    "display_name": "Ketazolam",
+    "category": "anxiolytic",
+    "aliases": [
+      "ketazolam"
+    ]
+  },
+  "nordazepam": {
+    "display_name": "Nordazepam",
+    "category": "anxiolytic",
+    "aliases": [
+      "nordazepam"
+    ]
+  },
+  "diazepam": {
+    "display_name": "Diazepam",
+    "category": "anxiolytic",
+    "aliases": [
+      "Valium",
+      "Diastat",
+      "Valtoco",
+      "Libervant",
+      "diazepam"
+    ]
+  },
+  "tofisopam": {
+    "display_name": "Tofisopam",
+    "category": "anxiolytic",
+    "aliases": [
+      "tofisopam"
+    ]
+  },
+  "alprazolam": {
+    "display_name": "Alprazolam",
+    "category": "anxiolytic",
+    "aliases": [
+      "Alprax",
+      "Trika",
+      "Xanax",
+      "alprazolam"
+    ]
+  },
+  "lorazepam": {
+    "display_name": "Lorazepam",
+    "category": "anxiolytic",
+    "aliases": [
+      "Ativan",
+      "Loreev",
+      "lorazepam"
+    ]
+  },
+  "medazepam": {
+    "display_name": "Medazepam",
+    "category": "anxiolytic",
+    "aliases": [
+      "medazepam"
+    ]
+  },
+  "oxazepam": {
+    "display_name": "Oxazepam",
+    "category": "anxiolytic",
+    "aliases": [
+      "oxazepam"
+    ]
+  },
+  "prazepam": {
+    "display_name": "Prazepam",
+    "category": "anxiolytic",
+    "aliases": [
+      "prazepam"
+    ]
+  },
+  "sulthiame": {
+    "display_name": "Sulthiame",
+    "category": "antiepileptic",
+    "aliases": [
+      "sulthiame"
+    ]
+  },
+  "ezogabine": {
+    "display_name": "Ezogabine",
+    "category": "antiepileptic",
+    "aliases": [
+      "ezogabine"
+    ]
+  },
+  "levetiracetam": {
+    "display_name": "Levetiracetam",
+    "category": "antiepileptic",
+    "aliases": [
+      "Elepsia",
+      "Roweepra",
+      "Spritam",
+      "Keppra",
+      "levetiracetam"
+    ]
+  },
+  "perampanel": {
+    "display_name": "Perampanel",
+    "category": "antiepileptic",
+    "aliases": [
+      "FYCOMPA",
+      "perampanel"
+    ]
+  },
+  "brivaracetam": {
+    "display_name": "Brivaracetam",
+    "category": "antiepileptic",
+    "aliases": [
+      "Briviact",
+      "brivaracetam"
+    ]
+  },
+  "beclamide": {
+    "display_name": "Beclamide",
+    "category": "antiepileptic",
+    "aliases": [
+      "beclamide"
+    ]
+  },
+  "cannabidiol": {
+    "display_name": "Cannabidiol",
+    "category": "antiepileptic",
+    "aliases": [
+      "Epidiolex",
+      "cannabidiol"
+    ]
+  },
+  "stiripentol": {
+    "display_name": "Stiripentol",
+    "category": "antiepileptic",
+    "aliases": [
+      "Diacomit",
+      "stiripentol"
+    ]
+  },
+  "cenobamate": {
+    "display_name": "Cenobamate",
+    "category": "antiepileptic",
+    "aliases": [
+      "Xcopri",
+      "cenobamate"
+    ]
+  },
+  "felbamate": {
+    "display_name": "Felbamate",
+    "category": "antiepileptic",
+    "aliases": [
+      "Felbatol",
+      "felbamate"
+    ]
+  },
+  "ganaxolone": {
+    "display_name": "Ganaxolone",
+    "category": "antiepileptic",
+    "aliases": [
+      "Ztalmy",
+      "ganaxolone"
+    ]
+  },
+  "lamotrigine": {
+    "display_name": "Lamotrigine",
+    "category": "antiepileptic",
+    "aliases": [
+      "Lamictal",
+      "Subvenite",
+      "lamotrigine"
+    ]
+  },
+  "phenacemide": {
+    "display_name": "Phenacemide",
+    "category": "antiepileptic",
+    "aliases": [
+      "phenacemide"
+    ]
+  },
+  "topiramate": {
+    "display_name": "Topiramate",
+    "category": "antiepileptic",
+    "aliases": [
+      "Qsymia",
+      "Trokendi",
+      "Qudexy",
+      "Topamax",
+      "Eprontia",
+      "topiramate"
+    ]
+  },
+  "zonisamide": {
+    "display_name": "Zonisamide",
+    "category": "antiepileptic",
+    "aliases": [
+      "Zonisade",
+      "Zonegran",
+      "zonisamide"
+    ]
+  },
+  "fenfluramine": {
+    "display_name": "Fenfluramine",
+    "category": "antiepileptic",
+    "aliases": [
+      "Fintepla",
+      "fenfluramine"
+    ]
+  },
+  "lacosamide": {
+    "display_name": "Lacosamide",
+    "category": "antiepileptic",
+    "aliases": [
+      "Motpoly",
+      "Vimpat",
+      "lacosamide"
+    ]
+  },
+  "ferrous_glycine_sulfate": {
+    "display_name": "Ferrous Glycine Sulfate",
     "category": "supplement",
-    "aliases": ["iron tablets", "ferrous"]
+    "aliases": [
+      "ferrous glycine sulfate"
+    ]
+  },
+  "ferrous_carbonate": {
+    "display_name": "Ferrous Carbonate",
+    "category": "supplement",
+    "aliases": [
+      "ferrous carbonate"
+    ]
+  },
+  "ferrous_aspartate": {
+    "display_name": "Ferrous Aspartate",
+    "category": "supplement",
+    "aliases": [
+      "ferrous aspartate"
+    ]
+  },
+  "ferrous_chloride": {
+    "display_name": "Ferrous Chloride",
+    "category": "supplement",
+    "aliases": [
+      "ferrous chloride"
+    ]
+  },
+  "ferrous_fumarate": {
+    "display_name": "Ferrous Fumarate",
+    "category": "supplement",
+    "aliases": [
+      "Ferocon",
+      "Folivane-F",
+      "Hemocyte Plus",
+      "Lactocal",
+      "Concept OB",
+      "Tandem Plus",
+      "Hematogen",
+      "Hemocyte-F",
+      "Natelle",
+      "TANDEM",
+      "Ferrimin 150",
+      "Ferrocite",
+      "Tandem F",
+      "Multigen Plus",
+      "Dialyvite 800 with Iron",
+      "Hemocyte",
+      "Integra F",
+      "ferrous fumarate"
+    ]
+  },
+  "ferrous_gluconate": {
+    "display_name": "Ferrous Gluconate",
+    "category": "supplement",
+    "aliases": [
+      "Fergon",
+      "Ferate",
+      "ferrous gluconate"
+    ]
+  },
+  "ferrous_succinate": {
+    "display_name": "Ferrous Succinate",
+    "category": "supplement",
+    "aliases": [
+      "ferrous succinate"
+    ]
+  },
+  "ferrous_sulfate": {
+    "display_name": "Ferrous Sulfate",
+    "category": "supplement",
+    "aliases": [
+      "Fefol",
+      "Orofer",
+      "Slow-Fe",
+      "Feosol",
+      "Fer-in-Sol",
+      "Poly-Vi-Sol with Iron",
+      "Folitab",
+      "ferrous sulfate"
+    ]
+  },
+  "ferrous_ascorbate": {
+    "display_name": "Ferrous Ascorbate",
+    "category": "supplement",
+    "aliases": [
+      "ferrous ascorbate"
+    ]
+  },
+  "alfacalcidol": {
+    "display_name": "Alfacalcidol",
+    "category": "supplement",
+    "aliases": [
+      "alfacalcidol"
+    ]
+  },
+  "calcifediol": {
+    "display_name": "Calcifediol",
+    "category": "supplement",
+    "aliases": [
+      "Rayaldee",
+      "calcifediol"
+    ]
+  },
+  "calcitriol": {
+    "display_name": "Calcitriol",
+    "category": "supplement",
+    "aliases": [
+      "Rocaltrol",
+      "Vectical",
+      "calcitriol"
+    ]
+  },
+  "cholecalciferol": {
+    "display_name": "Cholecalciferol",
+    "category": "supplement",
+    "aliases": [
+      "D-Rise",
+      "Uprise-D3",
+      "Tayo 60K",
+      "Folgard OS",
+      "Multi-Delyn",
+      "Oysco 500 with D",
+      "D3 Dots",
+      "Lactocal",
+      "Thera-D",
+      "Vitafol-One",
+      "Animi-3 with Vitamin D",
+      "Os-Cal 500 with D",
+      "Caltrate Gummy Bites",
+      "Viactiv Calcium Plus D",
+      "Cal-Quick",
+      "Dialyvite Vitamin D3 Max",
+      "Infuvite",
+      "Infuvite Pediatric",
+      "Replesta NX",
+      "Caltrate Plus D",
+      "ReliOn Glucose",
+      "Decara",
+      "Ostercal-D",
+      "Vital E- A + D3",
+      "Vital E- Repro",
+      "Vital E- Newborn",
+      "Decalcitrol",
+      "Calcet",
+      "Delta D3",
+      "Poly-Vi-Sol",
+      "Poly-Vi-Sol with Iron",
+      "Tri-Vi-Sol",
+      "Folditam",
+      "Folixate",
+      "Fosamax Plus D",
+      "Oysco D",
+      "Osteo-Poretical",
+      "D-Vi-Sol",
+      "MVC-Fluoride",
+      "Maximum D3",
+      "Encora AM Tablet",
+      "Encora PM Tablet",
+      "cholecalciferol"
+    ]
+  },
+  "dihydrotachysterol": {
+    "display_name": "Dihydrotachysterol",
+    "category": "supplement",
+    "aliases": [
+      "dihydrotachysterol"
+    ]
+  },
+  "ergocalciferol": {
+    "display_name": "Ergocalciferol",
+    "category": "supplement",
+    "aliases": [
+      "Calcidol",
+      "Drisdol",
+      "ergocalciferol"
+    ]
+  },
+  "vitamin_b12": {
+    "display_name": "Vitamin B12",
+    "category": "supplement",
+    "aliases": [
+      "Ferocon",
+      "Ferraplus",
+      "Ferrex 150 Forte Plus",
+      "Folbecal",
+      "Folgard OS",
+      "Hemocyte Plus",
+      "Hemax",
+      "Icar-C Plus",
+      "FoliNatal Plus B",
+      "Multi-Delyn",
+      "Folgard",
+      "Irospan Tablet",
+      "Lactocal",
+      "Vitafol-One",
+      "MTX Support",
+      "Animi-3 with Vitamin D",
+      "Infuvite",
+      "Infuvite Pediatric",
+      "Concept OB",
+      "Tandem Plus",
+      "Hematogen",
+      "Niva-Fol",
+      "Poly-Vi-Sol",
+      "Dodex",
+      "Nascobal",
+      "Foltrate",
+      "Folbee",
+      "Folbic",
+      "Iferex 150 Forte",
+      "Rena-Vite",
+      "Foltabs",
+      "Ferralet 90",
+      "Vita-Respa",
+      "Multigen",
+      "Multigen Plus",
+      "Ferrex 150 Forte",
+      "Ellis Tonic",
+      "MVC-Fluoride",
+      "Eldertonic",
+      "BiferaRx",
+      "Poly Iron 150 Forte",
+      "vitamin b12"
+    ]
+  },
+  "cobamamide": {
+    "display_name": "Cobamamide",
+    "category": "supplement",
+    "aliases": [
+      "cobamamide"
+    ]
+  },
+  "mecobalamin": {
+    "display_name": "Mecobalamin",
+    "category": "supplement",
+    "aliases": [
+      "Dialyvite 800",
+      "Dialyvite 800 with Zinc",
+      "Dialyvite 800 with Iron",
+      "mecobalamin"
+    ]
+  },
+  "hydroxocobalamin": {
+    "display_name": "Hydroxocobalamin",
+    "category": "supplement",
+    "aliases": [
+      "Cyanokit",
+      "hydroxocobalamin"
+    ]
+  },
+  "ascorbic_acid": {
+    "display_name": "Ascorbic Acid",
+    "category": "supplement",
+    "aliases": [
+      "Ferocon",
+      "Ferraplus",
+      "Folivane-F",
+      "Hemax",
+      "Icar-C Plus",
+      "Icar C",
+      "Macuvite with Lutein",
+      "Multi-Delyn",
+      "Irospan Tablet",
+      "Lactocal",
+      "Vitafol-One",
+      "Halls Defense",
+      "Infuvite",
+      "Infuvite Pediatric",
+      "Concept OB",
+      "Hematogen",
+      "Vitron-C Reformulated Jul 2016",
+      "Ascor",
+      "C-Time",
+      "Cemill 1000",
+      "N Ice with Vitamin C",
+      "Ocuvite",
+      "Poly-Vi-Sol",
+      "Poly-Vi-Sol with Iron",
+      "Tri-Vi-Sol",
+      "Natelle",
+      "Ocuvite Lutein",
+      "Dialyvite 800",
+      "Dialyvite 800 with Zinc",
+      "MoviPrep",
+      "Rena-Vite",
+      "Ferralet 90",
+      "Ferrex 150 Plus",
+      "Dialyvite 800 with Iron",
+      "PreserVision",
+      "Folitab",
+      "MVC-Fluoride",
+      "PreserVision with Lutein",
+      "Integra F",
+      "ascorbic acid"
+    ]
+  },
+  "folic_acid": {
+    "display_name": "Folic Acid",
+    "category": "supplement",
+    "aliases": [
+      "Folvite",
+      "Ferocon",
+      "Ferraplus",
+      "Ferrex 150 Forte Plus",
+      "Folbecal",
+      "Folgard OS",
+      "Folivane-F",
+      "Hemocyte Plus",
+      "Hemax",
+      "Icar-C Plus",
+      "FoliNatal Plus B",
+      "Folgard",
+      "Irospan Tablet",
+      "Lactocal",
+      "Vitafol-One",
+      "NicAzel",
+      "MTX Support",
+      "Animi-3 with Vitamin D",
+      "Pregnitude",
+      "Infuvite",
+      "Infuvite Pediatric",
+      "Concept OB",
+      "Tandem Plus",
+      "Hematogen",
+      "Niva-Fol",
+      "Folacin",
+      "Hemocyte-F",
+      "Folditam",
+      "Quiofic",
+      "Natelle",
+      "Nicomide",
+      "Dialyvite 800",
+      "Dialyvite 800 with Zinc",
+      "Foltrate",
+      "Folbee",
+      "Folbic",
+      "Iferex 150 Forte",
+      "Tandem F",
+      "MagneBind 400 Rx",
+      "Rena-Vite",
+      "Foltabs",
+      "Ferralet 90",
+      "Vita-Respa",
+      "Multigen Plus",
+      "Ferrex 150 Forte",
+      "Dialyvite 800 with Iron",
+      "Folitab",
+      "MVC-Fluoride",
+      "BiferaRx",
+      "Poly Iron 150 Forte",
+      "Encora AM Tablet",
+      "Encora PM Tablet",
+      "Integra F",
+      "folic acid"
+    ]
+  },
+  "calcium_carbonate": {
+    "display_name": "Calcium Carbonate",
+    "category": "supplement",
+    "aliases": [
+      "Shelcal",
+      "CCM",
+      "Folbecal",
+      "Folgard OS",
+      "FoliNatal Plus B",
+      "Oysco 500 with D",
+      "Lactocal",
+      "Os-Cal 500 with D",
+      "Viactiv Calcium Plus D",
+      "Slow-Mag Reformulated Feb 2012",
+      "Cal-Quick",
+      "Nutralox",
+      "Caltrate Plus D",
+      "Healthy Mama",
+      "Ostercal-D",
+      "D-Cal",
+      "Florical",
+      "Phazyme Gas & Acid",
+      "Duo Fusion",
+      "Mylicon Children's",
+      "Tums with Gas Relief",
+      "Alka-Mints",
+      "Alkums",
+      "Caltrate",
+      "Chooz",
+      "Monocal",
+      "OsCal 500",
+      "Titralac",
+      "Tums",
+      "Gas-X Total Relief",
+      "Pepcid Complete",
+      "Gas-X with Maalox",
+      "Maalox Max Quick Dissolve",
+      "MagneBind",
+      "Rolaids Reformulated Aug 2006",
+      "MagneBind 400 Rx",
+      "Pepto-Bismol Children's",
+      "Titralac Plus",
+      "Oysco D",
+      "Osteo-Poretical",
+      "Tums Dual Action",
+      "Encora AM Tablet",
+      "Encora PM Tablet",
+      "Cal Gest",
+      "calcium carbonate"
+    ]
+  },
+  "calcium_chloride": {
+    "display_name": "Calcium Chloride",
+    "category": "supplement",
+    "aliases": [
+      "Clinimix E 4.25/10",
+      "Extraneal",
+      "Nutrilyte II",
+      "Dianeal PD-2/4.25",
+      "Dianeal PD-2/2.5",
+      "Dianeal PD-2/1.5",
+      "Dianeal Low Calcium 1.5",
+      "Dianeal Low Calcium 4.25",
+      "Dianeal Low Calcium 2.5",
+      "Clinimix E 4.25/5",
+      "Clinimix E 2.75/5",
+      "Clinimix E 5/15",
+      "Clinimix E 5/20",
+      "Clinimix E 5/25",
+      "BSS Ophthalmic Solution",
+      "calcium chloride"
+    ]
+  },
+  "calcium_gluconate": {
+    "display_name": "Calcium Gluconate",
+    "category": "supplement",
+    "aliases": [
+      "Calgonate",
+      "calcium gluconate"
+    ]
+  },
+  "calcium_pangamate": {
+    "display_name": "Calcium Pangamate",
+    "category": "supplement",
+    "aliases": [
+      "calcium pangamate"
+    ]
+  },
+  "calcium_phosphate": {
+    "display_name": "Calcium Phosphate",
+    "category": "supplement",
+    "aliases": [
+      "Medi-Lyte",
+      "calcium phosphate"
+    ]
+  },
+  "calcium_glubionate": {
+    "display_name": "Calcium Glubionate",
+    "category": "supplement",
+    "aliases": [
+      "calcium glubionate"
+    ]
+  },
+  "calcium_citrate": {
+    "display_name": "Calcium Citrate",
+    "category": "supplement",
+    "aliases": [
+      "Calcet",
+      "calcium citrate"
+    ]
+  },
+  "calcium_gluceptate": {
+    "display_name": "Calcium Gluceptate",
+    "category": "supplement",
+    "aliases": [
+      "calcium gluceptate"
+    ]
+  },
+  "calcium_lactate": {
+    "display_name": "Calcium Lactate",
+    "category": "supplement",
+    "aliases": [
+      "calcium lactate"
+    ]
+  },
+  "calcium_levulinate": {
+    "display_name": "Calcium Levulinate",
+    "category": "supplement",
+    "aliases": [
+      "calcium levulinate"
+    ]
+  },
+  "voriconazole": {
+    "display_name": "Voriconazole",
+    "category": "antifungal",
+    "aliases": [
+      "Vfend",
+      "voriconazole"
+    ]
+  },
+  "isavuconazole": {
+    "display_name": "Isavuconazole",
+    "category": "antifungal",
+    "aliases": [
+      "isavuconazole"
+    ]
+  },
+  "oteseconazole": {
+    "display_name": "Oteseconazole",
+    "category": "antifungal",
+    "aliases": [
+      "Vivjoa",
+      "oteseconazole"
+    ]
+  },
+  "itraconazole": {
+    "display_name": "Itraconazole",
+    "category": "antifungal",
+    "aliases": [
+      "Sporanox",
+      "Tolsura",
+      "itraconazole"
+    ]
+  },
+  "posaconazole": {
+    "display_name": "Posaconazole",
+    "category": "antifungal",
+    "aliases": [
+      "Posatex",
+      "Mometamax Single",
+      "Noxafil",
+      "posaconazole"
+    ]
+  },
+  "fluconazole": {
+    "display_name": "Fluconazole",
+    "category": "antifungal",
+    "aliases": [
+      "Forcan",
+      "Zocon",
+      "Diflucan",
+      "fluconazole"
+    ]
+  },
+  "terbinafine": {
+    "display_name": "Terbinafine",
+    "category": "antifungal",
+    "aliases": [
+      "Silka Cream",
+      "Lamisil",
+      "Simplera",
+      "Duotic",
+      "Osurnia",
+      "Klentz",
+      "terbinafine"
+    ]
+  },
+  "griseofulvin": {
+    "display_name": "Griseofulvin",
+    "category": "antifungal",
+    "aliases": [
+      "Gris-PEG",
+      "Fulvicin P/G",
+      "griseofulvin"
+    ]
+  },
+  "indinavir": {
+    "display_name": "Indinavir",
+    "category": "antiviral",
+    "aliases": [
+      "indinavir"
+    ]
+  },
+  "nelfinavir": {
+    "display_name": "Nelfinavir",
+    "category": "antiviral",
+    "aliases": [
+      "Viracept",
+      "nelfinavir"
+    ]
+  },
+  "tipranavir": {
+    "display_name": "Tipranavir",
+    "category": "antiviral",
+    "aliases": [
+      "Aptivus",
+      "tipranavir"
+    ]
+  },
+  "amprenavir": {
+    "display_name": "Amprenavir",
+    "category": "antiviral",
+    "aliases": [
+      "amprenavir"
+    ]
+  },
+  "atazanavir": {
+    "display_name": "Atazanavir",
+    "category": "antiviral",
+    "aliases": [
+      "Evotaz",
+      "Reyataz",
+      "atazanavir"
+    ]
+  },
+  "fosamprenavir": {
+    "display_name": "Fosamprenavir",
+    "category": "antiviral",
+    "aliases": [
+      "Lexiva",
+      "fosamprenavir"
+    ]
+  },
+  "darunavir": {
+    "display_name": "Darunavir",
+    "category": "antiviral",
+    "aliases": [
+      "Prezcobix",
+      "Symtuza",
+      "Prezista",
+      "darunavir"
+    ]
+  },
+  "saquinavir": {
+    "display_name": "Saquinavir",
+    "category": "antiviral",
+    "aliases": [
+      "saquinavir"
+    ]
+  },
+  "ritonavir": {
+    "display_name": "Ritonavir",
+    "category": "antiviral",
+    "aliases": [
+      "Norvir",
+      "Kaletra",
+      "ritonavir"
+    ]
+  },
+  "zidovudine": {
+    "display_name": "Zidovudine",
+    "category": "antiviral",
+    "aliases": [
+      "Combivir",
+      "Retrovir",
+      "Trizivir",
+      "zidovudine"
+    ]
+  },
+  "adefovir_dipivoxil": {
+    "display_name": "Adefovir Dipivoxil",
+    "category": "antiviral",
+    "aliases": [
+      "Hepsera",
+      "adefovir dipivoxil"
+    ]
+  },
+  "tenofovir_alafenamide": {
+    "display_name": "Tenofovir Alafenamide",
+    "category": "antiviral",
+    "aliases": [
+      "Genvoya",
+      "Odefsey",
+      "Descovy",
+      "Vemlidy",
+      "Biktarvy",
+      "Symtuza",
+      "tenofovir alafenamide"
+    ]
+  },
+  "abacavir": {
+    "display_name": "Abacavir",
+    "category": "antiviral",
+    "aliases": [
+      "Triumeq",
+      "Ziagen",
+      "Trizivir",
+      "Epzicom",
+      "abacavir"
+    ]
+  },
+  "emtricitabine": {
+    "display_name": "Emtricitabine",
+    "category": "antiviral",
+    "aliases": [
+      "Complera",
+      "Stribild",
+      "Genvoya",
+      "Odefsey",
+      "Descovy",
+      "Biktarvy",
+      "Symtuza",
+      "Emtriva",
+      "Truvada",
+      "Atripla",
+      "emtricitabine"
+    ]
+  },
+  "tenofovir_disoproxil": {
+    "display_name": "Tenofovir Disoproxil",
+    "category": "antiviral",
+    "aliases": [
+      "Complera",
+      "Stribild",
+      "Cimduo",
+      "Symfi",
+      "Delstrigo",
+      "Temixys",
+      "Viread",
+      "Truvada",
+      "Atripla",
+      "tenofovir disoproxil"
+    ]
+  },
+  "entecavir": {
+    "display_name": "Entecavir",
+    "category": "antiviral",
+    "aliases": [
+      "Baraclude",
+      "entecavir"
+    ]
+  },
+  "zalcitabine": {
+    "display_name": "Zalcitabine",
+    "category": "antiviral",
+    "aliases": [
+      "zalcitabine"
+    ]
+  },
+  "didanosine": {
+    "display_name": "Didanosine",
+    "category": "antiviral",
+    "aliases": [
+      "didanosine"
+    ]
+  },
+  "telbivudine": {
+    "display_name": "Telbivudine",
+    "category": "antiviral",
+    "aliases": [
+      "telbivudine"
+    ]
+  },
+  "stavudine": {
+    "display_name": "Stavudine",
+    "category": "antiviral",
+    "aliases": [
+      "stavudine"
+    ]
+  },
+  "lamivudine": {
+    "display_name": "Lamivudine",
+    "category": "antiviral",
+    "aliases": [
+      "Triumeq",
+      "Combivir",
+      "Epivir",
+      "Cimduo",
+      "Symfi",
+      "Delstrigo",
+      "Dovato",
+      "Temixys",
+      "Epivir HBV",
+      "Trizivir",
+      "Epzicom",
+      "lamivudine"
+    ]
+  },
+  "tafenoquine": {
+    "display_name": "Tafenoquine",
+    "category": "antimalarial",
+    "aliases": [
+      "Arakoda",
+      "Krintafel",
+      "Kodatef",
+      "tafenoquine"
+    ]
+  },
+  "chloroquine": {
+    "display_name": "Chloroquine",
+    "category": "antimalarial",
+    "aliases": [
+      "chloroquine"
+    ]
+  },
+  "hydroxychloroquine": {
+    "display_name": "Hydroxychloroquine",
+    "category": "antimalarial",
+    "aliases": [
+      "Plaquenil",
+      "Sovuna",
+      "hydroxychloroquine"
+    ]
+  },
+  "amodiaquine": {
+    "display_name": "Amodiaquine",
+    "category": "antimalarial",
+    "aliases": [
+      "amodiaquine"
+    ]
+  },
+  "primaquine": {
+    "display_name": "Primaquine",
+    "category": "antimalarial",
+    "aliases": [
+      "primaquine"
+    ]
+  },
+  "ondansetron": {
+    "display_name": "Ondansetron",
+    "category": "antiemetic",
+    "aliases": [
+      "Emeset",
+      "Vomikind",
+      "Zuplenz",
+      "ondansetron"
+    ]
+  },
+  "granisetron": {
+    "display_name": "Granisetron",
+    "category": "antiemetic",
+    "aliases": [
+      "Sustol",
+      "Granisol",
+      "Sancuso",
+      "granisetron"
+    ]
+  },
+  "tropisetron": {
+    "display_name": "Tropisetron",
+    "category": "antiemetic",
+    "aliases": [
+      "tropisetron"
+    ]
+  },
+  "dolasetron": {
+    "display_name": "Dolasetron",
+    "category": "antiemetic",
+    "aliases": [
+      "Anzemet",
+      "dolasetron"
+    ]
+  },
+  "palonosetron": {
+    "display_name": "Palonosetron",
+    "category": "antiemetic",
+    "aliases": [
+      "Akynzeo",
+      "Posfrea",
+      "palonosetron"
+    ]
+  },
+  "tolperisone": {
+    "display_name": "Tolperisone",
+    "category": "muscle_relaxant",
+    "aliases": [
+      "tolperisone"
+    ]
+  },
+  "baclofen": {
+    "display_name": "Baclofen",
+    "category": "muscle_relaxant",
+    "aliases": [
+      "Gablofen",
+      "Lioresal",
+      "Ozobax",
+      "Lyvispah",
+      "Fleqsuvy",
+      "baclofen"
+    ]
+  },
+  "cyclobenzaprine": {
+    "display_name": "Cyclobenzaprine",
+    "category": "muscle_relaxant",
+    "aliases": [
+      "Tonmya",
+      "Fexmid",
+      "Amrix",
+      "cyclobenzaprine"
+    ]
+  },
+  "pridinol": {
+    "display_name": "Pridinol",
+    "category": "muscle_relaxant",
+    "aliases": [
+      "pridinol"
+    ]
+  },
+  "tetrazepam": {
+    "display_name": "Tetrazepam",
+    "category": "muscle_relaxant",
+    "aliases": [
+      "tetrazepam"
+    ]
+  },
+  "thiocolchicoside": {
+    "display_name": "Thiocolchicoside",
+    "category": "muscle_relaxant",
+    "aliases": [
+      "thiocolchicoside"
+    ]
+  },
+  "tizanidine": {
+    "display_name": "Tizanidine",
+    "category": "muscle_relaxant",
+    "aliases": [
+      "Tizan",
+      "Sirdalud",
+      "Zanaflex",
+      "Ontralfy",
+      "tizanidine"
+    ]
+  },
+  "mephenesin": {
+    "display_name": "Mephenesin",
+    "category": "muscle_relaxant",
+    "aliases": [
+      "mephenesin"
+    ]
   }
 }

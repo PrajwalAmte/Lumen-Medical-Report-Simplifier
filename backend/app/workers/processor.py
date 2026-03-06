@@ -1,16 +1,9 @@
 """
-Worker process – async event-loop with a thread-pool for CPU-bound steps.
+Async worker: Download → OCR → Parse → (RAG) → LLM → Store.
 
-Key behaviours:
-  • On startup, runs a *watchdog* that fails or re-queues jobs stuck in
-    "processing" for longer than STUCK_JOB_TIMEOUT_MINUTES  (#16).
-  • Primary job source is the Redis queue (BRPOP).
-  • A DB-poll fallback runs every QUEUED_POLL_INTERVAL_SEC to pick up
-    "queued" jobs that were committed to the DB but never reached Redis
-    (covers silent push_job failures — #18).
-  • OCR / parser (CPU-bound) run in a ThreadPoolExecutor; the OpenAI
-    call uses the async client.  Multiple jobs run concurrently up to
-    WORKER_CONCURRENCY (#20).
+On startup a watchdog re-queues jobs stuck in "processing" (crash recovery).
+A DB-poll loop runs every QUEUED_POLL_INTERVAL_SEC as a Redis fallback.
+Up to WORKER_CONCURRENCY jobs run concurrently via asyncio.Semaphore.
 """
 
 import asyncio
@@ -26,10 +19,24 @@ from sqlalchemy.orm import Session
 from app.db.session import SessionLocal
 from app.models.job import Job
 from app.models.result import Result
-from app.core.constants import *
+from app.core.constants import (
+    JOB_STATUS_QUEUED,
+    JOB_STATUS_PROCESSING,
+    JOB_STATUS_COMPLETED,
+    JOB_STATUS_FAILED,
+    STAGE_UPLOADING,
+    STAGE_EXTRACTING_TEXT,
+    STAGE_PARSING,
+    STAGE_GENERATING_EXPLANATION,
+    STAGE_FINALIZING,
+    STAGE_DONE,
+    STAGE_FAILED,
+    DEFAULT_PROGRESS_BY_STAGE,
+)
 from app.services.ocr import extract_text
 from app.services.parser import parse_medical_text
 from app.services.llm import generate_explanation_async
+from app.services.retrieval import retrieve_context
 from app.services.result_sanitizer import sanitize_result
 from app.core.config import settings
 from app.services.queue import pop_job, push_job
@@ -40,7 +47,6 @@ from app.core.logging import get_logger, setup_logging
 
 logger = get_logger("processor")
 
-# Shared thread-pool for CPU-bound work (OCR, parsing).
 _executor = ThreadPoolExecutor(max_workers=settings.WORKER_CONCURRENCY)
 
 
@@ -144,7 +150,7 @@ async def process_job(job_id: str):
     """Async job processing pipeline: Download → OCR → Parse → LLM → Store.
 
     CPU-bound steps (OCR, parsing) are offloaded to a thread-pool.
-    The LLM call uses the async OpenAI client.
+    The LLM call uses the async Groq client.
     """
     loop = asyncio.get_running_loop()
     db = SessionLocal()
@@ -181,9 +187,6 @@ async def process_job(job_id: str):
 
         parsed_data = await loop.run_in_executor(_executor, parse_medical_text, raw_text)
 
-        # Pass raw OCR text to the LLM so it can extract context the regex
-        # parser missed (hospital name, doctor notes, dosages, dates, etc.).
-        # llm.py truncates this to MAX_RAW_CHARS before sending.
         parsed_data["raw_text"] = raw_text
         logger.info(
             f"Job {job_id} parsed: {len(parsed_data.get('tests', []))} tests, "
@@ -195,7 +198,21 @@ async def process_job(job_id: str):
         update_job(db, job, JOB_STATUS_PROCESSING, STAGE_GENERATING_EXPLANATION,
                    DEFAULT_PROGRESS_BY_STAGE[STAGE_GENERATING_EXPLANATION])
 
-        explanation = await generate_explanation_async(parsed_data)
+        # RAG: retrieve relevant knowledge chunks (skipped when RAG_ENABLED=false)
+        retrieval_context = await loop.run_in_executor(
+            _executor, retrieve_context, parsed_data
+        )
+        if retrieval_context:
+            logger.info(
+                f"Job {job_id}: RAG retrieved {len(retrieval_context)} chunks"
+            )
+
+        explanation = await generate_explanation_async(
+            parsed_data, retrieval_context=retrieval_context
+        )
+
+        # Pop internal key so it doesn't reach the frontend
+        model_used = explanation.pop("_llm_model_used", settings.LLM_MODEL_HEAVY)
 
         # Stage 4: Finalize and store results
         update_job(db, job, JOB_STATUS_PROCESSING, STAGE_FINALIZING,
@@ -211,7 +228,7 @@ async def process_job(job_id: str):
                 "processing_time_sec": processing_time,
                 "ocr_engine": settings.OCR_ENGINE,
                 "llm_provider": settings.LLM_PROVIDER,
-                "model": settings.LLM_MODEL,
+                "model": model_used,
                 "cached": False
             }
         }
@@ -229,7 +246,7 @@ async def process_job(job_id: str):
             confidence=safe_result.get("confidence_score", 0.0),
             processing_time=processing_time,
             llm_provider=settings.LLM_PROVIDER,
-            model=settings.LLM_MODEL,
+            model=model_used,
             cached=False,
         )
         db.add(result_row)

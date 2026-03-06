@@ -5,7 +5,7 @@ services:
       dockerfile: backend/Dockerfile.api
     container_name: lumen-api
     env_file:
-      - .env
+      - ./backend/.env
     environment:
       REDIS_URL: redis://redis:6379/0
       STORAGE_TYPE: ${STORAGE_TYPE:-s3}
@@ -31,10 +31,12 @@ services:
       dockerfile: backend/Dockerfile.worker
     container_name: lumen-worker
     env_file:
-      - .env
+      - ./backend/.env
     environment:
       REDIS_URL: redis://redis:6379/0
       STORAGE_TYPE: ${STORAGE_TYPE:-s3}
+      CHROMADB_HOST: chromadb
+      CHROMADB_PORT: "8000"
       PYTHONUNBUFFERED: 1
       PYTHONPATH: /app
     depends_on:
@@ -61,7 +63,7 @@ services:
     image: postgres:15-alpine
     container_name: lumen-postgres
     env_file:
-      - .env
+      - ./backend/.env
     volumes:
       - pgdata:/var/lib/postgresql/data
     restart: unless-stopped
@@ -84,10 +86,30 @@ services:
         condition: service_started
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost"]
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost/"]
       interval: 30s
-      timeout: 5s
+      timeout: 10s
       retries: 3
+      start_period: 15s
+
+  chromadb:
+    image: chromadb/chroma:0.4.24
+    container_name: lumen-chromadb
+    ports:
+      - "8100:8000"
+    volumes:
+      - chromadb_data:/chroma/chroma
+    environment:
+      IS_PERSISTENT: "TRUE"
+      ANONYMIZED_TELEMETRY: "FALSE"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/heartbeat"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
 volumes:
   pgdata:
+  chromadb_data:

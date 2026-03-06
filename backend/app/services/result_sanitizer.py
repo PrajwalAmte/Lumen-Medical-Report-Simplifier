@@ -1,4 +1,19 @@
+import re
 from typing import Any, Dict, List
+
+# Matches prescription dosage language — values containing these words
+# are never valid lab test results and must be stripped from abnormal_values.
+_DOSAGE_KEYWORDS = re.compile(
+    r'\b(tablets?|tab|capsules?|cap|sachet|drop|drops|syrup|'
+    r'injection|inj|patch|cream|ointment|gel|inhaler|spray|'
+    r'suppository|lotion|solution|once|twice|thrice|daily|weekly)\b',
+    re.IGNORECASE,
+)
+
+
+def _is_dosage_value(value_str: str) -> bool:
+    """Return True if the string looks like a prescription dosage, not a lab result."""
+    return bool(_DOSAGE_KEYWORDS.search(str(value_str)))
 
 
 def _ensure_str(x: Any, default: str = "") -> str:
@@ -20,10 +35,7 @@ def _ensure_list(x: Any) -> List[Any]:
 
 
 def sanitize_result(data: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Normalize result payload so it NEVER violates ResultResponse schema.
-    Safe to run multiple times (idempotent).
-    """
+    """Normalise a result dict so it never violates the ResultResponse schema."""
 
     if not isinstance(data, dict):
         data = {}
@@ -69,6 +81,20 @@ def sanitize_result(data: Dict[str, Any]) -> Dict[str, Any]:
     input_summary["detected_hospital"] = input_summary.get("detected_hospital")
     input_summary["date_of_report"] = input_summary.get("date_of_report")
     data["input_summary"] = input_summary
+
+    # Prescriptions have no lab values — clear any the LLM may have hallucinated
+    doc_type = input_summary.get("document_type", "").lower()
+    if "prescription" in doc_type or doc_type == "rx":
+        data["abnormal_values"] = []
+        data["normal_values"] = []
+
+    # Drop entries whose value string looks like a dosage, not a measurement
+    data["abnormal_values"] = [
+        e for e in _ensure_list(data.get("abnormal_values"))
+        if not _is_dosage_value(
+            e.get("value", "") if isinstance(e, dict) else ""
+        )
+    ]
 
     def _sanitize_test_entry(e: Any, abnormal: bool) -> Dict[str, Any]:
         if not isinstance(e, dict):

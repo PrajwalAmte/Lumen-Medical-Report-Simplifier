@@ -7,7 +7,6 @@ from app.core.logging import get_logger
 
 # Import models so they register with Base.metadata (used by Alembic env.py).
 from app.models.job import Job  # noqa: F401
-from app.models.feedback import Feedback  # noqa: F401
 from app.models.result import Result  # noqa: F401
 
 logger = get_logger("init_db")

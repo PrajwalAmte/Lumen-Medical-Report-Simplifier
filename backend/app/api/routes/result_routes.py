@@ -83,8 +83,6 @@ def get_result(job_id: str, db: Session = Depends(get_db)):
     except Exception as e:
         logger.warning(f"Cache read failed for {job_id}: {e}")
 
-    # ORM query — result_json is a JSON/JSONB column, so SQLAlchemy
-    # returns a native dict; no manual json.loads needed.
     result_row = db.query(Result).filter(Result.job_id == job_id).first()
 
     if not result_row or not result_row.result_json:
@@ -96,8 +94,6 @@ def get_result(job_id: str, db: Session = Depends(get_db)):
 
     result_payload = result_row.result_json
 
-    # Re-populate Redis cache so subsequent requests avoid a DB round-trip.
-    # Uses the default 24-hour TTL from settings.
     try:
         set_cached_result(job_id, result_payload, ttl_sec=settings.REDIS_RESULT_TTL_SECONDS)
     except Exception as e:
@@ -105,7 +101,6 @@ def get_result(job_id: str, db: Session = Depends(get_db)):
 
     logger.info(f"Result retrieved successfully for job {job_id}")
 
-    # Sanitize the loaded payload to ensure no null required fields
     try:
         sanitized = sanitize_result(result_payload)
     except Exception as e:
@@ -117,7 +112,6 @@ def get_result(job_id: str, db: Session = Depends(get_db)):
         return validated
     except Exception as e:
         logger.error(f"Result schema validation failed for job {job_id}: {e}")
-        # Attempt one more auto-fix pass and return a minimal safe response if still invalid
         try:
             sanitized2 = sanitize_result(sanitized)
             return ResultResponse.model_validate(sanitized2)

@@ -6,56 +6,30 @@ from app.core.config import settings
 from app.core.logging import setup_logging, get_logger
 from app.db.init_db import init_db
 from app.db.session import SessionLocal
-
-# Import API route modules
 from app.api.routes.upload import router as upload_router
 from app.api.routes.status import router as status_router
 from app.api.routes.result_routes import router as result_router
-
 from app.services.job_lifecycle import cleanup_old_jobs
 from app.services.scheduler import start_scheduler
-
-# Import models to ensure they are registered with SQLAlchemy
-from app.models import job, result
+from app.models import job, result  # noqa: F401 — registers models with SQLAlchemy
 
 logger = get_logger("main")
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Application lifespan — replaces the deprecated @app.on_event pattern.
-
-    Everything before ``yield`` runs on startup; everything after runs on
-    shutdown.
-    """
+    """Start background services on startup; placeholder for shutdown cleanup."""
     logger.info("Starting background scheduler")
     start_scheduler()
     yield
-    # Shutdown: nothing to clean up currently, but this is where you'd
-    # stop the scheduler, close connection-pools, etc.
     logger.info("Application shutting down")
 
 
 def create_app() -> FastAPI:
-    """Create and configure the FastAPI application instance.
-    
-    Sets up:
-    - Logging system
-    - Database initialization
-    - CORS middleware
-    - Cache headers middleware
-    - API routes
-    - Background scheduler (via lifespan)
-    - Admin endpoints
-    
-    Returns:
-        FastAPI: Configured application instance
-    """
-    # Initialize core systems
+    """Build and return the configured FastAPI application."""
     setup_logging()
     init_db()
 
-    # Create FastAPI application with metadata and lifespan handler
     app = FastAPI(
         title=settings.APP_NAME,
         version="0.1.0",

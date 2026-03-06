@@ -1,12 +1,12 @@
 # Lumen
 
-Lumen is a document‑processing system that swallows your PDFs and images, runs OCR + parsing + LLM extraction, and spits out structured results with real‑time status tracking. The codebase is cleanly split: a FastAPI backend with async workers on one side, a Vite/React frontend on the other.
+Lumen is a medical document explainer. Upload a blood report or prescription (PDF/image), and it runs OCR → entity parsing → LLM analysis → structured result with plain-English explanations. Built as a FastAPI backend with async workers and a React/Vite frontend.
 
-## Architecture 
+## Architecture
 
 ```mermaid
 flowchart TB
-        UI["Frontend (React/Vite)"] --> API["Backend API (FastAPI)"]
+    UI["Frontend (React/Vite)"] --> API["Backend API (FastAPI)"]
 
     subgraph Backend
         API --> Routes["API Routes"]
@@ -14,16 +14,17 @@ flowchart TB
         Services --> Domain["Domain Models"]
         Services --> Infra["Infrastructure"]
 
-        Infra --> DB[("Database")]
-        Infra --> Cache[("Cache")]
-        Infra --> Queue[("Job Queue")]
-        Infra --> Storage[("File Storage")]
-        Infra --> OCR["OCR Engine"]
+        Infra --> DB[("PostgreSQL")]
+        Infra --> Cache[("Redis")]
+        Infra --> Queue[("Redis Queue")]
+        Infra --> Storage[("S3")]
+        Infra --> OCR["Tesseract OCR"]
         Infra --> LLM["LLM Provider"]
+        Infra --> VDB[("ChromaDB (RAG)")]
     end
 
     subgraph Workers
-        Worker["Worker Processor"] --> Queue
+        Worker["Async Worker"] --> Queue
         Worker --> Services
     end
 
@@ -33,74 +34,114 @@ flowchart TB
 
 ## What lives where
 
-- **API boundary**: Request validation and response shaping happens in [backend/app/api/routes](backend/app/api/routes). This is where the outside world meets your code.
-- **Application services**: Core orchestration—job lifecycle, parsing, OCR, LLM calls, storage—lives in [backend/app/services](backend/app/services).
-- **Domain models**: Data structures for jobs and results are defined in [backend/app/models](backend/app/models).
-- **Infrastructure**: Database, cache, queue, and storage adapters are tucked into [backend/app/db](backend/app/db) and [backend/app/services](backend/app/services).
-- **Frontend flow**: The upload → processing → result journey unfolds across [frontend/src/pages](frontend/src/pages).
+- **API routes** — request validation and response shaping: [backend/app/api/routes](backend/app/api/routes)
+- **Services** — OCR, parsing, LLM, RAG, storage, cache, job lifecycle: [backend/app/services](backend/app/services)
+- **LLM providers** — pluggable Groq / OpenAI / Llama backends: [backend/app/services/llm_providers](backend/app/services/llm_providers)
+- **Medical catalogs** — ~100 lab tests, 494 drugs (from RxNorm), synonyms, units: [backend/app/catalog](backend/app/catalog)
+- **Domain models** — job and result ORM + Pydantic schemas: [backend/app/models](backend/app/models)
+- **Ingestion scripts** — RxNorm drug pull, LOINC test import, ChromaDB indexer: [backend/scripts](backend/scripts)
+- **Frontend pages** — upload → processing → result flow: [frontend/src/pages](frontend/src/pages)
 
 ## Technical details
 
 ### Backend stack
 
-- **Framework**: FastAPI + Uvicorn ([backend/requirements.txt](backend/requirements.txt))
-- **Data validation**: Pydantic v2 schemas in [backend/app/models/schemas.py](backend/app/models/schemas.py)
-- **Database**: SQLAlchemy with SQLite by default (swap via `DATABASE_URL`)
-- **Cache/Queue**: Redis for job queueing and result caching
-- **Storage**: S3 by default (configurable storage adapters)
-- **OCR**: Tesseract with PDF/image helpers (`pytesseract`, `pdf2image`, `pdfplumber`, `Pillow`)
-- **LLM**: OpenAI SDK with retry/backoff controls
-- **Scheduler**: APScheduler for periodic cleanup tasks
+- **Framework**: FastAPI + Uvicorn
+- **Database**: PostgreSQL via SQLAlchemy + Alembic migrations
+- **Cache / Queue**: Redis (result cache + BRPOP job queue with DB-poll fallback)
+- **Storage**: AWS S3 (`STORAGE_TYPE=s3`)
+- **OCR**: Tesseract — native PDF text extraction first, image OCR fallback (`pytesseract`, `pdfplumber`, `pdf2image`, `Pillow`)
+- **LLM**: Pluggable provider layer — Groq (default), OpenAI, or local Llama/Ollama. Dual-model routing (heavy/light), retry with exponential backoff
+- **RAG**: ChromaDB + `sentence-transformers` (all-MiniLM-L6-v2) — disabled by default; enable after running `python scripts/index_catalogs.py`
+- **Scheduler**: APScheduler — periodic job expiry and file cleanup
 
-### Backend endpoints
+### Docker services
 
-- `POST /upload` (API key required): Accepts PDF/JPEG/PNG up to 10 MB, queues a job
-- `GET /status/{job_id}` (API key required): Job progress and current stage
-- `GET /result/{job_id}`: Final structured result (cache‑first)
-- `GET /health`: Liveness check
-- `POST /admin/cleanup` (admin token): Trigger cleanup
+Six containers managed by `docker-compose.yml`:
+
+| Container | Image | Port |
+|---|---|---|
+| `lumen-api` | custom (FastAPI) | 8000 |
+| `lumen-worker` | custom (async worker) | — |
+| `lumen-ui` | custom (nginx/React) | 3000 |
+| `lumen-postgres` | postgres:15-alpine | — |
+| `lumen-redis` | redis:7-alpine | — |
+| `lumen-chromadb` | chromadb/chroma:0.4.24 | 8100 |
+
+### API endpoints
+
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `POST` | `/upload` | API key | Accept PDF/JPEG/PNG ≤10 MB, create and queue a job |
+| `GET` | `/status/{job_id}` | API key | Job progress and current stage |
+| `GET` | `/result/{job_id}` | API key | Final structured result (cache-first) |
+| `GET` | `/health` | — | Liveness check |
+| `POST` | `/admin/cleanup` | Admin token | Trigger job expiry and file cleanup |
 
 ### Worker pipeline
 
-The worker pulls jobs from the queue and marches through five stages:
+```
+Download (S3) → OCR → Parse entities → RAG retrieval → LLM explanation → Sanitize → Store (DB + Redis)
+```
 
-1. Download from storage
-2. OCR to extract raw text
-3. Parse medical entities
-4. Generate explanation with LLM
-5. Sanitize and persist results (DB + cache)
+- CPU-bound steps (OCR, parsing) run in a `ThreadPoolExecutor`
+- LLM call is fully async
+- Up to `WORKER_CONCURRENCY` jobs run concurrently (default: 4)
+- Startup watchdog re-queues jobs stuck in `processing` (crash recovery)
+- DB-poll loop catches jobs that never reached Redis
+
+### Medical catalogs
+
+- **Tests**: ~100 lab tests across CBC, LFT, KFT, lipid, thyroid, diabetes, cardiac, hormones, vitamins, tumour markers, autoimmune, infectious panels — with reference ranges and clinical metadata
+- **Medicines**: 494 drugs pulled from RxNorm (60 ATC classes) with Indian brand name mappings
+- **Synonyms / Units**: auto-generated normalisation maps (1 468 synonyms, 75 unit mappings)
+
+To regenerate from source APIs:
+```bash
+cd backend
+python scripts/ingest_rxnorm.py          # pull drugs from RxNorm
+python scripts/build_catalogs.py --synonyms --units
+python scripts/index_catalogs.py         # index into ChromaDB
+```
 
 ### Frontend stack
 
-- **Framework**: React 18 + Vite + TypeScript ([frontend/package.json](frontend/package.json))
-- **Routing**: React Router
+- **Framework**: React 18 + Vite + TypeScript
 - **UI**: Tailwind CSS
+- **Routing**: React Router
 - **API client**: Axios wrapper in [frontend/src/api](frontend/src/api)
 
-### Configuration highlights
+## Configuration
 
-- **Security**: API key required for upload/status (`REQUIRE_API_KEY`)
-- **File constraints**: Size limit and extension validation
-- **LLM**: Model, temperature, retries, timeout
-- **Storage**: S3 bucket + region or local path
-- **Rate limiting**: Per‑minute limit in settings
+Copy `backend/.env.example` to `backend/.env` and fill in the required values:
 
-## Core flow (conceptual)
+```bash
+cp backend/.env.example backend/.env
+```
 
-1. Client uploads a file via the API
-2. API creates a job and enqueues work
-3. Worker pulls the job, runs OCR + parsing + LLM extraction
-4. Results are stored and returned to the client via status/result endpoints
+Key variables:
 
-## Key directories
+| Variable | Description |
+|---|---|
+| `LLM_PROVIDER` | `groq` (default) \| `openai` \| `llama` |
+| `GROQ_API_KEY` | Required when `LLM_PROVIDER=groq` |
+| `OPENAI_API_KEY` | Required when `LLM_PROVIDER=openai` |
+| `S3_BUCKET` / `AWS_*` | Required when `STORAGE_TYPE=s3` |
+| `RAG_ENABLED` | `false` (default) — set `true` after indexing |
+| `REQUIRE_API_KEY` | Enforce `X-API-Key` header on all routes |
 
-- [backend/app](backend/app)
-- [backend/app/api/routes](backend/app/api/routes)
-- [backend/app/services](backend/app/services)
-- [backend/app/models](backend/app/models)
-- [frontend/src](frontend/src)
-- [frontend/src/pages](frontend/src/pages)
+## Running locally
+
+```bash
+docker compose up -d
+```
+
+All six containers start automatically. The API is available at `http://localhost:8000`, the UI at `http://localhost:3000`.
 
 ## Navigating the codebase
 
-Start at the API routes to see request/response contracts. Trace route handlers into services to understand orchestration. Check models/schemas to grasp the data shapes. Review the worker processor to see asynchronous execution in action. Follow the frontend pages to understand the user journey.
+1. **API contract** — start at [backend/app/api/routes](backend/app/api/routes) for request/response shapes
+2. **Job execution** — trace into [backend/app/workers/processor.py](backend/app/workers/processor.py) for the full pipeline
+3. **LLM logic** — see [backend/app/services/llm_providers](backend/app/services/llm_providers) for provider abstraction and prompts
+4. **Data shapes** — [backend/app/models/schemas.py](backend/app/models/schemas.py) for all Pydantic models
+5. **Frontend flow** — [frontend/src/pages](frontend/src/pages): `UploadPage → ProcessingPage → ResultPage`

@@ -10,7 +10,7 @@ from app.services.storage import delete_file
 logger = get_logger("job_lifecycle")
 
 JOB_EXPIRY_DAYS = settings.JOB_EXPIRY_DAYS
-JOB_PURGE_DAYS = JOB_EXPIRY_DAYS * 2
+JOB_PURGE_DAYS = JOB_EXPIRY_DAYS * 2  # hard-delete after 2x expiry period
 
 
 def mark_expired_jobs(db: Session):

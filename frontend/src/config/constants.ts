@@ -1,5 +1,6 @@
 export const API_CONFIG = {
-  BASE_URL: '/api',
+  BASE_URL: import.meta.env.VITE_API_URL || '/api',
+  API_KEY: import.meta.env.VITE_API_KEY || '',
   POLLING_INTERVAL_MS: 2000,
   POLLING_TIMEOUT_MS: 300000,
   MAX_RETRIES: 5,
