@@ -87,9 +87,9 @@ def retrieve_context(
             # Returns distance (0 = identical, 2 = opposite)
             result = db.execute(
                 text("""
-                    SELECT content, (embedding <=> :qvec::vector) AS distance
+                    SELECT content, (embedding <=> CAST(:qvec AS vector)) AS distance
                     FROM medical_knowledge
-                    ORDER BY embedding <=> :qvec::vector
+                    ORDER BY embedding <=> CAST(:qvec AS vector)
                     LIMIT :top_k
                 """),
                 {"qvec": str(query_embedding), "top_k": top_k},
@@ -171,7 +171,7 @@ def index_documents(
             db.execute(
                 text("""
                     INSERT INTO medical_knowledge (content, embedding, source, entity_id, chunk_type, metadata)
-                    VALUES (:content, :embedding::vector, :source, :entity_id, :chunk_type, :metadata::jsonb)
+                    VALUES (:content, CAST(:embedding AS vector), :source, :entity_id, :chunk_type, CAST(:metadata AS jsonb))
                 """),
                 {
                     "content": doc,
