@@ -24,7 +24,6 @@ JINA_EMBED_URL = "https://api.jina.ai/v1/embeddings"
 SIMILARITY_THRESHOLD = 0.6
 
 
-# ── Embedding via Jina AI ────────────────────────────────────────────
 
 
 def _embed(texts: List[str]) -> List[List[float]]:
@@ -59,7 +58,6 @@ def _embed(texts: List[str]) -> List[List[float]]:
     return [item["embedding"] for item in embeddings]
 
 
-# ── Public API ────────────────────────────────────────────────────────
 
 
 def retrieve_context(
@@ -131,7 +129,6 @@ def _build_query(parsed_data: Dict) -> str:
     return " ".join(parts)
 
 
-# ── Indexing (used by ingestion scripts) ─────────────────────────────
 
 
 def index_documents(

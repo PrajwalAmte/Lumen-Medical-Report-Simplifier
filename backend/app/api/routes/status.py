@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
@@ -7,6 +7,7 @@ from app.models.schemas import StatusResponse
 from app.core.security import api_key_auth
 from app.core.constants import JOB_STATUS_EXPIRED
 from app.core.logging import get_logger
+from app.services.rate_limiter import rate_limit
 
 logger = get_logger("status")
 router = APIRouter()
@@ -17,7 +18,8 @@ router = APIRouter()
     response_model=StatusResponse,
     dependencies=[Depends(api_key_auth)]
 )
-def get_status(job_id: str, db: Session = Depends(get_db)):
+def get_status(job_id: str, request: Request, db: Session = Depends(get_db)):
+    rate_limit(request)
     job = db.query(Job).filter(Job.id == job_id).first()
 
     if not job:

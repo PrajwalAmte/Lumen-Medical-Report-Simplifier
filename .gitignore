@@ -1,5 +1,6 @@
 # Root .gitignore for monorepo
-# Environment and secrets
+
+# Environment and secrets — never commit these
 .env
 .env.*
 !backend/.env.example
@@ -10,9 +11,19 @@ frontend/dist/
 
 # Python
 venv/
+.venv/
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Training data — large files managed outside git
+training/data/
+training/__pycache__/
 
 # Docker
 .DS_Store
@@ -21,3 +32,7 @@ docker-compose.override.yml
 # Logs
 *.log
 lumen-key.pem
+
+# IDE
+.vscode/settings.json
+.idea/

@@ -153,6 +153,8 @@ export const ResultPage: React.FC = () => {
                   a.href = url;
                   a.download = `lumen-result-${result.job_id}.json`;
                   a.click();
+                  // Revoke immediately after click to prevent memory leak
+                  URL.revokeObjectURL(url);
                 }}
                 className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
                 aria-label="download-result"
@@ -212,7 +214,7 @@ export const ResultPage: React.FC = () => {
               <div className="space-y-3">
                 {result.normal_values && result.normal_values.length > 0 ? (
                   result.normal_values.map((value: NormalValue, idx) => (
-                    <div key={idx} className="bg-white rounded-lg shadow-sm border-l-4 border-green-500 p-4">
+                    <div key={value.test_name || idx} className="bg-white rounded-lg shadow-sm border-l-4 border-green-500 p-4">
                       <div className="flex items-start gap-3">
                         <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
                         <div className="flex-1">
@@ -288,7 +290,7 @@ export const ResultPage: React.FC = () => {
                 </h3>
                 <ul className="space-y-2">
                   {result.red_flags.map((flag, i) => (
-                    <li key={i} className="flex items-start gap-2 text-red-800 text-sm">
+                    <li key={flag.slice(0, 40) || i} className="flex items-start gap-2 text-red-800 text-sm">
                       <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                       <span>{flag}</span>
                     </li>

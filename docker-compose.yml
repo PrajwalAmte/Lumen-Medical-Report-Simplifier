@@ -24,6 +24,12 @@ services:
       db:
         condition: service_healthy
     restart: unless-stopped
+    networks:
+      - lumen-net
+    deploy:
+      resources:
+        limits:
+          memory: 1g
 
   worker:
     build:
@@ -37,25 +43,48 @@ services:
       STORAGE_TYPE: ${STORAGE_TYPE:-s3}
       PYTHONUNBUFFERED: 1
       PYTHONPATH: /app
+    healthcheck:
+      # Signal 0 to PID 1 checks the worker process is alive without killing it
+      test: ["CMD-SHELL", "kill -0 1 2>/dev/null"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     depends_on:
       redis:
         condition: service_healthy
       api:
-        condition: service_started
+        condition: service_healthy
       db:
         condition: service_healthy
     restart: unless-stopped
+    networks:
+      - lumen-net
+    deploy:
+      resources:
+        limits:
+          memory: 3g
 
   redis:
     image: redis:7-alpine
     container_name: lumen-redis
+    # Enable append-only persistence so the job queue survives container restarts
+    command: redis-server --appendonly yes
     restart: unless-stopped
+    volumes:
+      - redisdata:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 30s
       timeout: 5s
       retries: 3
       start_period: 10s
+    networks:
+      - lumen-net
+    deploy:
+      resources:
+        limits:
+          memory: 256m
 
   db:
     image: pgvector/pgvector:pg15
@@ -66,11 +95,17 @@ services:
       - pgdata:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U lumen"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-lumen}"]
       interval: 30s
       timeout: 5s
       retries: 5
       start_period: 20s
+    networks:
+      - lumen-net
+    deploy:
+      resources:
+        limits:
+          memory: 512m
 
   ui:
     build:
@@ -81,7 +116,7 @@ services:
       - "3000:80"
     depends_on:
       api:
-        condition: service_started
+        condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://127.0.0.1/"]
@@ -89,6 +124,17 @@ services:
       timeout: 10s
       retries: 3
       start_period: 15s
+    networks:
+      - lumen-net
+    deploy:
+      resources:
+        limits:
+          memory: 128m
 
 volumes:
   pgdata:
+  redisdata:
+
+networks:
+  lumen-net:
+    driver: bridge

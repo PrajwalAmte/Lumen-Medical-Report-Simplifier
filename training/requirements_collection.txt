@@ -1,0 +1,13 @@
+# Dependencies for Lumen training data collection scripts.
+# These are SEPARATE from backend/requirements.txt — install in your
+# training environment (Kaggle, Colab, or local venv).
+#
+# Install: pip install -r requirements_collection.txt
+
+# Already in backend/requirements.txt — listed here explicitly for clarity
+openai>=1.12.0
+requests>=2.31.0
+pdfplumber>=0.10.3
+
+# Additional (not in backend requirements)
+tqdm>=4.66.0

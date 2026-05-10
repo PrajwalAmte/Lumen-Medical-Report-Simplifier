@@ -41,14 +41,11 @@ class Settings(BaseSettings):
     # ------------------------------------------------------------------
     LLM_PROVIDER: str = "groq"          # groq | openai | llama | ollama
 
-    # ── Groq (OpenAI-compatible SDK) ──
     GROQ_API_KEY: Optional[str] = None
     GROQ_BASE_URL: str = "https://api.groq.com/openai/v1"
 
-    # ── OpenAI (direct) ──
     OPENAI_API_KEY: Optional[str] = None
 
-    # ── Llama (Ollama / vLLM local) ──
     LLAMA_ENDPOINT: str = "http://localhost:11434"
     LLAMA_MODEL: str = "llama3.1:8b"
     LLAMA_MAX_TOKENS: int = 4096
@@ -78,10 +75,26 @@ class Settings(BaseSettings):
 
     OCR_ENGINE: str = "tesseract"
 
+    # ------------------------------------------------------------------
+    #  Vision LLM tier (Phase 4) — complex/degraded/multi-modal pages
+    # ------------------------------------------------------------------
+    VISION_ENABLED: bool = True
+    # "openai" uses GPT-4o; "local" uses Ollama (PHI-compliant, on-premise)
+    VISION_PROVIDER: str = "openai"
+    VISION_MODEL: str = "gpt-4o"
+    VISION_TIMEOUT_SEC: int = 60
+    # Resize the long side of the image to this before sending to the API
+    # (reduces token cost; 1024 gives adequate resolution for text)
+    VISION_MAX_SIDE_PX: int = 1024
+    LOCAL_VISION_ENDPOINT: str = "http://localhost:11434"
+    LOCAL_VISION_MODEL: str = "llava:13b"
+
     LOG_LEVEL: str = "INFO"
 
     REQUIRE_API_KEY: bool = True
     API_KEY: str = ""
+    # Separate admin token — must differ from API_KEY in production
+    ADMIN_TOKEN: str = ""
 
     JOB_EXPIRY_DAYS: int = 7
     JOB_HARD_DELETE_DAYS: int = 30

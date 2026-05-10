@@ -164,28 +164,28 @@ def main():
         sys.exit(1)
 
     if args.all or args.rxnorm:
-        log.info("═══ RxNorm Drug Ingestion ═══")
+        log.info("RxNorm Drug Ingestion")
         run_rxnorm(enrich=args.enrich or args.all, dry_run=args.dry_run)
 
     if args.loinc or (args.all and args.loinc):
-        log.info("═══ LOINC Test Ingestion ═══")
+        log.info("LOINC Test Ingestion")
         run_loinc(args.loinc, merge=True, dry_run=args.dry_run)
 
     if args.all or args.synonyms:
-        log.info("═══ Building Synonyms ═══")
+        log.info("Building Synonyms")
         if not args.dry_run:
             build_synonyms()
         else:
             log.info("[DRY-RUN] Would rebuild synonyms.json")
 
     if args.all or args.units:
-        log.info("═══ Building Units ═══")
+        log.info("Building Units")
         if not args.dry_run:
             build_units()
         else:
             log.info("[DRY-RUN] Would rebuild units.json")
 
-    log.info("═══ Done ═══")
+    log.info("Done")
 
 
 if __name__ == "__main__":

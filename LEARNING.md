@@ -13,7 +13,7 @@ This document captures every concept, technology, and lesson learned while build
 5. [Alembic — Database Migrations](#5-alembic--database-migrations)
 6. [Redis — Queue and Cache](#6-redis--queue-and-cache)
 7. [The Worker Pipeline](#7-the-worker-pipeline)
-8. [OCR — Extracting Text from Documents](#8-ocr--extracting-text-from-documents)
+8. [OCR — Multi-Tier Text Extraction](#8-ocr--multi-tier-text-extraction)
 9. [LLM Integration and Prompt Engineering](#9-llm-integration-and-prompt-engineering)
 10. [RAG — Retrieval-Augmented Generation](#10-rag--retrieval-augmented-generation)
 11. [pgvector — Vector Search in PostgreSQL](#11-pgvector--vector-search-in-postgresql)
@@ -23,21 +23,36 @@ This document captures every concept, technology, and lesson learned while build
 15. [React Frontend Architecture](#15-react-frontend-architecture)
 16. [Security Patterns Used](#16-security-patterns-used)
 17. [Bug Fix Log](#17-bug-fix-log)
+18. [Hybrid Extraction Architecture](#18-hybrid-extraction-architecture)
+19. [Document Classifier](#19-document-classifier)
+20. [Structural OCR — PaddleOCR PPStructure](#20-structural-ocr--paddleocr-ppstructure)
+21. [Medical Validator](#21-medical-validator)
+22. [Ontology Normalizer and Unit Conversion](#22-ontology-normalizer-and-unit-conversion)
+23. [Vision LLM Tier](#23-vision-llm-tier)
+24. [Fine-Tuning OpenBioLLM-8B](#24-fine-tuning-openbio-llm-8b)
 
 ---
 
 ## 1. Project Overview
 
-Lumen takes a medical report or prescription (uploaded as a PDF or image), extracts the text, sends it to an AI model, and returns an explanation that a non-medical person can understand. It identifies abnormal lab values, explains what medicines are for, flags urgent issues, and suggests questions to ask the doctor.
+Lumen takes a medical report or prescription (uploaded as a PDF or image), extracts the text, validates the values, and returns a plain-English explanation. It identifies abnormal lab values, explains what medicines are for, flags urgent issues, and suggests questions to ask the doctor.
+
+The architecture has two distinct layers that must never be confused:
+
+- **Extraction layer** — deterministic. Three tiered OCR paths all feed into the same medical validator and ontology normalizer. No LLM is involved until values are already validated.
+- **Explanation layer** — generative. The LLM receives a pre-validated, structured `ExtractionResult` JSON and explains it. It never sees raw OCR text and therefore cannot hallucinate extraction facts.
 
 The full stack is:
 
 - **Backend**: FastAPI (Python) with a queue-based async worker
 - **Database**: PostgreSQL with the pgvector extension for AI-powered search
-- **Cache**: Redis for job results
-- **AI**: Groq LLM (llama-3.3-70b-versatile) + Jina AI for embeddings
+- **Cache**: Redis for job results (AOF persistence so the queue survives container restarts)
+- **AI (extraction)**: 4-tier OCR pipeline — pdfplumber, PaddleOCR PPStructure, Tesseract, Vision LLM
+- **AI (explanation)**: Groq LLM (llama-3.3-70b-versatile) via pluggable provider layer; fine-tuning in progress on `aaditya/Llama3-OpenBioLLM-8B`
+- **Embeddings**: Jina AI for RAG retrieval
 - **Frontend**: React + TypeScript + Tailwind CSS
 - **Infrastructure**: Docker Compose, deployed on AWS EC2
+- **Fine-tuning module**: Offline DAPT + SFT pipeline using Unsloth QLoRA on Kaggle, publishing to HuggingFace Hub
 
 ---
 
@@ -195,33 +210,56 @@ If Redis goes down or a job ID is somehow lost from the queue, the worker has a 
 
 ### Simple explanation
 
-The worker is a separate process that runs an infinite loop. It picks up job IDs from Redis, processes them through a pipeline of steps, and stores the result.
+The worker is a separate process that runs an infinite loop. It picks up job IDs from Redis, processes each job through eight stages, and stores the result.
 
-### The five stages
+### The eight stages
 
 Each stage updates the `jobs` table with the current `stage` name and a `progress` percentage (0-100). The frontend polls `/status/{job_id}` to display the progress bar.
 
 ```
-Stage 1 — EXTRACTING_TEXT  (20%)
+Stage 1 — DOWNLOADING  (10%)
   Download the file from S3 to a temp directory.
-  Run OCR to convert the PDF/image into raw text.
-  Delete the temp file.
 
-Stage 2 — PARSING  (40%)
-  Use regex and simple rules to extract structured data:
-  test names, values, units, and medicine names from the raw text.
-  This gives the LLM a head start — it does not have to parse from scratch.
+Stage 2 — CLASSIFYING  (20%)
+  Run the document classifier.
+  Produces a DocumentProfile: tier suggestion, page count, scan quality,
+  section types (lab table, ECG, echo, prescription).
 
-Stage 3 — GENERATING_EXPLANATION  (70%)
-  Call the pgvector database to find relevant medical knowledge chunks (RAG).
-  Send the raw text + parsed data + RAG context to the Groq LLM.
-  The LLM returns a structured JSON explanation.
+Stage 3 — EXTRACTING  (40%)
+  Route to the correct tier based on DocumentProfile:
+    Tier 0 (digital PDF): pdfplumber → line-classifier parser → ExtractionResult
+    Tier 1 (clean scan):  PaddleOCR PPStructure → cell mapper → ExtractionResult
+    Tier 2 (complex):     Vision LLM with section-aware prompts → ExtractionResult
 
-Stage 4 — FINALIZING  (90%)
-  Run the result through result_sanitizer to fix any malformed fields.
-  Store the result in Redis and PostgreSQL.
-  Mark the job as COMPLETED.
+Stage 4 — VALIDATING  (55%)
+  MedicalValidator checks every ExtractedValue:
+    - Hard limits (physiologically impossible values → rejected)
+    - Unit coherence (e.g. potassium cannot be in mg/dL)
+    - Inter-test consistency (e.g. HbA1c < 5.7 with fasting glucose > 126 → flagged)
+  Rejected values go to extraction_artifacts, not to the LLM.
+
+Stage 5 — NORMALIZING  (65%)
+  OntologyNormalizer resolves every test name to a canonical LOINC ID.
+  Converts units to the canonical form (e.g. mmol/L HbA1c → %).
+  Unifies reference ranges: catalog range takes precedence, document-extracted range as fallback.
+
+Stage 6 — RETRIEVING  (75%)
+  RAG: embed validated test names and fetch nearest medical knowledge chunks from pgvector.
+
+Stage 7 — EXPLAINING  (90%)
+  LLM receives ExtractionResult JSON — NOT raw OCR text.
+  Explanation-only prompt: explain what each value means, what could cause it,
+  what action to take. Confidence < 0.6 values are flagged to verify with a doctor.
+
+Stage 8 — FINALIZING  (95%)
+  result_sanitizer fixes any malformed fields.
+  Store in Redis (TTL = settings.REDIS_RESULT_TTL_SECONDS) and PostgreSQL.
+  Mark job as COMPLETED.
 ```
+
+### Why the LLM no longer extracts
+
+In the original design the LLM both extracted values from raw text _and_ explained them. This created an undetectable hallucination surface: the model could invent a value, assign a unit, and then generate a confident but entirely wrong explanation. By separating extraction (deterministic, auditable) from explanation (generative), any hallucination is now limited to the quality of the explanation — not the factual content of what was measured.
 
 ### Dead job recovery (crash resilience)
 
@@ -229,25 +267,35 @@ When the worker starts, it runs a "watchdog" that checks for jobs stuck in `proc
 
 ---
 
-## 8. OCR — Extracting Text from Documents
+## 8. OCR — Multi-Tier Text Extraction
 
 ### Simple explanation
 
-OCR (Optical Character Recognition) converts images or scanned PDFs into machine-readable text. Without this step, the AI would receive a binary blob it cannot understand.
+OCR (Optical Character Recognition) converts images or scanned PDFs into machine-readable text. The challenge is that Indian lab reports come in wildly different formats: crisp digital PDFs (Thyrocare, Metropolis), cleanly scanned table reports, and degraded or multi-modal documents (handwritten, ECG strips, echo images). One OCR approach cannot handle all three well.
 
-### Two-layer approach
+### Four-tier cascade
 
-Lumen tries two methods in order:
+Lumen selects the tier based on the `DocumentProfile` from the classifier:
 
-1. **pdfplumber** — extracts text directly from PDFs that already have embedded text (digital PDFs). This is fast and perfectly accurate.
+**Tier 0 — Native text (digital PDFs)**
+pdfplumber extracts embedded text directly without any image conversion. This is the fastest and most accurate path. Most urban Indian lab reports are digital PDFs and hit this path. The output is a `List[PageContent]` where each page carries its lines separately, preserving structure for the parser.
 
-2. **pdf2image + Tesseract** — if pdfplumber returns empty text (scanned or image-based PDFs), the PDF is converted to images using `pdf2image`, and each image is passed to Tesseract OCR. Tesseract is a free, open-source OCR engine developed by Google. It reads pixel patterns and recognises characters.
+**Tier 1 — Structural OCR (clean scans with tables)**
+When pdfplumber returns no text, PaddleOCR PPStructure is used. Unlike regular OCR which reads the whole page as a flat string, PPStructure understands the spatial layout. It returns table cells — `<td>HbA1c</td><td>5.9</td><td>%</td><td>4.0-5.6</td>`. Each cell is OCR'd individually, which is dramatically more accurate than reading the full page.
 
-Tesseract is a native binary (not a Python package), so it must be installed in the Docker image:
+**Tier 2 — Tesseract fallback**
+For scanned pages that are not primarily tabular, Tesseract PSM 3 (auto page segmentation) is used at 300 DPI. Binarisation threshold was raised from 140 to 160 to reduce salt-and-pepper noise from laser-printed reports.
+
+**Tier 3 — Vision LLM (complex/degraded/multi-modal pages)**
+For pages where structural extraction fails or returns sparse output, or for specialised sections (ECG, echocardiography), the page image is sent to a vision-capable LLM. The prompt is section-specific — a lab table page gets a constrained JSON extraction prompt; an ECG page gets a prompt that asks only for printed machine measurements, not waveform interpretation. See section 23.
+
+Tesseract is a native binary, so it must be installed in the Docker image:
 
 ```dockerfile
 RUN apt-get install -y tesseract-ocr
 ```
+
+PaddleOCR is a Python package but has sizeable dependencies (~500 MB). It is installed in the worker image, not the API image, since OCR only runs in the worker.
 
 ---
 
@@ -255,36 +303,53 @@ RUN apt-get install -y tesseract-ocr
 
 ### Simple explanation
 
-An LLM (Large Language Model) is an AI that reads text and generates text. In Lumen, the LLM reads the medical document and generates the structured JSON explanation that the frontend displays.
+An LLM (Large Language Model) is an AI that reads text and generates text. In Lumen, the LLM's role changed significantly during development: it went from being both extractor and explainer (unreliable) to being a pure explainer of pre-validated data (reliable).
 
 ### Groq as the LLM provider
 
 Groq provides fast LLM inference. The model used is `llama-3.3-70b-versatile` — a 70-billion parameter open-source model. It is called via an API that is compatible with OpenAI's SDK, meaning the same `openai` Python library works by just changing the `base_url`.
 
-### Prompt engineering — the hard part
+### The role shift: extraction → explanation only
 
-Prompting is the art of writing instructions that reliably steer the LLM toward the correct output format and reasoning. Lumen uses a system prompt and a user prompt.
+Originally the LLM received raw OCR text and was asked to both extract lab values and explain them. This created a critical failure mode: the LLM could hallucinate a non-existent value (e.g., invent `Potassium: 22 mEq/L`) and then confidently explain it as a dangerous hyperkalaemia. Because the extraction and explanation were one step, there was no checkpoint to catch this.
 
-**The system prompt** defines the AI's persona and rules. Key rules in Lumen's system prompt:
-
-- Output only valid JSON — no markdown fences, no prose
-- Copy values and units exactly as written — never convert units
-- Extract every test result — not just the first few
-- Compare each value against its reference range strictly — if above or below, it is abnormal
-- Document type rule — if the document is a prescription, `abnormal_values` and `normal_values` must be empty arrays because prescriptions contain dosages, not lab measurements
-
-**The user prompt** contains the actual data:
+Now the LLM receives a pre-validated `ExtractionResult` JSON. It never sees raw text. The system prompt instruction changed from `"Extract EVERY test result from raw_text"` to:
 
 ```
-Analyse the medical document below and return a JSON matching the schema.
-
-Input: { parsed_data: {...}, raw_text: "..." }
-
-Relevant medical knowledge (RAG context):
----
-Haemoglobin: measures oxygen-carrying capacity...
----
+You are explaining pre-extracted, validated medical test results to an Indian patient.
+The extraction and validation has already been done by a separate system.
+You must NOT re-extract values. Your job: for each value provided, explain
+what it means in simple Indian English, what could cause it, and what action
+the patient should take.
+For values with confidence < 0.6, note that this value had extraction uncertainty
+and the patient should verify it with their doctor.
 ```
+
+**What the LLM payload now contains:**
+
+```json
+{
+  "validated_values": [
+    {
+      "test_name": "HbA1c",
+      "value": "5.9%",
+      "canonical_value": 5.9,
+      "unit": "%",
+      "reference_range": "4.0–5.6%",
+      "status": "above_normal",
+      "confidence": 0.94,
+      "source_page": 4
+    }
+  ],
+  "medicines": [],
+  "document_metadata": {
+    "hospital": "Apollo Hospitals",
+    "date": "2026-04-15"
+  }
+}
+```
+
+The `raw_text` field that previously cut off at 8,000 characters is no longer in the payload.
 
 **JSON repair heuristics**
 
@@ -296,7 +361,7 @@ LLMs do not always return clean JSON. The `parse_or_repair_json` function tries 
 
 ### Dual-model routing
 
-There is a lightweight model (`gpt-oss-20b`) for simple cases and a heavy model (`llama-3.3-70b-versatile`) for complex reports. The router picks based on the estimated complexity of the parsed data.
+There is a lightweight model for simple cases and a heavy model (`llama-3.3-70b-versatile`) for complex reports. The router picks based on the estimated complexity of the extraction result.
 
 ---
 
@@ -540,13 +605,48 @@ All API response shapes are defined as TypeScript interfaces in `types.ts`. If t
 
 ## 16. Security Patterns Used
 
-### API key guard on admin routes
+### Timing-safe API key comparison
 
-The `/admin/cleanup` endpoint is protected by checking a request header against `settings.ADMIN_API_KEY`. If the header is missing or wrong, the request is rejected with 401 Unauthorized. This prevents any public user from triggering data cleanup.
+The original check used Python's `!=` operator: `if request_key != settings.API_KEY`. This is vulnerable to a timing attack — an attacker can measure how long the comparison takes. Equal strings take longer than unequal ones at the first differing byte, leaking information about what the correct key is. The fix:
 
-### CORS
+```python
+import hmac
+if not hmac.compare_digest(request_key.encode(), settings.API_KEY.encode()):
+    raise HTTPException(status_code=401)
+```
 
-CORS (Cross-Origin Resource Sharing) controls which websites can call the API. In development, all origins are allowed. In production, only the specific frontend domain should be listed.
+`hmac.compare_digest` always takes the same amount of time regardless of where the strings differ.
+
+### Separate admin token
+
+Previously `/admin/cleanup` was guarded by the same `API_KEY` used on public routes. This means any user with a valid API key could trigger cleanup. A separate `ADMIN_TOKEN` config field now guards admin routes. These are rotated independently.
+
+### CORS credentials and wildcard origins
+
+Browser specification forbids `Access-Control-Allow-Credentials: true` together with `Access-Control-Allow-Origin: *`. Setting both causes browsers to reject the response silently. The fix: `allow_credentials=True` is only set when `ALLOWED_ORIGINS` does not contain `*`.
+
+### Rate limiting on all routes
+
+Rate limiting was initially only on `/upload`. The `/status/` and `/result/` endpoints were unprotected — a client could poll them thousands of times per second. Rate limiting was added to all three routes.
+
+### Thread-safe singletons
+
+The Redis client and LLM provider factory were module-level globals. In a multi-threaded worker, two threads could both find the global `None` and both create a new instance simultaneously, potentially creating two connections to the same resource. Double-checked locking with `threading.Lock()` ensures only one instance is ever created:
+
+```python
+if _instance is None:
+    with _lock:
+        if _instance is None:   # check again inside the lock
+            _instance = create_instance()
+```
+
+### Lazy S3 client initialization
+
+The S3 client was created at module import time. This meant that importing `storage.py` in a test environment (or local development without AWS credentials) would immediately attempt to authenticate with AWS and fail. The fix: wrap initialization in a `_get_s3()` function called only when actually needed.
+
+### Redis AOF persistence
+
+By default Redis stores data only in memory. A container restart loses all queued job IDs. Append-Only File (AOF) persistence writes every operation to disk — Redis can replay the log on restart and recover the queue. Enabled in `docker-compose.yml` with `command: redis-server --appendonly yes`.
 
 ### S3 for file storage
 
@@ -775,6 +875,447 @@ ChromaDB was removed entirely as part of the pgvector migration (Bug 3 fix). Thi
 
 **Lesson**
 Containers that have a slow startup phase (databases, ML servers) need `start_period` in their health check. Without it, Docker can mark a perfectly healthy container as failed during its normal boot sequence. Other services depending on it will then refuse to start.
+
+---
+
+---
+
+## 18. Hybrid Extraction Architecture
+
+### The core problem with a single pipeline
+
+The original architecture had one pipeline that tried to handle everything: extract values from raw text and explain them. This failed in three compounding ways:
+
+1. **OCR quality determines extraction quality**: A smudged scan produces noisy text, which confuses the parser, which passes garbage to the LLM, which hallucinates a plausible value. At no point was there a check that a value was physiologically possible.
+
+2. **The LLM is not a reliable extractor**: LLMs are probabilistic. Given the same page, they sometimes extract 8 values and sometimes 6. They sometimes swap the value and reference range. They sometimes invent values from their training data when the actual text is ambiguous.
+
+3. **No intermediate representation**: When extraction and explanation are one step, there is no auditable checkpoint. You cannot inspect what was extracted before explanation.
+
+### The design principle
+
+**Separate extraction (deterministic) from explanation (generative).** The extraction layer is a pipeline of code that can be tested with unit tests and regression fixtures. The explanation layer is a single bounded LLM call that receives clean structured input.
+
+The intermediate representation `ExtractionResult` is the contract between these two layers. It carries every `ExtractedValue` with its source page, raw text, numeric value, unit, validator status, and confidence score.
+
+```python
+@dataclass
+class ExtractedValue:
+    test_id: str           # canonical LOINC-mapped ID: "hba1c"
+    raw_name: str          # exactly as found: "Glycated Haemoglobin"
+    raw_value: str         # exactly as found: "5.9%"
+    value_numeric: float   # parsed float: 5.9
+    unit: str              # normalized unit: "%"
+    ref_range_raw: str     # as found: "4.0 - 5.6"
+    source_page: int
+    source_line: str
+    extraction_tier: str   # "digital_text" | "paddle_table" | "vlm_cloud" | "vlm_local"
+    validator_status: str  # "passed" | "clamped" | "flagged" | "rejected"
+    confidence: float      # 0.0 – 1.0
+```
+
+**Lesson**: When an AI-generated result has safety implications, do not put the LLM in the extraction path. Build a deterministic extractor that the LLM cannot affect, then let the LLM work on clean validated data only.
+
+---
+
+## 19. Document Classifier
+
+### What it does
+
+The document classifier runs immediately after the file is downloaded. It produces a `DocumentProfile` that drives all downstream decisions: which extraction tier to use, what sections the document contains, how much to trust OCR output.
+
+```python
+@dataclass
+class DocumentProfile:
+    has_native_text: bool       # pdfplumber found embedded text
+    native_text_ratio: float    # fraction of pages with native text
+    page_count: int
+    scan_quality: str           # "clean" | "moderate" | "degraded"
+    has_tables: bool            # detected via whitespace alignment heuristics
+    has_imaging: bool           # pages with very low text density
+    detected_sections: List[str]  # ["lab_table", "ecg", "echo", "prescription"]
+    suggested_tier: str         # "digital" | "structural_ocr" | "vision"
+```
+
+### How classification works
+
+**`has_native_text`**: pdfplumber text extraction attempt. If more than 60% of pages return text, the document is digital.
+
+**`scan_quality`**: For scanned pages, sample-render at 150 DPI and compute image variance. Low variance signals either a blank scan (underpopulated) or a black blob (degraded). A lightweight Tesseract pass measures per-character confidence scores and the ratio of high-confidence characters determines quality.
+
+**`has_tables`**: Count whitespace-separated column alignment on at least three consecutive lines. This is a table. No ML needed — it is a spacing heuristic.
+
+**`has_imaging`**: Pages where text density is below 20 tokens per page. Could be an ECG strip, X-ray scan, or graph.
+
+**`detected_sections`**: Keyword triggers per page. First line keywords: "COMPLETE BLOOD COUNT" → `lab_table`. "ELECTROCARDIOGRAM" → `ecg`. "ECHOCARDIOGRAPHY" → `echo`. "Rx" or "Prescription" → `prescription`. These drive section-aware vision prompts.
+
+**Why this matters**: Once you know a document has an ECG section, you can route that specific page to the vision tier with an ECG-specific prompt instead of a generic table extraction prompt. Section awareness turns one hard problem into several easier ones.
+
+---
+
+## 20. Structural OCR — PaddleOCR PPStructure
+
+### The problem with reading tables as flat text
+
+A lab report table has four logical columns: test name, value, unit, reference range. When Tesseract reads this as a flat page, it linearises everything left to right, top to bottom. A four-column table with 20 rows becomes 80 tokens in reading order: `HbA1c 5.9 % 4.0-5.6 Fasting Glucose 94 mg/dL 70-100...`. This is fine until columns misalign (common in low-quality scans), in which case values and names get transposed silently.
+
+### What PPStructure does differently
+
+PaddleOCR's PPStructure understands that a table is a 2D grid before it reads any text. It:
+
+1. Detects the table bounding box using an object detection model
+2. Identifies individual cell boundaries using a table structure model
+3. Runs OCR on each cell independently
+4. Returns the cells as an HTML table string
+
+```html
+<td>HbA1c</td><td>5.9</td><td>%</td><td>4.0-5.6</td>
+```
+
+Each OCR call is now on a small clean rectangular region containing 1-3 words. Accuracy goes from ~40% (PSM 6 on full page) to ~95% on per-cell recognition.
+
+### Column mapping
+
+The returned HTML table is parsed to identify which column corresponds to which field. The mapping is verified: column 0 must resolve to a known test alias, column 1 must parse as a number, column 2 must be a recognized unit string. If the mapping looks wrong, alternate column orderings are tried. This makes the pipeline robust to labs that put value before test name (some pathology formats do this).
+
+### When to use it
+
+PPStructure is used when the document classifier detects: no native text (`has_native_text=False`), scan quality is clean or moderate, and the page has tables. It is not used for image-only pages (ECG, X-ray) or for digital PDFs.
+
+---
+
+## 21. Medical Validator
+
+### Why validation must be deterministic
+
+If the validator were an LLM call, it would itself be subject to hallucination — you cannot use a probabilistic system to validate the output of another probabilistic system. All validation rules are deterministic Python code with no external dependencies.
+
+### Three levels of checks
+
+**Hard limits** — physiologically impossible values are unconditionally rejected:
+
+```python
+HARD_LIMITS = {
+    "hba1c":     (2.0, 20.0),   # > 20% = OCR artifact
+    "potassium": (1.5, 9.0),    # > 9 mEq/L = lethal, likely "9" OCR'd as "19"
+    "sodium":    (100, 180),
+    "glucose":   (10, 800),
+    "hemoglobin": (2.0, 25.0),
+    "wbc_count": (100, 200_000),
+}
+```
+
+Rejected values are not silently dropped. They are moved to `extraction_artifacts` in the result, where the user can see that a value was detected but could not be validated. This is honest reporting.
+
+**Unit coherence** — a value in the wrong unit class is flagged:
+
+```python
+UNIT_CLASSES = {
+    "potassium":  {"mEq/L", "mmol/L"},    # NOT mg/dL
+    "hba1c":      {"%", "mmol/mol"},       # IFCC or NGSP only
+    "hemoglobin": {"g/dL", "g/L"},
+}
+```
+
+**Inter-test consistency** — logical contradictions between values are flagged for human review:
+
+```python
+if hba1c.value < 5.7 and fasting_glucose.value > 126:
+    flag("HbA1c normal range but fasting glucose diabetic — review extraction")
+```
+
+### What happens to rejected values
+
+The user sees a note like "One value (Potassium: 22 mEq/L) was detected but failed physiological validation. Check the original report." This is far better than passing an impossible value to the LLM which then generates a confident but wrong explanation.
+
+---
+
+## 22. Ontology Normalizer and Unit Conversion
+
+### The synonym problem
+
+The same lab test has many names. "HbA1c", "Glycated Haemoglobin", "Glycosylated Hb", "A1c", "GHb" all refer to the same measurement. The parser might extract "Glycated Haemoglobin" from one lab and "A1c" from another. Without normalization, the RAG lookup and the LLM prompt would receive different strings for the same test, fragmenting the knowledge retrieval.
+
+### Canonical ID resolution
+
+The ontology normalizer maps every known name variant to a canonical ID derived from the LOINC standard:
+
+```
+"Glycated Haemoglobin" | "HbA1c" | "A1c" → "hba1c"
+"Serum Creatinine" | "Creatinine" | "Cr"  → "creatinine"
+```
+
+The `synonyms.json` catalog contains 1,468 mappings. Resolution uses: exact match → alias match → fuzzy match (Levenshtein distance below threshold). The resolution confidence enters the per-value confidence score.
+
+### Unit conversion
+
+Some units express the same quantity in different scales. Before the LLM receives values, they are converted to the canonical form:
+
+```python
+UNIT_CONVERSIONS = {
+    "hba1c": {
+        "mmol/mol": lambda v: round((v / 10.929) + 2.15, 1),  # IFCC → NGSP %
+    },
+    "glucose": {
+        "mmol/L": lambda v: round(v * 18.016, 1),  # mmol/L → mg/dL
+    },
+    "creatinine": {
+        "μmol/L": lambda v: round(v / 88.4, 2),    # μmol/L → mg/dL
+    },
+}
+```
+
+The original value and unit are preserved in `raw_value`. The converted value goes into `value_numeric` and `unit`. The LLM always receives values in the canonical unit and never needs to perform unit arithmetic.
+
+### Reference range unification
+
+The catalog has curated reference ranges. The document also contains a printed reference range. The normalizer uses the catalog range as the authoritative source and the document range as a cross-check. If they differ by more than a configurable percentage, the discrepancy is noted in the result metadata.
+
+**Lesson**: Normalization has to happen before the LLM sees anything. An LLM that receives `HbA1c 47 mmol/mol` (IFCC units, Nordic pathology format) will not reliably convert this to `6.5%` \u2014 it may convert it, may leave it, or may hallucinate an incorrect conversion. Code-based unit conversion is exact, testable, and free.
+
+---
+
+## 23. Vision LLM Tier
+
+### When it activates
+
+The vision tier activates for pages where all text-based extraction approaches fail or produce sparse output. Triggers:
+
+- `scan_quality == "degraded"` — the classifier assessed the scan as low quality
+- `has_imaging == True` — pages with <20 text tokens (ECG strips, graph images)
+- Structural OCR returned fewer than 3 values from a page expected to have a full panel
+- Sections detected: `ecg`, `echo` (these always route to vision regardless of scan quality)
+
+### Section-aware prompting
+
+Sending a 20-page PDF to one vision LLM call is expensive and inaccurate. Instead, each page is routed individually based on its detected section type:
+
+**Lab table pages** — constrained JSON extraction prompt:
+```
+Return ONLY a JSON array for each row you can read:
+[{"test_name": "...", "value": "...", "unit": "...", "ref_range": "..."}]
+If a cell is unreadable, use null. Never guess or infer values.
+Do not include any text outside the JSON array.
+```
+
+**ECG pages** — metadata-only prompt:
+```
+Extract ONLY the printed machine measurements from this ECG.
+Return: {"heart_rate": ..., "rhythm": "...", "pr_interval_ms": ...,
+         "qrs_duration_ms": ..., "qtc_ms": ..., "axis_degrees": ...,
+         "machine_interpretation": "..."}
+Do NOT interpret waveform morphology. Only extract values explicitly printed.
+```
+
+The narrow prompts reduce hallucination. A vision LLM asked only for numeric metadata cannot invent a rhythm interpretation — the prompt scope excludes it.
+
+### Provider abstraction
+
+The vision providers mirror the existing `llm_providers/` pattern exactly:
+
+```
+services/vision_providers/
+    base.py              # VisionProvider ABC
+    factory.py           # VISION_PROVIDER routing
+    openai_vision.py     # GPT-4o / GPT-4o-mini
+    gemini_vision.py     # Gemini 1.5 Flash
+    local_vision.py      # Ollama (Qwen2-VL 7B / InternVL)
+    vision_prompts.py    # section-specific prompt builders
+```
+
+### Local option for PHI compliance
+
+`local_vision.py` calls Ollama's vision endpoint. Qwen2-VL 7B runs on 16 GB VRAM and outperforms GPT-4o-mini on document OCR benchmarks. Zero data leaves the hardware — relevant for enterprise deployments handling PHI (Personal Health Information).
+
+Configuration:
+```env
+VISION_PROVIDER=local
+VISION_ENDPOINT=http://localhost:11434
+VISION_MODEL=qwen2-vl:7b
+```
+
+**Lesson**: Vision LLMs are not magic. They hallucinate less when constrained to narrow output schemas and specific page sections. Sending a full document to a single unconstrained vision call produces worse results than routing each page individually.
+
+---
+
+## 24. Fine-Tuning OpenBioLLM-8B
+
+### Why fine-tune at all
+
+The Groq-hosted `llama-3.3-70b-versatile` model gives good explanations but has two problems: it costs per token, and it cannot be deployed on-premise for PHI compliance. A fine-tuned 8B model that explains Indian lab reports specifically, in Indian English, with Jan Aushadhi references and local clinical context, is both cheaper and more relevant than a 70B general model.
+
+### The base model
+
+`aaditya/Llama3-OpenBioLLM-8B` (Apache 2.0 license) is a medical fine-tune of Meta's Llama 3 8B. It has been further trained on PubMed, medical textbooks, and clinical notes. Starting from this checkpoint rather than base Llama 3 means the first phase of training has less distance to cover.
+
+### Two-phase training
+
+**Phase 1 — DAPT (Domain-Adaptive Pre-Training)**
+
+Standard causal language modelling on a corpus of Indian medical domain text, before any task-specific instruction is introduced. This shifts the model's token distribution toward:
+- Indian drug brand names and dosage forms
+- Indian reference range conventions (some labs report in different units)
+- Indian pathology report section headers and layouts
+- Clinical terminology from Indian epidemiology studies
+
+The corpus has 41,218 records from three sources:
+- PubMed abstracts filtered for India-relevant conditions (diabetes, anaemia, tuberculosis, cardiovascular)
+- RxNorm drug descriptions expanded with Indian brand names
+- Synthetic lab reports generated by `llama-3.1-8b-instant` via Groq free API
+
+**Phase 2 — SFT (Supervised Fine-Tuning)**
+
+The DAPT checkpoint is fine-tuned on instruction-following pairs. Each pair has:
+- **Input**: a structured `ExtractionResult` JSON (what the Lumen extraction pipeline produces)
+- **Output**: a plain-language explanation in Indian English (what the fine-tuned model must learn to produce)
+
+SFT pairs are generated by a 3-call Groq pipeline per sample:
+1. Simulate raw OCR extraction text for a plausible Indian lab report
+2. Produce the structured `ExtractionResult` JSON (simulating what the deterministic pipeline would output)
+3. Generate the patient-friendly explanation (the training target)
+
+### QLoRA with Unsloth
+
+Training 8B parameters from scratch would require hundreds of GPU-hours. QLoRA (Quantized Low-Rank Adaptation) freezes the base model weights at 4-bit precision and trains only a small set of adapter matrices (LoRA). The adapters are merged back into the base weights after training. This makes fine-tuning feasible on a single Kaggle T4 GPU (free).
+
+Unsloth is a library that makes Llama QLoRA training roughly 2x faster than standard `transformers` + `peft` training, through hand-optimized kernels for attention and gradient operations.
+
+Key hyperparameters:
+- LoRA rank: 16, alpha: 32
+- Batch size: 1 with gradient accumulation 16 (effective batch 16)
+- Learning rate: 2e-4 with cosine schedule
+- Max sequence length: 2048
+
+### HuggingFace Hub checkpointing
+
+The Kaggle notebook streams checkpoints to `PrajwalAmte/lumen-medical-8b` (private) every 50 training steps using `hub_strategy="checkpoint"`. This means a Kaggle session timeout does not lose all progress — training can resume from the last checkpoint uploaded to the Hub.
+
+### Data collection scripts
+
+```bash
+cd training
+
+# PubMed abstracts — no key needed, uses Entrez E-utilities
+python collect_all.py --pubmed
+
+# Drug descriptions from RxNorm catalog — no key needed
+python collect_all.py --drugs
+
+# Synthetic SFT pairs via Groq free tier (~120/day, 500K token/day limit)
+python collect_all.py --synthetic --count 120 --groq-key gsk_YOUR_KEY
+
+# Deduplicate and merge all sources into dapt_corpus.jsonl
+python collect_all.py --deduplicate
+```
+
+### DailyQuotaError and resumption
+
+The Groq free tier has a 500K token/day limit. The synthetic collector tracks this and raises `DailyQuotaError` when the limit is reached. The orchestrator catches this, saves progress, and prints a resume command so collection continues from where it left off the next day rather than starting over.
+
+**Lesson**: Fine-tuning is not a silver bullet. It improves explanation quality and cultural relevance, but it does not fix extraction errors — that is the validator's job. A fine-tuned model that receives bad input will produce wrong explanations confidently. The extraction → validation → explanation separation must be maintained even if you swap in a fine-tuned model for the explanation step.
+
+---
+
+### Bug 8 — Timing attack on API key comparison
+
+**Symptom**
+No visible symptom. Identified during security review.
+
+**Root Cause**
+The API key check used Python's `!=` operator: `if provided_key != settings.API_KEY`. Python strings are compared byte by byte and return False immediately at the first mismatch. An attacker sending thousands of requests can measure response times to determine, byte by byte, what the correct API key is. This is a timing side-channel attack.
+
+**Fix**
+
+```python
+import hmac
+if not hmac.compare_digest(
+    provided_key.encode("utf-8"),
+    settings.API_KEY.encode("utf-8")
+):
+    raise HTTPException(status_code=401)
+```
+
+`hmac.compare_digest` always compares the full string regardless of where the first mismatch occurs, taking constant time.
+
+**Lesson**
+Secret comparison must always use constant-time comparison. Python's string `==` and `!=` are fast but not timing-safe. `hmac.compare_digest` is in the standard library and has no additional dependencies.
+
+---
+
+### Bug 9 — CORS `allow_credentials=True` with wildcard origin rejected by browsers
+
+**Symptom**
+In certain browser/CORS configurations, API responses were rejected silently. No error appeared in the application, but authenticated cross-origin requests failed.
+
+**Root Cause**
+The CORS middleware was configured with both `allow_origins=["*"]` (wildcard) and `allow_credentials=True` simultaneously. This violates the browser CORS specification: a response with `Access-Control-Allow-Origin: *` and `Access-Control-Allow-Credentials: true` is forbidden by the spec. Browsers drop such responses.
+
+**Fix**
+`allow_credentials=True` is conditional on whether `ALLOWED_ORIGINS` contains a wildcard:
+
+```python
+allow_credentials = "*" not in settings.ALLOWED_ORIGINS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_credentials=allow_credentials,
+)
+```
+
+In production where specific origins are listed, credentials work. In development with `["*"]`, credentials are disabled but all requests still succeed.
+
+**Lesson**
+Read the CORS spec. The credential + wildcard combination is a common mistake because both settings appear to "work" in most simple tests, but fail in specific browser security contexts. If you need credentials (cookies, Authorization headers), you must list exact origins.
+
+---
+
+### Bug 10 — Job lifecycle deleting files for active jobs
+
+**Symptom**
+Occasionally, a job in progress would fail with an S3 `NoSuchKey` error mid-processing. The file had been deleted while the worker was still reading it.
+
+**Root Cause**
+The `delete_old_job_files` scheduler function queried for jobs older than N days without filtering by status. It would find jobs in `processing` or `queued` status (e.g. large reports that took longer than expected) and delete their S3 files.
+
+**Fix**
+Added a status filter to the query:
+
+```python
+jobs = db.query(Job).filter(
+    Job.created_at < cutoff,
+    Job.status.in_(["completed", "failed", "expired"])
+).all()
+```
+
+Only terminal-state jobs are eligible for file deletion.
+
+**Lesson**
+Cleanup queries on time alone are dangerous. Time + terminal status is the correct predicate. A job that is still in progress should never be touched by a cleanup scheduler, no matter how old it is.
+
+---
+
+### Bug 11 — Redis result TTL mismatch between setting and code
+
+**Symptom**
+Results disappeared from Redis after 1 hour, but the configured `REDIS_RESULT_TTL_SECONDS` was set to 86400 (24 hours). Users returning to check their result after a few hours found it gone and the API falling back to PostgreSQL.
+
+**Root Cause**
+The worker set the Redis TTL with a hardcoded literal:
+
+```python
+redis_client.setex(cache_key, 3600, json.dumps(result))
+```
+
+The `settings.REDIS_RESULT_TTL_SECONDS` setting existed and was correctly loaded by pydantic, but was never referenced here. The literal `3600` overrode whatever the operator configured.
+
+**Fix**
+
+```python
+redis_client.setex(cache_key, settings.REDIS_RESULT_TTL_SECONDS, json.dumps(result))
+```
+
+**Lesson**
+Constants are only useful if they are actually used. Hardcoded literals inside business logic invalidate configuration settings silently. Any value that an operator might reasonably want to tune (timeouts, TTLs, batch sizes) belongs in settings, and only in settings, with no fallback literal in code.
 
 ---
 

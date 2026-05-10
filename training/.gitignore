@@ -1,0 +1,15 @@
+# Ignore collected data — these files can be large (100MB–2GB)
+data/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Environment
+.env
+*.env

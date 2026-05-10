@@ -40,7 +40,9 @@ def create_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.CORS_ORIGINS,
-        allow_credentials=True,
+        # Credentials (cookies/HTTP auth) cannot be used with a wildcard origin.
+        # Lumen uses custom X-API-Key headers, so credentials=False is correct.
+        allow_credentials="*" not in settings.CORS_ORIGINS,
         allow_methods=["*"],
         allow_headers=["*"],
     )
@@ -68,7 +70,14 @@ def create_app() -> FastAPI:
 
     @app.post("/admin/cleanup")
     def trigger_cleanup(x_admin_token: str = Header(None)):
-        if settings.REQUIRE_API_KEY and (not x_admin_token or x_admin_token != settings.API_KEY):
+        # Use a dedicated ADMIN_TOKEN; fall back to API_KEY only when ADMIN_TOKEN
+        # is not configured (backwards-compatible for existing single-key setups).
+        expected = settings.ADMIN_TOKEN or settings.API_KEY
+        if settings.REQUIRE_API_KEY and (
+            not x_admin_token
+            or not expected
+            or not __import__('hmac').compare_digest(x_admin_token, expected)
+        ):
             logger.warning("Unauthorized cleanup attempt")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

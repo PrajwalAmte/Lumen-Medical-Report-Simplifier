@@ -21,7 +21,6 @@ from app.services.result_sanitizer import sanitize_result
 logger = get_logger("llm")
 
 
-# ── Public API (async-only) ───────────────────────────────────────────
 
 async def generate_explanation_async(
     parsed_data: dict,
@@ -65,7 +64,6 @@ def generate_explanation(parsed_data: dict) -> dict:
     return asyncio.run(generate_explanation_async(parsed_data))
 
 
-# ── Fallback (rule-based, no LLM) ────────────────────────────────────
 
 def _fallback_explanation(parsed_data: dict) -> dict:
     tests = parsed_data.get("tests", [])
@@ -125,7 +123,6 @@ def _fallback_explanation(parsed_data: dict) -> dict:
     return sanitize_result(result)
 
 
-# ── Catalog enrichment helpers ────────────────────────────────────────
 
 def _safe_float(x) -> Optional[float]:
     try:

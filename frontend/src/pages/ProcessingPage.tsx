@@ -62,8 +62,13 @@ export function ProcessingPage() {
       } catch (err) {
         if (!isMountedRef.current) return;
 
-        // If the API returned an error message, show it exactly (no friendly copy).
-        if (err instanceof Error && err.message) {
+        // Stop polling only for permanent client-side errors (4xx).
+        // Transient errors (5xx, network failures) allow polling to continue
+        // until MAX_RETRIES or POLLING_TIMEOUT_MS is exceeded.
+        const statusCode = (err as any)?.statusCode as number | null;
+        const isPermanent = statusCode !== null && statusCode >= 400 && statusCode < 500;
+
+        if (err instanceof Error && err.message && isPermanent) {
           setError(err.message);
           if (intervalIdRef.current) clearInterval(intervalIdRef.current);
           return;
@@ -131,7 +136,7 @@ export function ProcessingPage() {
             Processing report...
           </h2>
           <p className="text-gray-600 text-center mb-8">
-            Processing report...
+            Analysing your medical document. This typically takes 20–60 seconds.
           </p>
 
           {error ? (

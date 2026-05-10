@@ -1,4 +1,5 @@
 import os
+import hmac
 from fastapi import UploadFile, HTTPException, status, Request, Header
 from app.core.config import settings
 
@@ -60,7 +61,7 @@ def validate_file_size(file_content: bytes):
 def api_key_auth(x_api_key: str = Header(None)):
     """FastAPI dependency — raise 401 if API key is required but missing/invalid."""
     if settings.REQUIRE_API_KEY:
-        if not x_api_key or x_api_key != settings.API_KEY:
+        if not x_api_key or not hmac.compare_digest(x_api_key, settings.API_KEY):
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid or missing API key"

@@ -10,7 +10,7 @@ from app.services.storage import delete_file
 logger = get_logger("job_lifecycle")
 
 JOB_EXPIRY_DAYS = settings.JOB_EXPIRY_DAYS
-JOB_PURGE_DAYS = JOB_EXPIRY_DAYS * 2  # hard-delete after 2x expiry period
+JOB_PURGE_DAYS = settings.JOB_HARD_DELETE_DAYS
 
 
 def mark_expired_jobs(db: Session):
@@ -38,7 +38,13 @@ def mark_expired_jobs(db: Session):
 def delete_old_job_files(db: Session):
     expiry_date = datetime.now(timezone.utc) - timedelta(days=JOB_EXPIRY_DAYS)
 
-    old_jobs = db.query(Job).filter(Job.created_at < expiry_date).all()
+    # Only delete files for jobs that are no longer active.
+    # Excluding queued/processing prevents deleting files for jobs that are
+    # old but still being processed (e.g. after a long worker backlog).
+    old_jobs = db.query(Job).filter(
+        Job.created_at < expiry_date,
+        Job.status.in_(["completed", "failed", "expired"])
+    ).all()
     deleted_count = 0
 
     for job in old_jobs:

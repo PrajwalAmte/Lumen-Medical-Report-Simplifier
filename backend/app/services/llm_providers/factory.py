@@ -3,6 +3,7 @@ Provider factory — returns the correct LLMProvider singleton.
 LLM_PROVIDER options: groq | openai | llama | ollama
 """
 
+import threading
 from typing import Optional
 
 from app.core.config import settings
@@ -12,34 +13,39 @@ from app.services.llm_providers.base import LLMProvider
 logger = get_logger("llm.factory")
 
 _provider: Optional[LLMProvider] = None
+_provider_lock = threading.Lock()
 
 
 def get_provider() -> LLMProvider:
-    """Return a lazily-initialised provider singleton."""
+    """Return a lazily-initialised provider singleton (thread-safe)."""
     global _provider
     if _provider is not None:
         return _provider
 
-    name = settings.LLM_PROVIDER.lower().strip()
-    logger.info(f"Initialising LLM provider: {name}")
+    with _provider_lock:
+        if _provider is not None:
+            return _provider
 
-    if name == "groq":
-        from app.services.llm_providers.groq_provider import GroqProvider
-        _provider = GroqProvider()
+        name = settings.LLM_PROVIDER.lower().strip()
+        logger.info(f"Initialising LLM provider: {name}")
 
-    elif name == "openai":
-        from app.services.llm_providers.openai_provider import OpenAIProvider
-        _provider = OpenAIProvider()
+        if name == "groq":
+            from app.services.llm_providers.groq_provider import GroqProvider
+            _provider = GroqProvider()
 
-    elif name in ("llama", "ollama"):
-        from app.services.llm_providers.llama_provider import LlamaProvider
-        _provider = LlamaProvider()
+        elif name == "openai":
+            from app.services.llm_providers.openai_provider import OpenAIProvider
+            _provider = OpenAIProvider()
 
-    else:
-        raise ValueError(
-            f"Unknown LLM_PROVIDER={name!r}. "
-            f"Supported: groq, openai, llama, ollama"
-        )
+        elif name in ("llama", "ollama"):
+            from app.services.llm_providers.llama_provider import LlamaProvider
+            _provider = LlamaProvider()
+
+        else:
+            raise ValueError(
+                f"Unknown LLM_PROVIDER={name!r}. "
+                f"Supported: groq, openai, llama, ollama"
+            )
 
     return _provider
 

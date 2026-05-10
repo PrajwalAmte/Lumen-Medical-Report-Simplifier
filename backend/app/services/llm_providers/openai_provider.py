@@ -3,7 +3,7 @@ OpenAI provider — direct OpenAI API (GPT-4o / GPT-4-turbo).
 Switch to this by setting LLM_PROVIDER=openai + OPENAI_API_KEY.
 """
 
-from typing import Optional, List
+from typing import Optional
 
 from openai import AsyncOpenAI
 
@@ -37,12 +37,8 @@ class OpenAIProvider(LLMProvider):
     def choose_model(self, parsed_data: dict) -> tuple:
         tests = parsed_data.get("tests", [])
         medicines = parsed_data.get("medicines", [])
-        raw_text = parsed_data.get("raw_text", "")
 
-        has_tests = len(tests) > 0
-        long_text = len(raw_text) > 500
-
-        if has_tests or long_text:
+        if tests or len(medicines) > 2:
             return settings.LLM_MODEL_HEAVY, settings.LLM_MAX_TOKENS_HEAVY
         if medicines:
             return settings.LLM_MODEL_LIGHT, settings.LLM_MAX_TOKENS_LIGHT

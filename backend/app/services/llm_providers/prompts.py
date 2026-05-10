@@ -3,6 +3,13 @@ Shared prompt templates and JSON utilities used by all LLM providers.
 
 Keeps prompt engineering in one place — providers just call
 ``build_messages()`` and ``parse_or_repair_json()``.
+
+Phase 5 refactor — explanation-only role:
+  The LLM no longer receives raw OCR text or is asked to re-extract values.
+  Extraction is fully handled by the 3-tier pipeline (digital / PaddleOCR /
+  vision LLM).  This module's job is to build a clean structured payload and
+  a prompt that turns validated, classified test data into patient-friendly
+  explanations.
 """
 
 import json
@@ -12,8 +19,6 @@ from typing import Optional, List
 from app.core.logging import get_logger
 
 logger = get_logger("llm.prompt")
-
-MAX_RAW_CHARS = 8000  # truncate raw_text before sending to LLM
 
 _SCHEMA_OBJ = {
     "disclaimer": "string",
@@ -26,8 +31,8 @@ _SCHEMA_OBJ = {
     "abnormal_values": [
         {
             "test_name": "string",
-            "value": "string — copy EXACTLY from document including unit",
-            "normal_range": "string — copy EXACTLY from document",
+            "value": "string — copy EXACTLY from the provided value + unit fields",
+            "normal_range": "string — copy EXACTLY from normal_min and normal_max",
             "severity": "mild|moderate|severe|critical",
             "what_it_means": "string — plain English explanation",
             "common_causes": ["string"],
@@ -69,72 +74,91 @@ _SCHEMA_OBJ = {
     "confidence_score": "number",
 }
 
-SYSTEM_PROMPT_TEMPLATE = """
-You are Lumen, a medical report explainer for Indian patients.
+SYSTEM_PROMPT = """You are Lumen, a medical report explainer for Indian patients.
 
-Rules:
-- Output ONLY valid JSON. No markdown, no commentary.
+Your role is EXPLANATION ONLY. The structured data you receive has already been \
+extracted and validated by a multi-tier OCR pipeline. Do not attempt to \
+re-extract or reinterpret numerical values — work exclusively with the \
+structured fields provided.
+
+Output rules:
+- Output ONLY valid JSON matching the schema. No markdown, no commentary.
 - Do NOT omit any required keys. Do NOT add extra keys.
-- Never invent medical facts. Base everything on the provided data.
 - Use simple Indian English that a non-medical person can understand.
-- UNIT RULE: Copy values and units EXACTLY as written in the document.
-  Never convert, infer, or substitute units. If the document says
-  "12,800 cells/uL", output value="12800 cells/uL". Commas in numbers
-  are thousands separators — "12,800" means twelve thousand eight hundred.
-- Extract EVERY test result from raw_text. Do NOT stop after the first few.
-  A blood report may have 10-20 tests — list ALL of them.
-- CLASSIFICATION RULE (strict): Compare each value against its reference range.
-  If the value is ABOVE the max OR BELOW the min of the normal range → put it
-  in abnormal_values. ONLY put a test in normal_values if the value falls
-  strictly within the normal range. Never put a high or low result in
-  normal_values, even if it is only slightly out of range.
-- For each abnormal value, provide specific causes and actionable advice.
-- For each medicine, explain purpose and side effects in plain language.
-- If data is truly insufficient for a field, use null or empty array [].
-- confidence_score: 0.0-1.0 reflecting how much usable data was found.
-  Set to 1.0 if raw_text was readable and all tests were extracted.
-- DOCUMENT TYPE RULE (critical — follow strictly):
-  * If the document is a PRESCRIPTION / DOCTOR'S Rx (contains medicines prescribed by
-    a doctor, not lab test numerical results), then:
-    • abnormal_values MUST be [] — prescriptions contain dosages, NOT lab values.
-      Never put "1 tablet", "60000 IU", dosage amounts etc. into abnormal_values.
-    • normal_values MUST be [] for the same reason.
-    • Focus all effort on the medicines array — list every prescribed drug.
-  * If the document is a BLOOD REPORT / LAB REPORT / DIAGNOSTIC REPORT, then:
-    • Extract ALL numerical lab test results into abnormal_values or normal_values.
-    • Do NOT confuse medicine dosages (tablet, capsule, IU) with lab test values.
-- MEDICINE FIELDS RULE — use your medical knowledge, never leave these null:
-  * generic_name: official INN name (e.g. "Atorvastatin" for Lipitor).
-    If the drug name IS already generic, repeat it here.
-  * mechanism: how this drug works — 1-2 sentences in plain patient language.
-  * generic_alternative: a common cheaper Indian brand with dose
-    (e.g. "Atorva 20mg by Cadila", "Glycomet 500mg by USV").
-  * cost_saving_tip: one practical India-specific tip (Jan Aushadhi stores,
-    splitting tablets if safe, asking for generic prescription, etc.).
+- Never invent medical facts not supported by the provided data.
+
+Classification rule:
+- Each test carries an is_abnormal flag computed by clinical validation.
+  Tests where is_abnormal=true go into abnormal_values.
+  Tests where is_abnormal=false go into normal_values.
+- Copy value and normal_range exactly from the provided fields — \
+  do not reformat numbers or change units.
+
+Confidence-aware explanation:
+- extraction_confidence is a 0.0–1.0 quality score from the extraction pipeline.
+  >= 0.90: high confidence — explain directly.
+  0.70–0.89: moderate confidence — add "Please confirm this value by checking \
+your original report." at the end of what_it_means.
+  < 0.70: low confidence — add "This value had low extraction confidence. \
+Verify against your original report before acting on it." at the end of \
+what_it_means.
+- If validator_note is non-empty, include it verbatim at the start of \
+  what_it_means, followed by your explanation.
+
+Severity rule (for abnormal values):
+- Compare value against normal_min / normal_max using the percentage deviation.
+  > 50% deviation: critical. > 30%: severe. > 15%: moderate. Otherwise: mild.
+
+Special sections:
+- detected_sections lists medical section types found in the document
+  (possible values: ecg, echo, radiology).
+  ecg: use appropriate cardiology/electrocardiography language.
+  echo: explain ejection fraction, chamber dimensions, valve findings accessibly.
+  radiology: explain radiographic findings in plain language.
+
+Medicines:
+- Use your medical knowledge for mechanism, generic_name, generic_alternative, \
+  and cost_saving_tip.
+- generic_alternative: name a common Indian brand with dose \
+  (e.g. "Atorva 20mg by Cadila").
+- cost_saving_tip: one India-specific practical tip \
+  (Jan Aushadhi stores, asking for a generic prescription, etc.).
+
+confidence_score: use document_summary.avg_confidence from the input. \
+If no tests were found, set to 0.0.
 
 Always follow this JSON schema exactly:
-{{SCHEMA}}
-"""
+""" + json.dumps(_SCHEMA_OBJ, separators=(",", ":"))
 
-SYSTEM_PROMPT = SYSTEM_PROMPT_TEMPLATE.replace(
-    "{{SCHEMA}}", json.dumps(_SCHEMA_OBJ, separators=(",", ":"))
-)
 
 def build_messages(
     parsed_data: dict,
     retrieval_context: Optional[List[str]] = None,
 ) -> list:
-    """Return [system, user] message list for the LLM.
+    """
+    Build the [system, user] message list for the LLM.
+
+    The payload sent to the LLM contains ONLY structured fields — no raw OCR
+    text.  Each test includes its pre-computed is_abnormal flag and
+    extraction_confidence so the LLM can apply confidence-aware explanation
+    without having to perform its own extraction or classification.
+
     RAG chunks are injected into the user message when provided.
     """
-    safe_parsed = json.loads(json.dumps(parsed_data))
-    raw_text = safe_parsed.get("raw_text")
-    if isinstance(raw_text, str) and len(raw_text) > MAX_RAW_CHARS:
-        safe_parsed["raw_text"] = raw_text[:MAX_RAW_CHARS] + "…"
+    safe = json.loads(json.dumps(parsed_data))
 
-    enriched_payload = {"parsed_data": safe_parsed}
+    tests = safe.get("tests", [])
+    for t in tests:
+        t.pop("raw_text", None)
 
-    # RAG context block
+    payload = {
+        "tests":                tests,
+        "medicines":            safe.get("medicines", []),
+        "extraction_artifacts": safe.get("extraction_artifacts", []),
+        "detected_sections":    safe.get("detected_sections", []),
+        "document_summary":     safe.get("document_summary", {}),
+    }
+
     rag_block = ""
     if retrieval_context:
         chunks = "\n---\n".join(retrieval_context)
@@ -145,16 +169,12 @@ def build_messages(
         )
 
     user_prompt = (
-        "Analyse the medical document below and return a JSON object "
-        "matching the required schema.\n\n"
-        f"Input data (includes raw OCR text AND pre-extracted structured fields):\n"
-        f"{json.dumps(enriched_payload, separators=(',', ':'))}\n"
+        "Explain the following pre-extracted and validated medical data. "
+        "Return a JSON object matching the required schema.\n\n"
+        f"Structured extraction data:\n"
+        f"{json.dumps(payload, separators=(',', ':'))}\n"
         f"{rag_block}\n"
-        "Instructions:\n"
-        "- Use raw_text as the PRIMARY source — extract every test, value, "
-        "medicine, hospital, doctor, and date from it.\n"
-        "- Use the structured fields (tests/medicines) as hints, not the only source.\n"
-        "- Return ONLY JSON. No explanations, no markdown.\n"
+        "Return ONLY JSON. No explanations, no markdown."
     )
 
     return [
@@ -174,13 +194,11 @@ def parse_or_repair_json(text: str) -> dict:
     """
     text = text.strip()
 
-    # 1. Try direct parse
     try:
         return json.loads(text)
     except Exception:
         pass
 
-    # 2. Strip markdown fences (```json … ```)
     fence_match = re.search(r"```(?:json)?\s*\n?(.*?)```", text, re.DOTALL)
     if fence_match:
         try:
@@ -188,7 +206,6 @@ def parse_or_repair_json(text: str) -> dict:
         except Exception:
             pass
 
-    # 3. Extract first { … last }
     first = text.find("{")
     last = text.rfind("}")
     if first != -1 and last != -1 and last > first:
@@ -197,7 +214,6 @@ def parse_or_repair_json(text: str) -> dict:
         except Exception:
             pass
 
-    # 4. Truncation detection
     if not text.endswith("}"):
         raise RuntimeError("LLM output truncated (likely token limit)")
 

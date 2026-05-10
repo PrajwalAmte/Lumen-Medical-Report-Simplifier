@@ -12,6 +12,7 @@ import traceback
 import tempfile
 import os
 from concurrent.futures import ThreadPoolExecutor
+from typing import List
 from datetime import datetime, timezone, timedelta
 
 from sqlalchemy.orm import Session
@@ -33,8 +34,11 @@ from app.core.constants import (
     STAGE_FAILED,
     DEFAULT_PROGRESS_BY_STAGE,
 )
-from app.services.ocr import extract_text
-from app.services.parser import parse_medical_text
+from app.services.ocr import extract_pages
+from app.services.parser import parse_pages
+from app.services.medical_validator import validate as medical_validate
+from app.services.ontology import normalize as ontology_normalize
+from app.models.extraction import ExtractionResult
 from app.services.llm import generate_explanation_async
 from app.services.retrieval import retrieve_context
 from app.services.result_sanitizer import sanitize_result
@@ -44,6 +48,7 @@ from app.services.redis_client import get_redis_client
 from app.services.cache import set_cached_result
 from app.services.storage import download_file
 from app.core.logging import get_logger, setup_logging
+from app.models.extraction import PageContent
 
 logger = get_logger("processor")
 
@@ -143,6 +148,98 @@ def poll_orphaned_queued_jobs() -> list[str]:
 
 
 # ---------------------------------------------------------------------------
+#  Extraction result → LLM input dict
+# ---------------------------------------------------------------------------
+
+def _extraction_to_parsed_data(result: ExtractionResult, pages: List[PageContent]) -> dict:
+    """
+    Convert an ExtractionResult (post-validation, post-normalization) to the
+    dict format expected by the LLM explanation layer.
+
+    Phase 5 changes:
+    - raw_text is no longer included in the payload. Extraction is complete;
+      the LLM role is explanation-only.
+    - is_abnormal is pre-computed from value vs reference range so the LLM
+      does not need to re-classify.
+    - extraction_confidence and validator_note are passed through so the LLM
+      can apply confidence-aware explanation language.
+    - detected_sections aggregated from all pages are included so the LLM
+      selects the appropriate domain vocabulary (ecg/echo/radiology).
+    - document_summary provides aggregate stats for the LLM's confidence_score.
+
+    Rejected values are moved to extraction_artifacts — the LLM never sees
+    physiologically impossible numbers.
+    """
+    tests: list = []
+    artifacts: list = []
+    confidences: list = []
+
+    for v in result.values:
+        if v.validator_status == "rejected":
+            artifacts.append({
+                "test_id":        v.test_id,
+                "raw_value":      v.raw_value,
+                "unit":           v.unit,
+                "source_line":    v.source_line,
+                "source_page":    v.source_page,
+                "rejection_note": v.validator_note,
+            })
+        else:
+            value = v.value_numeric
+            is_abnormal = False
+            if value is not None and v.ref_min is not None and v.ref_max is not None:
+                is_abnormal = value < v.ref_min or value > v.ref_max
+
+            tests.append({
+                "id":                    v.test_id,
+                "name":                  v.raw_name,
+                "value":                 v.value_numeric,
+                "unit":                  v.unit,
+                "normal_min":            v.ref_min,
+                "normal_max":            v.ref_max,
+                "is_abnormal":           is_abnormal,
+                "source_page":           v.source_page,
+                "extraction_confidence": v.confidence,
+                "extraction_tier":       v.extraction_tier,
+                "validator_note": (
+                    v.validator_note if v.validator_status == "flagged" else ""
+                ),
+            })
+            confidences.append(v.confidence)
+
+    medicines = [
+        {"id": m.id, "name": m.name, "category": m.category}
+        for m in result.medicines
+    ]
+
+    detected_sections: List[str] = []
+    seen: set = set()
+    for page in pages:
+        for section in page.detected_sections:
+            if section not in seen:
+                detected_sections.append(section)
+                seen.add(section)
+
+    avg_confidence = (
+        round(sum(confidences) / len(confidences), 3) if confidences else 0.0
+    )
+
+    return {
+        "tests":                tests,
+        "medicines":            medicines,
+        "extraction_artifacts": artifacts,
+        "detected_sections":    detected_sections,
+        "document_summary": {
+            "total_tests":       len(tests),
+            "total_medicines":   len(medicines),
+            "rejected_values":   len(artifacts),
+            "extraction_tier":   result.extraction_tier,
+            "avg_confidence":    avg_confidence,
+        },
+    }
+
+
+# ---------------------------------------------------------------------------
 #  #20 – Async job pipeline
 # ---------------------------------------------------------------------------
 
@@ -173,25 +270,29 @@ async def process_job(job_id: str):
 
         try:
             await loop.run_in_executor(_executor, download_file, job.file_path, local_path)
-            raw_text = await loop.run_in_executor(_executor, extract_text, local_path)
+            pages = await loop.run_in_executor(_executor, extract_pages, local_path)
         finally:
             if os.path.exists(local_path):
                 os.remove(local_path)
 
+        raw_text = "\n\n".join(p.raw_text for p in pages)
         if not raw_text.strip():
             raise RuntimeError("OCR returned empty text")
 
-        # Stage 2: Parse medical entities (CPU-bound → thread-pool)
+        # Stage 2: Parse → validate → normalize (all CPU-bound → thread-pool)
         update_job(db, job, JOB_STATUS_PROCESSING, STAGE_PARSING,
                    DEFAULT_PROGRESS_BY_STAGE[STAGE_PARSING])
 
-        parsed_data = await loop.run_in_executor(_executor, parse_medical_text, raw_text)
+        extraction  = await loop.run_in_executor(_executor, parse_pages, pages)
+        validated   = await loop.run_in_executor(_executor, medical_validate, extraction)
+        normalized  = await loop.run_in_executor(_executor, ontology_normalize, validated)
+        parsed_data = _extraction_to_parsed_data(normalized, pages)
 
-        parsed_data["raw_text"] = raw_text
         logger.info(
             f"Job {job_id} parsed: {len(parsed_data.get('tests', []))} tests, "
             f"{len(parsed_data.get('medicines', []))} medicines, "
-            f"{len(raw_text)} OCR chars"
+            f"{len(parsed_data.get('extraction_artifacts', []))} rejected artifacts, "
+            f"avg_confidence={parsed_data.get('document_summary', {}).get('avg_confidence', 0):.2f}"
         )
 
         # Stage 3: Generate explanation via async LLM call
@@ -238,7 +339,7 @@ async def process_job(job_id: str):
         except Exception:
             safe_result = sanitize_result({})
 
-        set_cached_result(job.id, safe_result, ttl_sec=3600)
+        set_cached_result(job.id, safe_result, ttl_sec=settings.REDIS_RESULT_TTL_SECONDS)
 
         result_row = Result(
             job_id=job.id,

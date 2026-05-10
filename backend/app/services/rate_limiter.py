@@ -16,7 +16,13 @@ return current
 def rate_limit(request: Request):
     """Raise 429 if the requesting IP has exceeded RATE_LIMIT_PER_MINUTE."""
     r = get_redis_client()
-    client_ip = request.client.host if request.client else "unknown"
+    # Prefer X-Forwarded-For when behind a reverse proxy (e.g. Nginx).
+    # Take only the first, leftmost IP to avoid header spoofing by the client.
+    forwarded_for = request.headers.get("X-Forwarded-For", "")
+    if forwarded_for:
+        client_ip = forwarded_for.split(",")[0].strip()
+    else:
+        client_ip = request.client.host if request.client else "unknown"
     key = f"rate:{client_ip}"
     window_seconds = 60
 

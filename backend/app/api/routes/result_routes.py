@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Request
 from sqlalchemy.orm import Session
 
 from app.api.deps import get_db
@@ -11,6 +11,7 @@ from app.core.constants import JOB_STATUS_EXPIRED
 from app.core.config import settings
 from app.core.security import api_key_auth
 from app.core.logging import get_logger
+from app.services.rate_limiter import rate_limit
 
 logger = get_logger("result")
 router = APIRouter()
@@ -21,7 +22,8 @@ router = APIRouter()
     response_model=ResultResponse,
     dependencies=[Depends(api_key_auth)]
 )
-def get_result(job_id: str, db: Session = Depends(get_db)):
+def get_result(job_id: str, request: Request, db: Session = Depends(get_db)):
+    rate_limit(request)
     job = db.query(Job).filter(Job.id == job_id).first()
 
     if not job:
@@ -59,12 +61,14 @@ def get_result(job_id: str, db: Session = Depends(get_db)):
             try:
                 validated = ResultResponse.model_validate(cached)
                 return validated
-            except Exception:
+            except Exception as e:
+                logger.warning(f"Cached result validation failed for {job_id}: {e}; attempting sanitize")
                 # best-effort: sanitize and validate one more time
                 try:
                     sanitized_cached = sanitize_result(cached)
                     return ResultResponse.model_validate(sanitized_cached)
-                except Exception:
+                except Exception as e2:
+                    logger.error(f"Cached result sanitize+validate failed for {job_id}: {e2}; returning stub")
                     return ResultResponse.model_validate({
                         "job_id": job_id,
                         "status": "completed",

@@ -33,6 +33,9 @@ class AbnormalValue(BaseModel):
     health_risks: Optional[List[str]] = None
     lifestyle_recommendations: Optional[List[str]] = None
     dietary_recommendations: Optional[List[str]] = None
+    # Extraction traceability — added by the new pipeline
+    source_page: Optional[int] = None
+    extraction_confidence: Optional[float] = None
 
 
 class NormalValue(BaseModel):
@@ -41,6 +44,9 @@ class NormalValue(BaseModel):
     value: str
     normal_range: str
     what_it_means: str  # Brief explanation of what this test measures
+    # Extraction traceability — added by the new pipeline
+    source_page: Optional[int] = None
+    extraction_confidence: Optional[float] = None
 
 
 class Medicine(BaseModel):

@@ -118,6 +118,15 @@ def sanitize_result(data: Dict[str, Any]) -> Dict[str, Any]:
             base["lifestyle_recommendations"] = _ensure_list(e.get("lifestyle_recommendations"))
             base["dietary_recommendations"] = _ensure_list(e.get("dietary_recommendations"))
 
+        # Preserve extraction traceability fields from the new pipeline
+        if e.get("source_page") is not None:
+            base["source_page"] = int(e["source_page"])
+        if e.get("extraction_confidence") is not None:
+            try:
+                base["extraction_confidence"] = float(e["extraction_confidence"])
+            except (TypeError, ValueError):
+                pass
+
         return base
 
     data["abnormal_values"] = [

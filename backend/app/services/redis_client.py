@@ -8,6 +8,7 @@ it trivial to swap the implementation (e.g. cluster, sentinel) later.
 """
 
 import redis
+import threading
 from typing import Optional
 from app.core.config import settings
 from app.core.logging import get_logger
@@ -15,15 +16,18 @@ from app.core.logging import get_logger
 logger = get_logger("redis")
 
 _redis_client: Optional[redis.Redis] = None
+_redis_lock = threading.Lock()
 
 
 def get_redis_client() -> redis.Redis:
-    """Return the shared Redis client, creating it on first call."""
+    """Return the shared Redis client, creating it on first call (thread-safe)."""
     global _redis_client
     if _redis_client is None:
-        _redis_client = redis.Redis.from_url(
-            settings.REDIS_URL,
-            decode_responses=True,
-        )
-        logger.info("Shared Redis client initialised")
+        with _redis_lock:
+            if _redis_client is None:
+                _redis_client = redis.Redis.from_url(
+                    settings.REDIS_URL,
+                    decode_responses=True,
+                )
+                logger.info("Shared Redis client initialised")
     return _redis_client
